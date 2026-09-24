@@ -217,16 +217,6 @@
     .nav-right { display: flex; align-items: center; gap: 24px; }
     .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
     .nav-link:hover { color: var(--text); }
-    /* The homepage pill (home.html .nav-cta) — same button, same site.
-       #f5f4f0 is the homepage's --ink, a touch warmer than this page's --text. */
-    .nav-cta {
-      padding: 9px 20px;
-      background: #f5f4f0;
-      color: #000; border: none; border-radius: 100px;
-      font-size: 13.5px; font-weight: 600; cursor: pointer; text-decoration: none;
-      transition: background 0.3s;
-    }
-    .nav-cta:hover { background: #fff; }
 
     /* ── Tools dropdown ──────────────────────────────────────────────────── */
     .nav-tools { position: relative; display: flex; }
@@ -659,7 +649,6 @@
       </div>
     </div>
     <a href="/" class="nav-link">Home</a>
-    <a href="/app" class="nav-cta">Open App</a>
   </div>
 </nav>
 
@@ -777,13 +766,6 @@
       <li><strong>Effects, inserts, graphic EQ and automix don't transfer.</strong> Neither does anything else the target desk has no equivalent for. Those are listed rather than guessed at.</li>
       <li><strong>Check it on the desk before a show.</strong> Gain structure and dynamics especially. This saves you forty minutes of typing, not soundcheck.</li>
     </ul>
-    <p>
-      Building a plot from scratch instead? The <a href="/app">stage plot builder</a> exports scene
-      files for the X32, M32 and Wing straight from your input list — and the
-      <a href="/blog/input-list-guide">input list guide</a> covers how to lay one out so it survives
-      contact with a house engineer.
-    </p>
-
     <h2 id="faq">Common questions</h2>
 
     <h3>Which consoles does the scene converter support?</h3>

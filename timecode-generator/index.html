@@ -111,12 +111,6 @@
     .nav-right { display: flex; align-items: center; gap: 24px; }
     .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
     .nav-link:hover { color: var(--text); }
-    .nav-cta {
-      padding: 8px 18px;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      color: #fff; border: none; border-radius: 8px;
-      font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
-    }
     /* ── Tools dropdown ──────────────────────────────────────────────────── */
     .nav-tools { position: relative; display: flex; }
     .nav-tools-btn {
@@ -308,14 +302,6 @@
     td { color: #cbd5e1; }
     td:first-child { font-family: var(--font-mono); font-weight: 500; white-space: nowrap; color: var(--text); }
 
-    .callout {
-      background: rgba(139,92,246,0.08);
-      border: 1px solid rgba(139,92,246,0.22);
-      border-radius: 12px; padding: 18px 20px; margin: 26px 0;
-    }
-    .callout p { margin: 0; color: #cbd5e1; font-size: 14px; }
-    .callout a { color: var(--purple); font-weight: 500; }
-
     footer {
       text-align: center;
       padding: 32px 24px 48px;
@@ -367,7 +353,6 @@
       </div>
     </div>
     <a href="/" class="nav-link">Home</a>
-    <a href="/app" class="nav-cta">Open App</a>
   </div>
 </nav>
 
@@ -492,14 +477,6 @@
       <li><strong>Start early.</strong> Give receivers a few seconds of timecode before the first cue — most need a couple of frames to lock, and a nervous console may want longer.</li>
       <li><strong>Mind the start time.</strong> Starting at <code>01:00:00:00</code> rather than zero is a long-standing habit: it leaves room for pre-roll ahead of the show without rolling past midnight.</li>
     </ul>
-
-    <div class="callout">
-      <p>
-        Building the rest of the paperwork too? <a href="/app">StageBuilder</a> is a free 3D stage
-        plot builder — design the stage, generate the input list, and share a rider anyone can open on
-        their phone. <a href="/blog/tech-advance-guide">See how a tech advance comes together →</a>
-      </p>
-    </div>
 
     <h2>Batches</h2>
     <p>
