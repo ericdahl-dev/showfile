@@ -247,7 +247,7 @@ export function emitWingSnapshot(ir, opts = {}) {
   if (Object.keys(lcl).length) ae.io = { in: lcl };
 
   return {
-    snapshot: { type: 'snapshot.11', creator: 'StageBuilder Pro',
+    snapshot: { type: 'snapshot.11', creator: 'StageBuilder',
                 creator_name: String(ir.name || '').slice(0, 32), creator_model: 'wing', ae_data: ae },
     warnings: renderAll(warnings),
     losses: warnings.filter(w => typeof w !== 'string'),

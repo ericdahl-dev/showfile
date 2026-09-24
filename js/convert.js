@@ -12,7 +12,6 @@ import { emitWingSnapshot } from './wing-snap.js';
 import { parseWingSnapshot } from './wing-scene.js';
 import { emitX32Scene } from './x32-emit.js';
 import { emitXAirScene } from './xair-emit.js';
-import { countConversion } from './convert-count.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -363,9 +362,7 @@ $('go').addEventListener('click', () => {
   if (!state.ir || !route() || state.shown) return;
   $('go').disabled = true;
   // The conversion itself already ran — render() built the output when the
-  // file loaded, and Convert is what reveals it. Counting here rather than on
-  // load keeps the number to shows someone actually asked to move.
-  countConversion('converted', $('from').value, $('to').value);
+  // file loaded, and Convert is what reveals it.
   runCurtain(() => { state.shown = true; animateNext = true; render(); });
 });
 
@@ -377,7 +374,6 @@ $('dl').addEventListener('click', () => {
   a.download = `${state.baseName}.${r.ext}`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  countConversion('downloaded', $('from').value, $('to').value);
 });
 
 $('clear').addEventListener('click', () => { reset(); drop.focus({ preventScroll: true }); });

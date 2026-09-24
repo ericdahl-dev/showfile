@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export | StageBuilder</title>
+  <meta name="description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/brand.css" />
+  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <link rel="canonical" href="https://stagebuilder.ericdahl.dev/timecode-generator" />
+  <meta property="og:title" content="Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export" />
+  <meta property="og:description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
+  <meta property="og:image" content="https://stagebuilder.ericdahl.dev/og-image-v3.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://stagebuilder.ericdahl.dev/timecode-generator" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="StageBuilder" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export" />
+  <meta name="twitter:description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
+  <meta name="twitter:image" content="https://stagebuilder.ericdahl.dev/og-image-v3.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "LTC Timecode Generator",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "url": "https://stagebuilder.ericdahl.dev/timecode-generator",
+    "description": "Generate SMPTE LTC (linear timecode) WAV files in the browser at 23.976, 24, 25, 29.97 drop-frame, 29.97 non-drop and 30 fps. Download a single file or a numbered batch as a zip.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "StageBuilder", "url": "https://stagebuilder.ericdahl.dev/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is LTC timecode?",
+        "acceptedAnswer": { "@type": "Answer", "text": "LTC (Linear Timecode, SMPTE 12M) encodes an 80-bit hours:minutes:seconds:frames word into an audio signal, one word per video frame. Because it is just audio, it travels down any audio path — an XLR line, a console channel, a track in your playback rig — and any device that can decode it will lock to it." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between drop-frame and non-drop timecode?",
+        "acceptedAnswer": { "@type": "Answer", "text": "NTSC video runs at 29.97 fps, not 30, so a straight 30 fps count gains about 3.6 seconds per hour on the wall clock. Drop-frame fixes the label rather than the frames: it skips frame numbers 00 and 01 at the top of every minute except every tenth minute, so an hour of drop-frame timecode is 107,892 frames and matches real elapsed time. No frames of video or audio are lost — only the numbering changes." }
+      },
+      {
+        "@type": "Question",
+        "name": "What level should I send LTC at?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Aim for a healthy line level without clipping — around -6 dBFS out of a playback rig is a safe default. LTC is a square wave, so it is far more tolerant of level than it is of processing: keep it off any bus with EQ, compression, limiting, or lossy codecs, and never send it through a noise gate." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this timecode with QLab, Ableton Live, or a lighting console?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Download the WAV and play it from a dedicated output of your playback system, then patch that output to the timecode input of the device you want to chase — a lighting console, a media server, or a DAW set to sync to LTC. Make sure both ends are set to the same frame rate." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #060610;
+      --surface: rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.07);
+      --blue:    #3b82f6;
+      --purple:  #8b5cf6;
+      --text:    #f8fafc;
+      --muted:   #94a3b8;
+      --danger:  #ef4444;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(6,6,16,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .sbp-logo { --sbp-size: 17px; --sbp-word-size: 15px; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .nav-link:hover { color: var(--text); }
+    .nav-cta {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff; border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
+    }
+    /* ── Tools dropdown ──────────────────────────────────────────────────── */
+    .nav-tools { position: relative; display: flex; }
+    .nav-tools-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: var(--font-body); font-size: 13px; font-weight: 300;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .nav-tools-btn:hover,
+    .nav-tools[data-open="true"] .nav-tools-btn { color: var(--text); }
+    .nav-tools-btn:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 4px; }
+    .nav-tools-btn svg { width: 9px; height: 9px; transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
+    .nav-tools[data-open="true"] .nav-tools-btn svg { transform: rotate(180deg); }
+
+    .nav-tools-menu {
+      position: absolute; top: 100%; right: 0;
+      margin-top: 14px; min-width: 290px; padding: 6px;
+      background: rgba(13,13,24,0.94);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: 0 20px 48px -14px rgba(0,0,0,0.8);
+      opacity: 0; visibility: hidden;
+      transform: translateY(-7px) scale(0.975); transform-origin: top right;
+      transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.4,0,0.2,1), visibility 0.2s;
+    }
+    /* Bridge the gap between button and panel so the pointer can cross it. */
+    .nav-tools-menu::before { content: ''; position: absolute; inset: -14px 0 100% 0; }
+    .nav-tools[data-open="true"] .nav-tools-menu {
+      opacity: 1; visibility: visible; transform: none;
+    }
+
+    .nav-tool {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 10px 11px; border-radius: 10px;
+      text-decoration: none; color: var(--text);
+      transition: background 0.15s;
+    }
+    .nav-tool:hover { background: rgba(255,255,255,0.055); }
+    .nav-tool:focus-visible { outline: none; background: rgba(139,92,246,0.16); }
+    .nav-tool[aria-current="page"] { background: rgba(139,92,246,0.11); }
+    .nav-tool-ico {
+      flex: none; width: 30px; height: 30px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+    }
+    .nav-tool-ico svg { width: 15px; height: 15px; }
+    /* These are spans inside a span, so they need an explicit display — inline
+       ignores the margin and runs the name and description onto one line. */
+    .nav-tool-text { display: block; min-width: 0; }
+    .nav-tool-name { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+    .nav-tool-desc { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-tools-menu { transition: opacity 0.01ms, visibility 0.01ms; transform: none; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 16px; }
+      .nav-right { gap: 16px; }
+      /* Keep Tools reachable on phones — it is the only route to the tools. */
+      .nav-link { display: none; }
+      .nav-tools-menu { min-width: 262px; }
+    }
+
+    .page { max-width: 860px; margin: 0 auto; padding: 110px 24px 60px; }
+
+    .hero { text-align: center; margin-bottom: 34px; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--purple); margin-bottom: 12px;
+    }
+    h1 {
+      font-family: var(--font-head); font-weight: 800;
+      font-size: clamp(1.7rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .hero p { color: var(--muted); font-size: clamp(0.95rem, 2vw, 1.05rem); max-width: 58ch; margin: 0 auto; }
+
+    /* ── Generator ──────────────────────────────────────────────────────────── */
+    .tool {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(18px, 3.5vw, 28px);
+      margin-bottom: 44px;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .field label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .field .hint { font-size: 11.5px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+    input, select {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      font-family: var(--font-body); font-size: 14px;
+      padding: 10px 12px;
+      transition: border-color 0.15s;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--purple); }
+    input.mono { font-family: var(--font-mono); letter-spacing: 0.06em; }
+    input.invalid { border-color: var(--danger); }
+    select { appearance: none; -webkit-appearance: none; cursor: pointer;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+      background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+    select option { background: #12121c; color: var(--text); }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 22px; border-radius: 10px; border: 1px solid transparent;
+      font-family: var(--font-body); font-size: 14.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none; color: #fff;
+      transition: transform 0.06s ease, opacity 0.15s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-go { background: linear-gradient(135deg, var(--blue), var(--purple)); min-width: 190px; }
+    .status { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 160px; }
+    .status.error { color: var(--danger); }
+
+    /* Batch manifest — what you're about to get, before you commit to it */
+    .manifest {
+      margin-top: 20px; padding: 14px 16px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border); border-radius: 11px;
+    }
+    .manifest[hidden] { display: none; }
+    .manifest-head {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .manifest-list {
+      list-style: none; margin: 0; padding: 0;
+      max-height: 210px; overflow-y: auto;
+      font-family: var(--font-mono); font-size: 12px; color: #cbd5e1;
+    }
+    .manifest-list li {
+      display: flex; justify-content: space-between; gap: 14px;
+      padding: 3px 0; white-space: nowrap;
+      /* Rows collapse rather than vanish when the count changes. The animated
+         max-height is set inline to the row's *measured* height: a fixed ceiling
+         above the real height wastes most of the duration off-screen, which
+         makes an arriving row look like it simply appeared. */
+      overflow: hidden;
+      transition: max-height 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.19s ease,
+                  padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .manifest-list .mf-name { color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+    .manifest-list .mf-tc { color: var(--muted); flex-shrink: 0; }
+    .manifest-list li.mf-more { color: var(--muted); font-style: italic; justify-content: center; }
+    @media (prefers-reduced-motion: reduce) {
+      .manifest-list li { transition: none; }
+    }
+
+    /* ── Explainer ──────────────────────────────────────────────────────────── */
+    .prose h2 {
+      font-family: var(--font-head); font-weight: 700;
+      font-size: 1.28rem; letter-spacing: -0.01em;
+      margin: 40px 0 12px;
+    }
+    .prose h3 {
+      font-family: var(--font-head); font-weight: 600;
+      font-size: 1rem; margin: 24px 0 8px;
+    }
+    .prose p { color: #cbd5e1; margin-bottom: 14px; }
+    .prose ul { color: #cbd5e1; margin: 0 0 16px 20px; }
+    .prose li { margin-bottom: 7px; }
+    .prose strong { font-weight: 600; color: var(--text); }
+    .prose code {
+      font-family: var(--font-mono); font-size: 0.86em;
+      background: rgba(255,255,255,0.06); border-radius: 4px; padding: 1px 5px;
+    }
+    .table-wrap { overflow-x: auto; margin-bottom: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 480px; }
+    th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-weight: 600; color: var(--text); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+    td { color: #cbd5e1; }
+    td:first-child { font-family: var(--font-mono); font-weight: 500; white-space: nowrap; color: var(--text); }
+
+    .callout {
+      background: rgba(139,92,246,0.08);
+      border: 1px solid rgba(139,92,246,0.22);
+      border-radius: 12px; padding: 18px 20px; margin: 26px 0;
+    }
+    .callout p { margin: 0; color: #cbd5e1; font-size: 14px; }
+    .callout a { color: var(--purple); font-weight: 500; }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px 48px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="sbp-logo" href="https://stagebuilderpro.com/">
+    <span class="sbp-mark" aria-hidden="true">
+      <span class="sbp-row"><i></i><i></i></span>
+      <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
+      <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
+      <span class="sbp-row"><i></i><i></i></span>
+    </span>
+    <span class="sbp-word">StageBuilder<span class="app-version-tag"></span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-tools" data-nav-tools data-open="false">
+      <button type="button" class="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="toolsMenu">
+        Free Tools
+        <svg viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-tools-menu" id="toolsMenu" role="menu">
+        <a class="nav-tool" href="/timecode-generator" role="menuitem" aria-current="page">
+          <span class="nav-tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2-6 3 12 3-9 2 6 3-3h4"/></svg>
+          </span>
+          <span class="nav-tool-text">
+            <span class="nav-tool-name">LTC Generator</span>
+            <span class="nav-tool-desc">Timecode WAV files at any frame rate and start time.</span>
+          </span>
+        </a>
+        <a class="nav-tool" href="/convert" role="menuitem">
+          <span class="nav-tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
+          </span>
+          <span class="nav-tool-text">
+            <span class="nav-tool-name">Console Scene Converter</span>
+            <span class="nav-tool-desc">Move a show between desks — X32, M32, X Air and Wing.</span>
+          </span>
+        </a>
+      </div>
+    </div>
+    <a href="https://stagebuilderpro.com/" class="nav-link">Home</a>
+    <a href="https://stagebuilderpro.com/app" class="nav-cta">Open App</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <span class="eyebrow">Free tool · nothing to install</span>
+    <h1>LTC Timecode Generator</h1>
+    <p>Generate SMPTE linear timecode right here. Pick a frame rate and a start time, then download a WAV for your playback rig — or a whole numbered batch, zipped, with the timecode running continuously across the set.</p>
+  </div>
+
+  <div class="tool">
+    <div class="grid">
+      <div class="field">
+        <label for="rate">Frame rate</label>
+        <select id="rate"></select>
+        <span class="hint" id="rate-note"></span>
+      </div>
+
+      <div class="field">
+        <label for="start">Start timecode</label>
+        <input id="start" class="mono" type="text" value="00:00:00:00" inputmode="numeric"
+               spellcheck="false" autocomplete="off" aria-describedby="start-hint" />
+        <span class="hint" id="start-hint">HH:MM:SS:FF — shows use 01:00:00:00 as often as zero.</span>
+      </div>
+
+      <div class="field">
+        <label for="duration">Duration each (minutes)</label>
+        <input id="duration" type="number" min="0.1" max="60" step="0.5" value="10" />
+        <span class="hint" id="size-hint"></span>
+      </div>
+
+      <div class="field">
+        <label for="count">Number of files</label>
+        <input id="count" type="number" min="1" max="100" step="1" value="1" />
+        <span class="hint">More than one downloads a numbered .zip.</span>
+      </div>
+
+      <div class="field">
+        <label for="samplerate">Sample rate</label>
+        <select id="samplerate">
+          <option value="48000" selected>48 kHz — video / broadcast standard</option>
+          <option value="44100">44.1 kHz</option>
+        </select>
+        <span class="hint">48 kHz unless your playback system runs at 44.1.</span>
+      </div>
+
+      <div class="field">
+        <label for="level">Output level</label>
+        <select id="level">
+          <option value="0">0 dBFS — hottest</option>
+          <option value="-6" selected>−6 dBFS — recommended</option>
+          <option value="-12">−12 dBFS</option>
+          <option value="-20">−20 dBFS — quiet</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="manifest" id="manifest" hidden>
+      <div class="manifest-head">Files</div>
+      <ol class="manifest-list" id="manifest-list"></ol>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-go" id="btn-download">↓&nbsp; Download WAV</button>
+      <span class="status" id="status">Rendered on your machine — nothing is uploaded.</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <h2>What this generates</h2>
+    <p>
+      <strong>LTC</strong> — linear timecode, defined by SMPTE 12M — is an 80-bit
+      <code>hours:minutes:seconds:frames</code> word encoded as audio, one word per frame. It's
+      biphase-mark encoded, which is a fancy way of saying the signal is a square wave that survives
+      being flipped, attenuated, or run down whatever cable the venue has. Anything that can decode
+      timecode — a lighting console, a media server, a DAW, a show-control rig — will chase it.
+    </p>
+    <p>
+      Everything here runs in your browser. Nothing is uploaded, and the file is built on your own
+      machine, so you can use it on a locked-down show laptop with no internet.
+    </p>
+
+    <h2>Which frame rate should I pick?</h2>
+    <p>
+      The only rule that matters: <strong>every device in the chain has to agree.</strong> A console
+      set to 30 fps chasing a 29.97 source will drift roughly a frame every 33 seconds, and you'll
+      spend the afternoon blaming the cable.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Rate</th><th>Where you'll meet it</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>23.976</td><td>Film finished for NTSC video. Common in post, rare on a live stage.</td></tr>
+          <tr><td>24</td><td>True film rate. Occasionally used for theatrical playback.</td></tr>
+          <tr><td>25</td><td>PAL/EBU territory — the default across most of Europe, Australia and much of Asia.</td></tr>
+          <tr><td>29.97 NDF</td><td>NTSC video where the label doesn't have to match the wall clock.</td></tr>
+          <tr><td>29.97 DF</td><td>NTSC broadcast, where a running time on screen has to be honest.</td></tr>
+          <tr><td>30</td><td>Audio-only rigs and legacy gear in North America. A safe default for a show that answers to nobody else.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Drop-frame, in one paragraph</h3>
+    <p>
+      NTSC runs at 29.97 fps, not 30, so counting <em>as if</em> it were 30 gains about 3.6 seconds
+      every hour against real time. Drop-frame corrects the <strong>numbering</strong>, not the
+      frames: it skips the labels <code>00</code> and <code>01</code> at the top of every minute
+      except every tenth minute. Nothing is lost — an hour of drop-frame timecode is 107,892 frames
+      and lines up with a stopwatch. Drop-frame is conventionally written with a semicolon before the
+      frames, like <code>01:00:00;02</code>.
+    </p>
+
+    <h2>Using it on a show</h2>
+    <ul>
+      <li><strong>Give it its own output.</strong> A dedicated channel out of your playback rig, patched straight to the timecode input of whatever is chasing.</li>
+      <li><strong>Keep processing off it.</strong> No EQ, no compression, no limiting, and above all no noise gate. LTC is a square wave; processing rounds its edges and decoders start guessing.</li>
+      <li><strong>Never send it through a lossy codec.</strong> Bluetooth, MP3, and most wireless systems will destroy it. Wired, uncompressed, or not at all.</li>
+      <li><strong>Level it sanely.</strong> Around −6 dBFS is a good starting point. Loud enough to be unambiguous, with headroom to spare.</li>
+      <li><strong>Start early.</strong> Give receivers a few seconds of timecode before the first cue — most need a couple of frames to lock, and a nervous console may want longer.</li>
+      <li><strong>Mind the start time.</strong> Starting at <code>01:00:00:00</code> rather than zero is a long-standing habit: it leaves room for pre-roll ahead of the show without rolling past midnight.</li>
+    </ul>
+
+    <div class="callout">
+      <p>
+        Building the rest of the paperwork too? <a href="https://stagebuilderpro.com/app">StageBuilder</a> is a free 3D stage
+        plot builder — design the stage, generate the input list, and share a rider anyone can open on
+        their phone. <a href="https://stagebuilderpro.com/blog/tech-advance-guide">See how a tech advance comes together →</a>
+      </p>
+    </div>
+
+    <h2>Batches</h2>
+    <p>
+      Set <strong>Number of files</strong> above one and you get a numbered <code>.zip</code>
+      instead of a single WAV, with a <code>manifest.txt</code> listing every file and the timecode
+      it covers. The files are named <code>01_</code>, <code>02_</code> and so on — zero-padded to
+      the length of the batch, so they sort correctly in a file browser and on a playback machine.
+    </p>
+    <p>
+      Timecode runs continuously across the set: each file picks up on the frame after the last one
+      ended, so a long show cut into manageable chunks still lines up end to end. The file list above
+      shows exactly what each one will cover before you download anything.
+    </p>
+    <p>
+      Durations snap to whole frames before rendering. Twenty seconds at 29.97 is 599.4 frames, and
+      leaving that fraction in would make the second file start on the same frame number the first
+      one ended on — a duplicated label, which is exactly the sort of thing that unpicks a show at
+      2am. Snapped, every file abuts the next exactly.
+    </p>
+
+    <h2>Questions</h2>
+    <h3>How long can these be?</h3>
+    <p>
+      Up to 60 minutes per file, and 240 minutes across a batch. A 60-minute WAV is already about
+      350&nbsp;MB, though the zip is far smaller than that suggests — LTC is a square wave, so it
+      compresses roughly fifty to a hundred times over.
+    </p>
+    <h3>Does this work offline?</h3>
+    <p>
+      Once the page has loaded, yes — the audio is generated locally. Worth loading it before you
+      leave the hotel wifi.
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  <p style="margin-bottom:8px">
+    <a href="https://stagebuilderpro.com/">Home</a> &nbsp;&middot;&nbsp;
+    <a href="https://stagebuilderpro.com/blog">Blog</a> &nbsp;&middot;&nbsp;
+    <a href="https://stagebuilderpro.com/changelog">Changelog</a> &nbsp;&middot;&nbsp;
+    <a href="https://stagebuilderpro.com/terms">Terms</a> &nbsp;&middot;&nbsp;
+    <a href="https://stagebuilderpro.com/privacy">Privacy</a>
+  </p>
+  <p>&copy; 2026 StageBuilder</p>
+</footer>
+
+<script type="module" src="/js/nav-tools.js"></script>
+
+<script type="module" src="/js/version-tag.js"></script>
+<script type="module">
+  import {
+    FRAME_RATES, RATE_KEYS, DEFAULT_RATE, parseTimecode, formatTimecode,
+    timecodeToFrames, framesToTimecode, snapDurationToFrames, renderLTC,
+    wavFromPCM, wavByteSize,
+  } from '/js/ltc.js';
+  import { zipFiles } from '/js/zip.js';
+
+  const $ = id => document.getElementById(id);
+  const els = {
+    rate: $('rate'), rateNote: $('rate-note'), start: $('start'), duration: $('duration'),
+    count: $('count'),
+    sampleRate: $('samplerate'), level: $('level'),
+    download: $('btn-download'), status: $('status'),
+    sizeHint: $('size-hint'), startHint: $('start-hint'),
+    manifest: $('manifest'), manifestList: $('manifest-list'),
+  };
+
+  const MAX_MINUTES       = 60;    // per file — a 60 min WAV is already ~350 MB
+  const MAX_FILES         = 100;
+  const MAX_TOTAL_MINUTES = 240;   // across the whole batch
+  const PREVIEW_ROWS      = 12;
+
+  for (const key of RATE_KEYS) {
+    els.rate.appendChild(Object.assign(document.createElement('option'), {
+      value: key, textContent: FRAME_RATES[key].label, selected: key === DEFAULT_RATE,
+    }));
+  }
+
+  const spec = () => FRAME_RATES[els.rate.value];
+  const setStatus = (msg, isError = false) => {
+    els.status.textContent = msg;
+    els.status.classList.toggle('error', isError);
+  };
+  const clampNum = (el, lo, hi, fallback) => {
+    const n = Number(el.value);
+    return Number.isFinite(n) ? Math.min(Math.max(n, lo), hi) : fallback;
+  };
+
+  function readStart() {
+    const tc = parseTimecode(els.start.value);
+    if (!tc) return null;
+    // A start frame the chosen rate can't count is a real mistake, not a nitpick:
+    // 00:00:00:29 at 25 fps would silently roll the seconds on the first frame.
+    if (tc.f >= spec().nominal) return null;
+    return tc;
+  }
+
+  /** The whole batch as data: what each file is called and what it contains. */
+  function plan() {
+    const tc = readStart();
+    if (!tc) return null;
+
+    const s = spec();
+    const rate = els.rate.value;
+    const count = Math.round(clampNum(els.count, 1, MAX_FILES, 1));
+    const minutes = clampNum(els.duration, 0.1, MAX_MINUTES, 10);
+    const { frames: framesPerFile, durationSec } = snapDurationToFrames(minutes * 60, rate);
+    const startFrames = timecodeToFrames(tc, s.nominal, s.dropFrame);
+    // Two digits minimum: "1_" through "9_" sorts fine on its own but reads as
+    // provisional next to the 01_/02_ convention everything else on a show uses.
+    const pad = Math.max(2, String(count).length);
+
+    const files = [];
+    for (let i = 0; i < count; i++) {
+      // Files run continuously: each one starts on the frame after the last ended.
+      const fileStart = framesToTimecode(startFrames + i * framesPerFile, s.nominal, s.dropFrame);
+      // Last frame of the file, i.e. one before the next file's first.
+      const endFrames = timecodeToFrames(fileStart, s.nominal, s.dropFrame) + framesPerFile - 1;
+      const fileEnd = framesToTimecode(endFrames, s.nominal, s.dropFrame);
+      const stamp = formatTimecode(fileStart).replace(/[:;]/g, '-');
+      files.push({
+        index: i,
+        start: fileStart,
+        end: fileEnd,
+        name: count > 1
+          ? `${String(i + 1).padStart(pad, '0')}_LTC_${rate}_${stamp}.wav`
+          : `LTC_${rate}_${stamp}_${minutes}min.wav`,
+      });
+    }
+
+    return { rate, spec: s, count, minutes, durationSec, framesPerFile, files,
+             sampleRate: Number(els.sampleRate.value), levelDb: Number(els.level.value),
+             totalMinutes: count * minutes };
+  }
+
+  function refreshMeta() {
+    const s = spec();
+    els.rateNote.textContent = s.note;
+    els.startHint.textContent = s.dropFrame
+      ? 'HH:MM:SS;FF — drop-frame skips labels 00 and 01 each minute.'
+      : 'HH:MM:SS:FF — shows use 01:00:00:00 as often as zero.';
+
+    const count = Math.round(clampNum(els.count, 1, MAX_FILES, 1));
+
+    const p = plan();
+    els.start.classList.toggle('invalid', !p);
+
+    if (!p) {
+      els.manifest.hidden = true;
+      els.download.disabled = true;
+      els.sizeHint.textContent = `Up to ${MAX_MINUTES} min each.`;
+      return;
+    }
+
+    // Audio bytes are known exactly; the zip is a fair estimate — LTC is a square
+    // wave and deflates roughly 50-100×, so quoting the raw size would be absurd.
+    const wavBytes = wavByteSize(p.durationSec, p.sampleRate);
+    const totalRaw = wavBytes * p.count;
+    els.sizeHint.textContent = p.count > 1
+      ? `${fmtBytes(wavBytes)} each · about ${fmtBytes(totalRaw / 60)} zipped`
+      : `WAV will be about ${fmtBytes(wavBytes)}. Max ${MAX_MINUTES} min.`;
+
+    renderManifest(p);
+
+    const overBudget = p.totalMinutes > MAX_TOTAL_MINUTES;
+    els.download.disabled = overBudget;
+    els.download.textContent = p.count > 1 ? '↓  Download ZIP' : '↓  Download WAV';
+    if (overBudget) {
+      setStatus(`That is ${Math.round(p.totalMinutes)} minutes of audio — the limit is ` +
+        `${MAX_TOTAL_MINUTES}. Reduce the count or the duration.`, true);
+    } else if (!els.status.dataset.sticky) {
+      setStatus('Rendered on your machine — nothing is uploaded.');
+    }
+  }
+
+  function fmtBytes(n) {
+    return n >= 1048576 ? `${(n / 1048576).toFixed(n > 10485760 ? 0 : 1)} MB`
+      : `${Math.max(1, Math.round(n / 1024))} KB`;
+  }
+
+  /**
+   * Reconcile the file list against the DOM rather than rewriting innerHTML.
+   *
+   * Typing in the count field fires this on every keystroke. Rebuilding the list
+   * wholesale made rows that hadn't changed flicker, and gave new and departing
+   * rows nothing to animate between. Keyed by index: surviving rows have their
+   * text updated in place, arrivals expand in, departures collapse out.
+   */
+  const ROW_EXIT_MS = 260;
+
+  // Rows are single-line and never wrap, so one measurement serves them all.
+  // Taken from a real row rather than hard-coded, so it survives a font swap or
+  // a browser zoom.
+  let rowHeight = 0;
+  function measureRowHeight(list) {
+    for (const li of list.children) {
+      if (!li.style.maxHeight && !li.classList.contains('mf-leaving')) {
+        const h = li.offsetHeight;
+        if (h > 0) { rowHeight = h; break; }
+      }
+    }
+    return rowHeight || 26;
+  }
+
+  /**
+   * Release a row's pinned height once it has finished opening, so it goes back
+   * to sizing itself. Left pinned, a row would ignore any later content change —
+   * and a revived row would keep the inline height it was rescued with.
+   */
+  function settleRow(li, delay) {
+    clearTimeout(Number(li.dataset.enterTimer));
+    const done = () => {
+      li.style.maxHeight = '';
+      li.style.transitionDelay = '';
+      li.removeEventListener('transitionend', done);
+      clearTimeout(Number(li.dataset.enterTimer));
+      delete li.dataset.enterTimer;
+    };
+    li.addEventListener('transitionend', done);
+    // Fallback: a row rescued mid-collapse may already be at its target height,
+    // in which case no transition runs and transitionend never fires.
+    li.dataset.enterTimer = String(setTimeout(done, delay + ROW_EXIT_MS + 80));
+  }
+
+  /** Ease a freshly-inserted row open from nothing to its full height. */
+  function expandRow(li, target, delay) {
+    li.style.maxHeight = '0px';
+    li.style.opacity = '0';
+    li.style.paddingTop = '0px';
+    li.style.paddingBottom = '0px';
+    void li.offsetHeight;                 // commit the closed state before easing off it
+    li.style.transitionDelay = `${delay}ms`;
+    li.style.maxHeight = `${target}px`;
+    li.style.opacity = '';
+    li.style.paddingTop = '';
+    li.style.paddingBottom = '';
+    settleRow(li, delay);
+  }
+
+  /** Collapse a departing row from its current height to nothing, then drop it. */
+  function collapseRow(li) {
+    li.classList.add('mf-leaving');
+    li.style.transitionDelay = '';
+    li.style.maxHeight = `${li.offsetHeight || rowHeight}px`;
+    void li.offsetHeight;
+    li.style.maxHeight = '0px';
+    li.style.opacity = '0';
+    li.style.paddingTop = '0px';
+    li.style.paddingBottom = '0px';
+    li.dataset.exitTimer = String(setTimeout(() => li.remove(), ROW_EXIT_MS));
+  }
+
+  function renderManifest(p) {
+    const df = p.spec.dropFrame;
+    const list = els.manifestList;
+    // First paint fills an empty list — animating that reads as a glitch on load
+    // rather than as a response to anything the user did.
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      || els.manifest.hidden;
+
+    const desired = p.files.slice(0, PREVIEW_ROWS).map(f => ({
+      key: `f${f.index}`,
+      html: `<span class="mf-name">${f.name}</span>` +
+            `<span class="mf-tc">${formatTimecode(f.start, df)} → ${formatTimecode(f.end, df)}</span>`,
+      cls: '',
+    }));
+    const extra = p.files.length - PREVIEW_ROWS;
+    if (extra > 0) {
+      desired.push({ key: 'more', html: `…and ${extra} more`, cls: 'mf-more' });
+    }
+
+    const target = measureRowHeight(list);
+
+    // Rows part-way through leaving are reclaimed instead of being duplicated —
+    // holding the count key down would otherwise stack ghosts of the same row.
+    for (const li of list.querySelectorAll('.mf-leaving')) {
+      clearTimeout(Number(li.dataset.exitTimer));
+      delete li.dataset.exitTimer;
+      li.classList.remove('mf-leaving');
+      li.style.transitionDelay = '';
+      li.style.maxHeight = `${target}px`;
+      li.style.opacity = '';
+      li.style.paddingTop = '';
+      li.style.paddingBottom = '';
+      settleRow(li, 0);
+    }
+
+    const live = [...list.children];
+    let arriving = 0;
+
+    desired.forEach((d, i) => {
+      const existing = live[i];
+      if (existing) {
+        if (existing.dataset.key !== d.key || existing.innerHTML !== d.html) {
+          existing.innerHTML = d.html;   // in place: no flicker, no animation
+          existing.dataset.key = d.key;
+        }
+        existing.className = d.cls;
+        return;
+      }
+      const li = document.createElement('li');
+      li.dataset.key = d.key;
+      li.className = d.cls;
+      li.innerHTML = d.html;
+      list.appendChild(li);
+      if (!reduce) {
+        // A short stagger so a jump from 1 to 8 files cascades instead of
+        // flinching open all at once. Capped, or a big batch feels sluggish.
+        expandRow(li, target, Math.min(arriving++ * 28, 140));
+      }
+    });
+
+    for (const li of live.slice(desired.length)) {
+      if (reduce) { li.remove(); continue; }
+      collapseRow(li);
+    }
+
+    els.manifest.hidden = false;
+  }
+
+  function manifestText(p) {
+    const df = p.spec.dropFrame;
+    const head = [
+      'StageBuilder — LTC batch',
+      `Generated:    ${new Date().toLocaleString()}`,
+      `Frame rate:   ${p.spec.label}`,
+      `Sample rate:  ${p.sampleRate} Hz`,
+      `Level:        ${p.levelDb} dBFS`,
+      `Files:        ${p.count} × ${p.minutes} min (${p.framesPerFile} frames each)`,
+      '',
+    ].filter(v => v !== null);
+    const width = Math.max(...p.files.map(f => f.name.length));
+    const rows = p.files.map(f =>
+      `${f.name.padEnd(width)}  ${formatTimecode(f.start, df)} → ${formatTimecode(f.end, df)}`);
+    return head.concat(rows).join('\n') + '\n';
+  }
+
+  function saveBlob(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  // Let the browser paint between files — rendering is synchronous and would
+  // otherwise freeze the page with no sign of progress on a long batch.
+  const breathe = () => new Promise(r => setTimeout(r, 0));
+
+  els.download.addEventListener('click', async () => {
+    const p = plan();
+    if (!p) { setStatus('Enter a valid start timecode first.', true); return; }
+
+    els.download.disabled = true;
+    els.status.dataset.sticky = '1';
+    const label = els.download.textContent;
+    els.download.textContent = 'Rendering…';
+
+    try {
+      const render = (file) => {
+        const { samples } = renderLTC({
+          rate: p.rate, start: file.start, durationSec: p.durationSec,
+          sampleRate: p.sampleRate, levelDb: p.levelDb,
+        });
+        return new Uint8Array(wavFromPCM(samples, p.sampleRate));
+      };
+
+      if (p.count === 1) {
+        setStatus('Rendering…');
+        await breathe();
+        saveBlob(new Blob([render(p.files[0])], { type: 'audio/wav' }), p.files[0].name);
+        setStatus(`Downloaded ${p.files[0].name} — ` +
+          `${formatTimecode(p.files[0].start, p.spec.dropFrame)} to ` +
+          `${formatTimecode(p.files[0].end, p.spec.dropFrame)}.`);
+      } else {
+        const entries = [];
+        for (const file of p.files) {
+          setStatus(`Rendering file ${file.index + 1} of ${p.count}…`);
+          await breathe();
+          entries.push({ name: file.name, data: render(file) });
+        }
+        entries.push({ name: 'manifest.txt', data: manifestText(p) });
+
+        setStatus('Compressing…');
+        await breathe();
+        const zip = await zipFiles(entries, {
+          onProgress: (done, total) => setStatus(`Compressing ${done} of ${total}…`),
+        });
+        const zipName = `LTC_${p.rate}_${p.count}files_${p.minutes}min.zip`;
+        saveBlob(zip, zipName);
+        setStatus(`Downloaded ${zipName} — ${p.count} files, ${fmtBytes(zip.size)}.`);
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus(err?.message || 'Could not render that. Try fewer or shorter files.', true);
+    } finally {
+      delete els.status.dataset.sticky;
+      els.download.disabled = false;
+      els.download.textContent = label;
+    }
+  });
+
+  for (const el of [els.rate, els.duration, els.count, els.sampleRate, els.start, els.level]) {
+    el.addEventListener('input', refreshMeta);
+    el.addEventListener('change', refreshMeta);
+  }
+  // Typing a bare digit run is faster than reaching for the colons on a laptop
+  // in a dark room, so accept "01000000" and punctuate it on blur.
+  els.start.addEventListener('blur', () => {
+    const digits = els.start.value.replace(/\D/g, '');
+    if (digits.length === 8) {
+      els.start.value = digits.replace(/(\d\d)(\d\d)(\d\d)(\d\d)/, '$1:$2:$3:$4');
+      refreshMeta();
+    }
+  });
+
+  refreshMeta();
+</script>
+</body>
+</html>

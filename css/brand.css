@@ -1,4 +1,4 @@
-/* brand.css — the StageBuilder Pro logo lockup. One definition, every page.
+/* brand.css — the StageBuilder logo lockup. One definition, every page.
  *
  * The mark is the six-bar glyph rebuilt in CSS (no image): a 2-column × 4-row
  * grid where rows 2 and 3 drop one bar. Each row is its own 3D-rotating element
@@ -14,7 +14,7 @@
  *       <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
  *       <span class="sbp-row"><i></i><i></i></span>
  *     </span>
- *     <span class="sbp-word">StageBuilder&nbsp;Pro</span>
+ *     <span class="sbp-word">StageBuilder</span>
  *   </a>
  *
  * Per-page tuning: set --sbp-size / --sbp-word-size / --sbp-gap on .sbp-logo.

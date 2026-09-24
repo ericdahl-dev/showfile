@@ -1,4 +1,4 @@
-// constants.js — shared constants for StageBuilder Pro
+// constants.js — shared constants for StageBuilder
 
 export const APP_VERSION = '2.6';
 

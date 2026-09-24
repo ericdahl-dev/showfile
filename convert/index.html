@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#060610" />
-  <title>Console Scene Converter — X32, M32, X Air and Wing, any direction | StageBuilder Pro</title>
+  <title>Console Scene Converter — X32, M32, X Air and Wing, any direction | StageBuilder</title>
   <meta name="description" content="Convert scene files between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of the three, in either direction, in your browser. Names, colours, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that cannot is listed channel by channel. Free, nothing uploaded." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -16,15 +16,15 @@
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/fonts/fonts.css" />
-  <link rel="canonical" href="https://stagebuilder.ericdahl.dev/" />
+  <link rel="canonical" href="https://stagebuilder.ericdahl.dev/convert" />
   <meta property="og:title" content="Console Scene Converter — X32, M32, X Air and Wing" />
   <meta property="og:description" content="Move a show between the X32, M32, X Air, MR and Wing in either direction. Everything that cannot come across is listed channel by channel. Nothing is uploaded." />
-  <meta property="og:url" content="https://stagebuilder.ericdahl.dev/" />
+  <meta property="og:url" content="https://stagebuilder.ericdahl.dev/convert" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://stagebuilder.ericdahl.dev/og-image-convert.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:site_name" content="StageBuilder Pro" />
+  <meta property="og:site_name" content="StageBuilder" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Console Scene Converter — X32, M32, X Air and Wing" />
   <meta name="twitter:description" content="Move a show between the X32, M32, X Air, MR and Wing, either direction. Names, colours, patch, gains, EQ and dynamics carry across; anything that cannot is listed. Free, nothing uploaded." />
@@ -36,7 +36,7 @@
     "name": "Console Scene Converter",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Any (web browser)",
-    "url": "https://stagebuilder.ericdahl.dev/",
+    "url": "https://stagebuilder.ericdahl.dev/convert",
     "description": "Convert mixing console scene files between the Behringer X32, Midas M32, Behringer X Air (XR12/XR16/XR18), Midas MR and Behringer Wing, in either direction, entirely in the browser. Channel names, strip colours, input patch, preamp gains, phantom power, filters, EQ, gate, compressor, bus sends, DCAs and mute groups carry across. Stereo handling is translated between desks that link mono pairs and desks with native stereo channels. Every setting the target console cannot represent is reported channel by channel rather than dropped silently.",
     "featureList": [
       "Converts between the Behringer X32 / Midas M32, the Behringer X Air / Midas MR and the Behringer Wing, in either direction",
@@ -52,7 +52,7 @@
       "Runs entirely in the browser — no upload, no account, no cost"
     ],
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "publisher": { "@type": "Organization", "name": "StageBuilder Pro", "url": "https://stagebuilderpro.com/" }
+    "publisher": { "@type": "Organization", "name": "StageBuilder", "url": "https://stagebuilder.ericdahl.dev/" }
   }
   </script>
   <script type="application/ld+json">
@@ -161,7 +161,7 @@
         "name": "Are my scene files uploaded anywhere?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. One thing does leave the page: a count that a conversion happened and which desk went to which desk, so we know the tool is being used. No filename, no channel names, no settings, nothing from inside your file."
+          "text": "No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. Nothing leaves the page: no analytics, no counters, no network requests of any kind."
         }
       },
       {
@@ -629,7 +629,7 @@
       <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
       <span class="sbp-row"><i></i><i></i></span>
     </span>
-    <span class="sbp-word">StageBuilder&nbsp;Pro<span class="app-version-tag"></span></span>
+    <span class="sbp-word">StageBuilder<span class="app-version-tag"></span></span>
   </a>
   <div class="nav-right">
     <div class="nav-tools" data-nav-tools data-open="false">
@@ -638,7 +638,7 @@
         <svg viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="nav-tools-menu" id="toolsMenu" role="menu">
-        <a class="nav-tool" href="https://stagebuilderpro.com/timecode-generator" role="menuitem">
+        <a class="nav-tool" href="/timecode-generator" role="menuitem">
           <span class="nav-tool-ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2-6 3 12 3-9 2 6 3-3h4"/></svg>
           </span>
@@ -647,7 +647,7 @@
             <span class="nav-tool-desc">Timecode WAV files at any frame rate and start time.</span>
           </span>
         </a>
-        <a class="nav-tool" href="/" role="menuitem" aria-current="page">
+        <a class="nav-tool" href="/convert" role="menuitem" aria-current="page">
           <span class="nav-tool-ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
           </span>
@@ -848,7 +848,7 @@
 
     <h3>Are my scene files uploaded anywhere?</h3>
     <p>
-      No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. One thing does leave the page: a count that a conversion happened and which desk went to which desk, so we know the tool is being used. No filename, no channel names, no settings, nothing from inside your file.
+      No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. Nothing leaves the page: no analytics, no counters, no network requests of any kind.
     </p>
 
     <h3>Why are the channel colours different from other X32 to Wing converters?</h3>
@@ -862,13 +862,13 @@
 <footer>
   <p style="margin-bottom:8px">
     <a href="https://stagebuilderpro.com/">Home</a> &nbsp;&middot;&nbsp;
-    <a href="https://stagebuilderpro.com/timecode-generator">LTC Generator</a> &nbsp;&middot;&nbsp;
+    <a href="/timecode-generator">LTC Generator</a> &nbsp;&middot;&nbsp;
     <a href="https://stagebuilderpro.com/blog">Blog</a> &nbsp;&middot;&nbsp;
     <a href="https://stagebuilderpro.com/changelog">Changelog</a> &nbsp;&middot;&nbsp;
     <a href="https://stagebuilderpro.com/terms">Terms</a> &nbsp;&middot;&nbsp;
     <a href="https://stagebuilderpro.com/privacy">Privacy</a>
   </p>
-  <p>&copy; 2026 StageBuilder Pro</p>
+  <p>&copy; 2026 StageBuilder</p>
 </footer>
 
 <script type="module" src="/js/nav-tools.js"></script>
