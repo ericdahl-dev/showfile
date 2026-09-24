@@ -1,6 +1,6 @@
-# StageBuilder free tools
+# Showfile
 
-The free tools from StageBuilder, served at <https://stagebuilder.ericdahl.dev>:
+Free browser tools for live production, served at <https://showfile.ericdahl.dev>:
 
 - **Console Scene Converter** (`/convert/`): moves a show between the Behringer X32 / Midas M32,
   X Air / Midas MR and Behringer Wing, in any direction.
@@ -35,6 +35,7 @@ with Python's `zipfile`.
 | `js/convert.js` | Converter page UI |
 | `js/ltc.js`, `js/zip.js` | LTC encoder and the zip writer for batch export |
 | `js/nav-tools.js`, `js/version-tag.js`, `css/brand.css`, `fonts/` | Shared chrome |
+| `favicon.svg` | The mark; also used as the logo in the lockup. PNG icons are rendered from it |
 | `index.html` | Home page listing the tools |
 | `og/index.html` | Source for the share images (not linked from the site) |
 
@@ -61,4 +62,13 @@ Real `.scn` and `.snap` files from each desk would make much stronger fixtures.
 
 The first commit is the site exactly as stagebuilderpro.com served it on 2026-09-24
 (APP_VERSION 2.6), recovered because the original source repo was not available.
-`js/constants.js` still carries the stage-plot app's constants; only `APP_VERSION` is used here.
+The tools began as part of StageBuilder Pro and were split out as Showfile on the same day,
+with their own name, mark, domain and version (starting at 1.0).
+
+## Icons
+
+```sh
+rsvg-convert -w 32 -h 32 favicon.svg -o favicon.png
+rsvg-convert -w 116 -h 116 favicon.svg -o /tmp/mark.png
+magick -size 180x180 xc:'#060610' /tmp/mark.png -gravity center -composite -strip apple-touch-icon.png
+```

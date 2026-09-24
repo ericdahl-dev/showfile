@@ -1,18 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289 285" role="img" aria-label="StageBuilder Pro">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Showfile">
   <defs>
-    <linearGradient id="sbp" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#7e7aff"/>
-      <stop offset="0.26" stop-color="#996cff"/>
-      <stop offset="0.53" stop-color="#b265fe"/>
+      <stop offset="0.5" stop-color="#b265fe"/>
       <stop offset="1" stop-color="#d77aba"/>
     </linearGradient>
+    <mask id="sf-cut">
+      <rect width="64" height="64" fill="#fff"/>
+      <path d="M38 0 V14 Q38 22 46 22 H60" fill="none" stroke="#000" stroke-width="5"/>
+      <polyline points="16,46 26,46 26,34 38,34 38,46 48,46" fill="none" stroke="#000" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+    </mask>
   </defs>
-  <g fill="url(#sbp)">
-    <rect x="0" y="0" width="139" height="62"/>
-    <rect x="150" y="0" width="139" height="62"/>
-    <rect x="0" y="74.33" width="139" height="62"/>
-    <rect x="150" y="148.67" width="139" height="62"/>
-    <rect x="0" y="223" width="139" height="62"/>
-    <rect x="150" y="223" width="139" height="62"/>
-  </g>
+  <path mask="url(#sf-cut)" fill="url(#sf)" d="M15 2 H40 L58 20 V52 Q58 62 48 62 H15 Q5 62 5 52 V12 Q5 2 15 2 Z"/>
 </svg>

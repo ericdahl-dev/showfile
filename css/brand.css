@@ -1,102 +1,47 @@
-/* brand.css — the StageBuilder logo lockup. One definition, every page.
+/* brand.css — the Showfile logo lockup. One definition, every page.
  *
- * The mark is the six-bar glyph rebuilt in CSS (no image): a 2-column × 4-row
- * grid where rows 2 and 3 drop one bar. Each row is its own 3D-rotating element
- * spinning about the mark's vertical centre axis, so the single-bar rows swing
- * out and back. Rows rest flat for most of the cycle, then spin once — staggered
- * top to bottom so the spin cascades down the mark.
+ * The mark is favicon.svg: a page with a folded corner and a single pulse cut
+ * through it, filled with the violet brand ramp (#7e7aff → #b265fe → #d77aba).
+ * Using the favicon file itself keeps the tab icon and the lockup identical.
  *
  * Markup:
- *   <a class="sbp-logo" href="/">
- *     <span class="sbp-mark" aria-hidden="true">
- *       <span class="sbp-row"><i></i><i></i></span>
- *       <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
- *       <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
- *       <span class="sbp-row"><i></i><i></i></span>
- *     </span>
- *     <span class="sbp-word">StageBuilder</span>
+ *   <a class="sf-logo" href="/">
+ *     <img class="sf-mark" src="/favicon.svg" alt="" width="18" height="18" />
+ *     <span class="sf-word">Showfile</span>
  *   </a>
  *
- * Per-page tuning: set --sbp-size / --sbp-word-size / --sbp-gap on .sbp-logo.
+ * Per-page tuning: set --sf-size / --sf-word-size / --sf-gap on .sf-logo.
  */
 
-.sbp-logo {
-  --sbp-size: 17px;        /* mark width; height follows the 289:285 aspect */
-  --sbp-word-size: 15px;
-  --sbp-gap: 7px;
-  --sbp-cycle: 8s;         /* rest + one spin */
-  /* Per-row cascade offset, top → bottom. Keep 3 × stagger well under the
-     rest window (cycle − spin ≈ 5.7s) so all four rows still sit flat
-     together between spins. */
-  --sbp-stagger: 0.28s;
+.sf-logo {
+  --sf-size: 18px;
+  --sf-word-size: 15px;
+  --sf-gap: 7px;
 
   display: inline-flex;
   align-items: center;
-  gap: var(--sbp-gap);
+  gap: var(--sf-gap);
   text-decoration: none;
   color: inherit;
   white-space: nowrap;
 }
 
-/* ── mark ─────────────────────────────────────────────────────────────────
-   Every number is the source artwork (289 × 285 units) divided by 289, so the
-   whole mark scales off --sbp-size: bar 139 wide / 11 column gap, bar 62 tall
-   / 12.33 row gap. Heights are calc()'d rather than percentages because a
-   percentage height against an aspect-ratio box is not reliably definite. */
-.sbp-mark {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.sf-mark {
+  display: block;
   flex: none;
-  width: var(--sbp-size);
-  height: calc(var(--sbp-size) * 0.98615);   /* 285 / 289 */
-  perspective: calc(var(--sbp-size) * 12);
+  width: var(--sf-size);
+  height: var(--sf-size);
 }
 
-.sbp-row {
-  display: flex;
-  gap: 3.806%;                               /* 11 / 289, of the mark width */
-  height: calc(var(--sbp-size) * 0.21453);   /* 62 / 289 */
-  transform-style: preserve-3d;
-  animation: sbpRowSpin var(--sbp-cycle) cubic-bezier(0.55, 0, 0.3, 1) infinite;
-}
-
-.sbp-row > i {
-  flex: 0 0 48.097%;                         /* 139 / 289 */
-  background-image: linear-gradient(180deg, var(--sbp-a), var(--sbp-b));
-}
-
-/* The empty half of rows 2 and 3 — holds the column open so every row spins
-   about the same centre axis. */
-.sbp-row > i.sbp-void { background: none; }
-
-/* Each row carries its own slice of the single top-to-bottom brand gradient
-   (#7e7aff → #996cff → #b265fe → #d77aba), so the four rows read as one ramp. */
-.sbp-row:nth-child(1) { --sbp-a: #7e7aff; --sbp-b: #956eff; animation-delay: 0s; }
-.sbp-row:nth-child(2) { --sbp-a: #996cff; --sbp-b: #ad66fe; animation-delay: var(--sbp-stagger); }
-.sbp-row:nth-child(3) { --sbp-a: #b165fe; --sbp-b: #c26ee0; animation-delay: calc(var(--sbp-stagger) * 2); }
-.sbp-row:nth-child(4) { --sbp-a: #c670da; --sbp-b: #d77aba; animation-delay: calc(var(--sbp-stagger) * 3); }
-
-/* Flat and still for the first 58% of the cycle, then one full revolution. */
-@keyframes sbpRowSpin {
-  0%,  58%  { transform: rotateY(0deg); }
-  86%, 100% { transform: rotateY(360deg); }
-}
-
-/* ── wordmark ─────────────────────────────────────────────────────────── */
-.sbp-word {
+.sf-word {
   font-family: 'Inter Tight', Inter, system-ui, -apple-system, sans-serif;
-  font-size: var(--sbp-word-size);
+  font-size: var(--sf-word-size);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1;
-  color: var(--sbp-word-color, currentColor);
-  /* Pages that gradient-fill their old wordmark leave these set; reset them. */
+  color: var(--sf-word-color, currentColor);
+  /* Pages that gradient-fill their headings leave these set; reset them. */
   -webkit-text-fill-color: currentColor;
   background: none;
   text-transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sbp-row { animation: none; }
 }

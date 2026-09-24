@@ -1,8 +1,8 @@
 {
-  "name": "stagebuilder-free",
+  "name": "showfile",
   "private": true,
   "type": "module",
-  "description": "StageBuilder Pro console scene converter: X32/M32, X Air/MR and Wing, any direction, entirely in the browser.",
+  "description": "Showfile: free browser tools for live production. Console scene converter and LTC timecode generator.",
   "scripts": {
     "dev": "python3 -m http.server 8080",
     "test": "node --test"

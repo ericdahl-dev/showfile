@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export | StageBuilder</title>
+  <title>Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export | Showfile</title>
   <meta name="description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -13,19 +13,19 @@
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/fonts/fonts.css" />
-  <link rel="canonical" href="https://stagebuilder.ericdahl.dev/timecode-generator" />
+  <link rel="canonical" href="https://showfile.ericdahl.dev/timecode-generator" />
   <meta property="og:title" content="Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export" />
   <meta property="og:description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
-  <meta property="og:image" content="https://stagebuilder.ericdahl.dev/og-image-timecode.jpg" />
+  <meta property="og:image" content="https://showfile.ericdahl.dev/og-image-timecode.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:url" content="https://stagebuilder.ericdahl.dev/timecode-generator" />
+  <meta property="og:url" content="https://showfile.ericdahl.dev/timecode-generator" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="StageBuilder" />
+  <meta property="og:site_name" content="Showfile" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Free LTC Timecode Generator — SMPTE WAV &amp; Batch Export" />
   <meta name="twitter:description" content="Generate SMPTE LTC timecode in your browser. Any frame rate, any start time — download one WAV or a whole numbered batch as a zip. Free, no sign-up." />
-  <meta name="twitter:image" content="https://stagebuilder.ericdahl.dev/og-image-timecode.jpg" />
+  <meta name="twitter:image" content="https://showfile.ericdahl.dev/og-image-timecode.jpg" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,10 +33,10 @@
     "name": "LTC Timecode Generator",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Any (web browser)",
-    "url": "https://stagebuilder.ericdahl.dev/timecode-generator",
+    "url": "https://showfile.ericdahl.dev/timecode-generator",
     "description": "Generate SMPTE LTC (linear timecode) WAV files in the browser at 23.976, 24, 25, 29.97 drop-frame, 29.97 non-drop and 30 fps. Download a single file or a numbered batch as a zip.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "publisher": { "@type": "Organization", "name": "StageBuilder", "url": "https://stagebuilder.ericdahl.dev/" }
+    "publisher": { "@type": "Organization", "name": "Showfile", "url": "https://showfile.ericdahl.dev/" }
   }
   </script>
   <script type="application/ld+json">
@@ -107,7 +107,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .sbp-logo { --sbp-size: 17px; --sbp-word-size: 15px; }
+    .sf-logo { --sf-size: 17px; --sf-word-size: 15px; }
     .nav-right { display: flex; align-items: center; gap: 24px; }
     .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
     .nav-link:hover { color: var(--text); }
@@ -316,14 +316,9 @@
 <body>
 
 <nav>
-  <a class="sbp-logo" href="/">
-    <span class="sbp-mark" aria-hidden="true">
-      <span class="sbp-row"><i></i><i></i></span>
-      <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
-      <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
-      <span class="sbp-row"><i></i><i></i></span>
-    </span>
-    <span class="sbp-word">StageBuilder<span class="app-version-tag"></span></span>
+  <a class="sf-logo" href="/">
+    <img class="sf-mark" src="/favicon.svg" alt="" width="18" height="18" />
+    <span class="sf-word">Showfile<span class="app-version-tag"></span></span>
   </a>
   <div class="nav-right">
     <div class="nav-tools" data-nav-tools data-open="false">
@@ -518,7 +513,7 @@
     <a href="/">Home</a> &nbsp;&middot;&nbsp;
     <a href="/convert">Scene Converter</a>
   </p>
-  <p>&copy; 2026 StageBuilder</p>
+  <p>&copy; 2026 Showfile</p>
 </footer>
 
 <script type="module" src="/js/nav-tools.js"></script>
@@ -798,7 +793,7 @@
   function manifestText(p) {
     const df = p.spec.dropFrame;
     const head = [
-      'StageBuilder — LTC batch',
+      'Showfile — LTC batch',
       `Generated:    ${new Date().toLocaleString()}`,
       `Frame rate:   ${p.spec.label}`,
       `Sample rate:  ${p.sampleRate} Hz`,

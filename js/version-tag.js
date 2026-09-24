@@ -5,7 +5,7 @@
 //   <script type="module" src="/js/version-tag.js"></script>
 //
 // It injects its own styles and, if the page has a lockup but no chip markup,
-// creates the chip inside the first .sbp-word — which is the top-left nav
+// creates the chip inside the first .sf-word — which is the top-left nav
 // lockup, since nav comes first in the document. Pages that already carry an
 // explicit <span class="app-version-tag"></span> keep using it, and a page with
 // several lockups (a footer repeat, say) still gets exactly one chip.
@@ -44,7 +44,7 @@ function injectStyle() {
 // Only ever adds a chip to a page that has none — never a second one.
 function ensureTag() {
   if (document.querySelector('.app-version-tag')) return;
-  const word = document.querySelector('.sbp-word');
+  const word = document.querySelector('.sf-word');
   if (!word) return;                       // no lockup on this page (404, manage)
   const tag = document.createElement('span');
   tag.className = 'app-version-tag';
