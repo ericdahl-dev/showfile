@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Tools for Live Production | StageBuilder</title>
+  <meta name="description" content="Free browser tools for live production: convert console scenes between the X32, M32, X Air and Wing, and generate SMPTE LTC timecode WAV files. No upload, no account." />
+  <link rel="canonical" href="https://stagebuilder.ericdahl.dev/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <link rel="stylesheet" href="/css/brand.css" />
+  <style>
+    :root {
+      --bg:      #060610;
+      --surface: rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.07);
+      --purple:  #8b5cf6;
+      --text:    #f8fafc;
+      --muted:   #94a3b8;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sbp-logo { --sbp-size: 17px; --sbp-word-size: 15px; }
+    .page { max-width: 860px; margin: 0 auto; padding: 72px 24px 60px; }
+    h1 { font-family: var(--font-head); font-weight: 700; font-size: 34px; line-height: 1.2; letter-spacing: -0.02em; }
+    .lede { color: var(--muted); margin: 12px 0 40px; max-width: 560px; }
+    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .tool {
+      display: block;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .tool:hover, .tool:focus-visible { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.06); }
+    .tool h2 { font-family: var(--font-head); font-weight: 600; font-size: 18px; margin-bottom: 6px; }
+    .tool p { color: var(--muted); font-size: 14px; }
+    footer { max-width: 860px; margin: 0 auto; padding: 24px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) {
+      nav { padding: 14px 16px; }
+      .page { padding: 48px 16px 40px; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="sbp-logo" href="/">
+    <span class="sbp-mark" aria-hidden="true">
+      <span class="sbp-row"><i></i><i></i></span>
+      <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
+      <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
+      <span class="sbp-row"><i></i><i></i></span>
+    </span>
+    <span class="sbp-word">StageBuilder</span>
+  </a>
+</nav>
+
+<main class="page">
+  <h1>Free tools for live production</h1>
+  <p class="lede">Everything runs in your browser. Nothing is uploaded and there is no account.</p>
+
+  <div class="tools">
+    <a class="tool" href="/convert/">
+      <h2>Console Scene Converter</h2>
+      <p>Move a show between desks: X32, M32, X Air and Wing, in any direction, with a report of everything that did not carry.</p>
+    </a>
+    <a class="tool" href="/timecode-generator/">
+      <h2>LTC Generator</h2>
+      <p>SMPTE timecode WAV files at any frame rate and start time, one at a time or as a batch.</p>
+    </a>
+  </div>
+</main>
+
+<footer>&copy; 2026 StageBuilder</footer>
+
+</body>
+</html>
