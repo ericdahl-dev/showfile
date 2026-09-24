@@ -1,6 +1,6 @@
 // constants.js — shared constants for StageBuilder
 
-export const APP_VERSION = '2.6';
+export const APP_VERSION = '1.0';
 
 export const UNITS = 'ft';
 export const GRID_SIZE = 0.5;         // ft default snap
