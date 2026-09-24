@@ -1,0 +1,30 @@
+#4.0# "Synthetic" "" %000000000 1
+/config/chlink ON OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF
+/config/mute OFF OFF OFF OFF OFF OFF
+/config/routing/IN AN1-8 AN9-16 A1-8 CARD9-16 AUX1-6/USB
+/headamp/000 +32.5 ON
+/headamp/001 +32.5 ON
+/headamp/002 +20.0 OFF
+/ch/01/config "Keys L" 44 GN 1
+/ch/01/preamp +0.0 OFF ON 24 100
+/ch/01/eq ON
+/ch/01/eq/1 PEQ 200 +2.0 2.0
+/ch/01/eq/2 PEQ 3k43 -3.5 1.4
+/ch/01/mix ON -5.0 ON +0 OFF -oo
+/ch/01/mix/01 ON -10.0 +0 POST
+/ch/01/grp %00000001 %000000
+/ch/02/config "Keys R" 44 GN 2
+/ch/02/preamp +0.0 OFF ON 24 100
+/ch/02/eq ON
+/ch/02/mix ON -5.0 ON +0 OFF -oo
+/ch/02/grp %00000001 %000000
+/ch/03/config "Vox" 40 RD 3
+/ch/03/preamp +0.0 OFF ON 24 80
+/ch/03/eq ON
+/ch/03/eq/1 HSHV 10k02 +1.5 0.7
+/ch/03/mix OFF 0.0 ON -20 OFF -oo
+/ch/03/grp %00000100 %000001
+/dca/1/config "Keys" 1 GN
+/dca/1 ON 0.0
+/dca/3/config "Vox" 1 RD
+/dca/3 ON -2.0

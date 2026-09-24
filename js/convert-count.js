@@ -19,6 +19,12 @@ const ENDPOINT = 'https://tbjjkvkuunklijaiicvh.supabase.co/rest/v1/rpc/record_co
 const ANON_KEY = 'sb_publishable_35L2m0yW4pElt_DwJpNoyw_2fIspEMo';
 const STORE_KEY = 'sbp.convert.visitor';
 
+// Only production pages count. A local dev server or a preview deploy would
+// otherwise post into the same numbers the live site reports.
+const COUNT_HOSTS = new Set(['stagebuilder.ericdahl.dev']);
+
+export const shouldCount = (hostname) => COUNT_HOSTS.has(String(hostname || ''));
+
 function visitorId() {
   try {
     let v = localStorage.getItem(STORE_KEY);
@@ -36,6 +42,7 @@ function visitorId() {
 export function countConversion(event, from, to) {
   if (!from || !to) return;
   try {
+    if (!shouldCount(globalThis.location?.hostname)) return;
     fetch(ENDPOINT, {
       method: 'POST',
       headers: {

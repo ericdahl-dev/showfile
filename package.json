@@ -1,0 +1,13 @@
+{
+  "name": "stagebuilder-free",
+  "private": true,
+  "type": "module",
+  "description": "StageBuilder Pro console scene converter: X32/M32, X Air/MR and Wing, any direction, entirely in the browser.",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
