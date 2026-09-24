@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<!--
+  Share-image source. Each image is this page at 1200×630, screenshotted:
+
+    npm run dev, then open /og/?page=convert  (or timecode, home)
+
+  and capture the viewport at exactly 1200×630 (the README has the steps).
+  The results live at the site root as og-*.jpg.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
+  <title>Share Image Source</title>
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <link rel="stylesheet" href="/css/brand.css" />
+  <style>
+    :root {
+      --bg: #060610;
+      --panel: #0d0d18;
+      --line: rgba(255,255,255,0.08);
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --ok: #4ade80;
+      --head: 'Plus Jakarta Sans', sans-serif;
+      --body: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+      position: relative;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Atmosphere: faint grid plus a blue, a violet and an amber glow. */
+    .bg { position: absolute; inset: 0; pointer-events: none; }
+    .bg::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .bg::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(420px 320px at 170px 90px, rgba(37,99,235,0.28), transparent 70%),
+        radial-gradient(460px 260px at 520px 640px, rgba(139,92,246,0.22), transparent 70%),
+        radial-gradient(360px 260px at 1130px 30px, rgba(245,158,11,0.12), transparent 70%);
+    }
+
+    .sbp-logo { --sbp-size: 30px; --sbp-word-size: 25px; --sbp-gap: 12px; }
+    .sbp-row, .sbp-row * { animation: none !important; }
+
+    .left { position: absolute; left: 52px; top: 42px; width: 470px; }
+    .eyebrow {
+      margin-top: 62px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #a78bfa;
+    }
+    h1 {
+      margin-top: 14px;
+      font-family: var(--head); font-weight: 800;
+      font-size: 64px; line-height: 1.02; letter-spacing: -0.035em;
+    }
+    h1 .grad {
+      background: linear-gradient(90deg, var(--blue), #a855f7 60%, #d77aba);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lede { margin-top: 26px; font-size: 17px; line-height: 1.6; color: var(--muted); }
+
+    .right { position: absolute; right: 52px; top: 40px; width: 604px; }
+    .card {
+      background: rgba(13,13,24,0.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+    }
+    .card + .card { margin-top: 16px; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .row { display: flex; gap: 14px; align-items: flex-end; }
+    .field { flex: 1; }
+    .select {
+      margin-top: 8px; height: 42px; padding: 0 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: 10px;
+      font-size: 15px;
+    }
+    .select::after { content: '▾'; color: var(--muted); font-size: 13px; }
+    .select.plain::after { content: none; }
+    .mono { font-family: var(--mono); }
+    .swap {
+      width: 40px; height: 40px; flex: none; border-radius: 50%;
+      border: 1px solid var(--line); display: grid; place-items: center; color: var(--muted);
+    }
+    .file {
+      margin-top: 16px; padding: 14px 16px;
+      border: 1px dashed rgba(139,92,246,0.45); border-radius: 12px;
+      background: rgba(139,92,246,0.06);
+      display: flex; gap: 14px; align-items: center;
+    }
+    .file small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .actions { margin-top: 16px; display: flex; gap: 16px; align-items: center; }
+    .btn {
+      padding: 10px 18px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      font-size: 14px; font-weight: 600;
+    }
+    .ok { color: var(--ok); font-size: 14px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13.5px; }
+    th { text-transform: uppercase; text-align: left; font-family: var(--mono); font-weight: 500; font-size: 10.5px; letter-spacing: 0.12em; color: var(--muted); padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    td { padding: 6px 6px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    td.m { font-family: var(--mono); font-size: 12.5px; color: #cbd5e1; }
+    .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 10px; vertical-align: -1px; }
+    .tag { font-family: var(--mono); font-size: 10.5px; padding: 1px 7px; border-radius: 99px; background: rgba(139,92,246,0.18); color: #c4b5fd; margin-left: 6px; }
+    .fade td { opacity: 0.35; }
+    .cardhead { display: flex; justify-content: space-between; align-items: baseline; }
+    .cardhead .mono { font-size: 12px; color: var(--muted); }
+
+    .wave { margin-top: 16px; height: 96px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); overflow: hidden; }
+    .tc { font-family: var(--mono); font-size: 44px; font-weight: 500; letter-spacing: 0.02em; margin-top: 6px; }
+
+    .tool { display: flex; gap: 18px; align-items: flex-start; }
+    .tool .ico { width: 46px; height: 46px; flex: none; border-radius: 12px; display: grid; place-items: center; background: rgba(139,92,246,0.14); color: #c4b5fd; }
+    .tool h3 { font-family: var(--head); font-size: 21px; font-weight: 700; }
+    .tool p { color: var(--muted); font-size: 14.5px; line-height: 1.55; margin-top: 4px; }
+
+    .features {
+      position: absolute; left: 52px; right: 52px; bottom: 0; height: 88px;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 14.5px; color: #cbd5e1;
+    }
+    .features span { display: inline-flex; gap: 10px; align-items: center; }
+    .features svg { width: 17px; height: 17px; color: #a78bfa; }
+
+    [data-page]:not(.on) { display: none; }
+  </style>
+</head>
+<body>
+<div class="bg"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
+</svg>
+
+<div class="left">
+  <span class="sbp-logo">
+    <span class="sbp-mark" aria-hidden="true">
+      <span class="sbp-row"><i></i><i></i></span>
+      <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
+      <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
+      <span class="sbp-row"><i></i><i></i></span>
+    </span>
+    <span class="sbp-word">StageBuilder</span>
+  </span>
+
+  <div data-page="convert">
+    <p class="eyebrow">Console Scene Converter</p>
+    <h1>X32. X Air.<br><span class="grad">Wing.</span></h1>
+    <p class="lede">Move a show between any two of them, either direction. Names, colours, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that can't is listed channel by channel. Runs in your browser.</p>
+  </div>
+
+  <div data-page="timecode">
+    <p class="eyebrow">LTC Timecode Generator</p>
+    <h1>SMPTE LTC.<br><span class="grad">Any rate.</span></h1>
+    <p class="lede">Linear timecode WAV files at any frame rate and start time, one file or a whole batch in a zip. Drop-frame done right. Runs in your browser.</p>
+  </div>
+
+  <div data-page="home">
+    <p class="eyebrow">Free tools</p>
+    <h1>Built for<br><span class="grad">show day.</span></h1>
+    <p class="lede">Free browser tools for live production. Convert console scenes between desks and generate SMPTE timecode. No upload, no account.</p>
+  </div>
+</div>
+
+<div class="right">
+  <div data-page="convert">
+    <div class="card">
+      <div class="row">
+        <div class="field"><span class="label">From console</span><div class="select">Behringer X Air / Midas MR</div></div>
+        <div class="swap">⇆</div>
+        <div class="field"><span class="label">To console</span><div class="select">Behringer Wing</div></div>
+      </div>
+      <div class="file">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
+        <div><span class="mono">FallTour_FOH.scn</span><small>Converted locally · never uploaded</small></div>
+      </div>
+      <div class="actions"><span class="btn">Download</span><span class="ok">Ready: 16 channels to Behringer Wing.</span></div>
+    </div>
+    <div class="card">
+      <div class="cardhead"><span class="label">Channels</span><span class="mono">16 channels</span></div>
+      <table>
+        <tr><th></th><th>Name</th><th>From</th><th>Patch</th><th>Groups</th></tr>
+        <tr><td class="m">1</td><td><span class="sw" style="background:#dc324b"></span>Kick In</td><td class="m">ch 1</td><td class="m">LCL1</td><td class="m">#D1</td></tr>
+        <tr><td class="m">2</td><td><span class="sw" style="background:#dc324b"></span>Kick Out</td><td class="m">ch 2</td><td class="m">LCL2</td><td class="m">#D1</td></tr>
+        <tr><td class="m">3</td><td><span class="sw" style="background:#ead73c"></span>Snare Top</td><td class="m">ch 3</td><td class="m">LCL3</td><td class="m">#D1</td></tr>
+        <tr><td class="m">4</td><td><span class="sw" style="background:#2db2c8"></span>OH L/R</td><td class="m">ch 7+8<span class="tag">stereo</span></td><td class="m">LCL7</td><td class="m">#D1#M2</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div data-page="timecode">
+    <div class="card" style="margin-top:42px">
+      <div class="row">
+        <div class="field"><span class="label">Frame rate</span><div class="select">29.97 fps drop-frame</div></div>
+        <div class="field"><span class="label">Sample rate</span><div class="select">48 kHz</div></div>
+      </div>
+      <div style="margin-top:18px"><span class="label">Start timecode</span></div>
+      <div class="tc">01:00:00;00</div>
+      <div class="wave">
+        <svg width="560" height="96" viewBox="0 0 560 96" preserveAspectRatio="none">
+          <defs><linearGradient id="wg" x1="0" x2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          <path id="ltc" fill="none" stroke="url(#wg)" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="actions"><span class="btn">↓ Download WAV</span><span class="ok">10 files · 5 min each · batch zip</span></div>
+    </div>
+  </div>
+
+  <div data-page="home">
+    <div class="card" style="margin-top:104px">
+      <div class="tool">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg></div>
+        <div><h3>Console Scene Converter</h3><p>Move a show between the X32, M32, X Air and Wing, in any direction, with a report of everything that didn't carry.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tool">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2-6 3 12 3-9 2 6 3-3h4"/></svg></div>
+        <div><h3>LTC Timecode Generator</h3><p>SMPTE timecode WAV files at any frame rate and start time, one at a time or as a batch.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features">
+  <div data-page="convert" style="display:contents">
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Names &amp; Icons</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Strip Colours</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Input Patch</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Gain &amp; 48V</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>EQ &amp; Dynamics</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>DCAs &amp; Mutes</span>
+  </div>
+  <div data-page="timecode" style="display:contents">
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>23.976 to 30 fps</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Drop-Frame</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>48 / 44.1 kHz</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Output Level</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Batch Zip</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>No Upload</span>
+  </div>
+  <div data-page="home" style="display:contents">
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>X32 / M32</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>X Air / MR</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Wing</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>SMPTE LTC</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Runs in the Browser</span>
+    <span><svg viewBox="0 0 24 24"><use href="#i-dot"/></svg>Free</span>
+  </div>
+</div>
+
+<script type="module">
+  import { ltcFrameBits } from '/js/ltc.js';
+
+  const page = new URLSearchParams(location.search).get('page') || 'convert';
+  for (const el of document.querySelectorAll(`[data-page="${page}"]`)) el.classList.add('on');
+  for (const el of document.querySelectorAll('.features [data-page]:not(.on)')) el.style.display = 'none';
+
+  // The timecode waveform is real biphase-mark LTC for 01:00:00;00, drawn from
+  // the same encoder the generator uses: a transition at every bit cell, and a
+  // second one mid-cell for each 1.
+  const path = document.getElementById('ltc');
+  if (path) {
+    const bits = ltcFrameBits({ h: 1, m: 0, s: 0, f: 0 }, { dropFrame: true });
+    const cells = 40, w = 560 / cells, hi = 22, lo = 74;
+    const flip = (y) => (y === hi ? lo : hi);
+    let y = hi, d = `M0 ${y}`;
+    for (let i = 0; i < cells; i++) {
+      const x = i * w;
+      y = flip(y); d += ` L${x} ${y}`;
+      if (bits[i]) { d += ` L${x + w / 2} ${y}`; y = flip(y); d += ` L${x + w / 2} ${y}`; }
+      d += ` L${x + w} ${y}`;
+    }
+    path.setAttribute('d', d);
+  }
+</script>
+</body>
+</html>

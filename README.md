@@ -35,6 +35,21 @@ with Python's `zipfile`.
 | `js/convert.js` | Converter page UI |
 | `js/ltc.js`, `js/zip.js` | LTC encoder and the zip writer for batch export |
 | `js/nav-tools.js`, `js/version-tag.js`, `css/brand.css`, `fonts/` | Shared chrome |
+| `index.html` | Home page listing the tools |
+| `og/index.html` | Source for the share images (not linked from the site) |
+
+## Share images
+
+`og-image.jpg`, `og-image-convert.jpg` and `og-image-timecode.jpg` are screenshots of
+`og/index.html`, which is kept as their source. To regenerate one after a copy or brand change:
+
+1. `npm run dev`
+2. Open `http://localhost:8080/og/?page=home` (or `convert`, `timecode`) with the browser viewport
+   at exactly 1200×630 and a device pixel ratio of 1. In Chrome DevTools, use device toolbar,
+   Responsive, 1200 × 630.
+3. Capture the viewport as JPEG and save it over the matching file at the site root.
+
+The timecode waveform is drawn from `js/ltc.js`, so it is real LTC for 01:00:00;00.
 
 ## Tests and their limits
 
