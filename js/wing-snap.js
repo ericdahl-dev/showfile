@@ -1,0 +1,259 @@
+// ─── Wing snapshot emitter ─────────────────────────────────────────────────
+// Turns the console-independent IR into a partial Wing snapshot (.snap). The
+// Wing merges partial snapshots, so we deliberately write only what the source
+// console actually specified rather than a full 28,000-key console state.
+//
+// Key names and value encodings were derived by diffing snapshots saved from
+// WING-EDIT: an initialised baseline against files with known values set.
+
+import { mapColor, mapIcon, codeToHex } from './console-map.js';
+import { loss, renderAll } from './losses.js';
+
+const NEG_INF = -144;                 // the Wing's -oo sentinel
+const DESK = 'Wing';
+const MAX_CH = 40;
+const LCL_INPUTS = 24;                // local inputs present in the snapshot
+
+const dB = (v) => (v === -Infinity || v === null || v === undefined ? NEG_INF : round(v));
+const round = (v) => Math.round(v * 1e4) / 1e4;
+
+// X32 EQ bands each choose their own type; the Wing has six bands where only
+// the outer two switch between shelf and bell. So bands route by type rather
+// than by position: shelves and cuts claim the dedicated low/high bands, and
+// everything else fills the four parametric mids in order.
+function mapEq(eq, warnings, label, filterFree) {
+  const out = { on: !!eq.on, mdl: 'STD' };
+  const mids = [];
+  let low = null, high = null;
+  out.cut = null;                                  // a cut to fold into node.flt
+
+  for (const b of eq.bands || []) {
+    const t = b.type || 'bell';
+    if (t === 'lowcut' || t === 'lowshelf') { if (!low)  low  = b; else mids.push(b); }
+    else if (t === 'highcut' || t === 'highshelf') { if (!high) high = b; else mids.push(b); }
+    else mids.push(b);
+  }
+
+  // A low-CUT band has no home in the Wing's EQ: its outer band switches
+  // between shelf and bell, and a bell at 0 dB does nothing at all, so
+  // writing one silently throws the rolloff away. The Wing does have a real
+  // low cut — in the dedicated filter section — so use that when the channel
+  // high-pass has not already claimed it, and say so when it has.
+  if (low && low.type === 'lowcut') {
+    if (filterFree) { out.cut = { lc: true, lcf: round(low.f), lcs: '12' }; }
+    else {
+      warnings.push(loss('eq.lowcut-no-slot',
+        { label, freq: Math.round(low.f), desk: DESK }));
+    }
+    low = null;
+  }
+
+  // Every one of the six bands is written, including the ones the source
+  // does not use. The Wing merges a snapshot key by key, so a band left out
+  // keeps whatever the last show put there — the converted channel then has
+  // two EQ curves fighting, and the one you cannot see came from a different
+  // gig. An unused band is written flat at 0 dB rather than omitted.
+  const MID_DEFAULT_F = [250, 1000, 4000, 8000];
+
+  out.lf = round(low ? low.f : 80);
+  out.lg = round(low ? low.g : 0);
+  out.lq = round(low ? low.q : 1);
+  out.leq = 'SHV';
+
+  out.hf = round(high ? high.f : 12000);
+  out.hg = round(high ? high.g : 0);
+  out.hq = round(high ? high.q : 1);
+  out.heq = high && high.type === 'highcut' ? 'PEQ' : 'SHV';
+
+  const fitMids = mids.length > 4 ? mids.filter(b => Number(b.g) !== 0).slice(0, 4) : mids;
+  for (let i = 0; i < 4; i++) {
+    const b = fitMids[i];
+    const n = i + 1;
+    out[`${n}f`] = round(b ? b.f : MID_DEFAULT_F[i]);
+    out[`${n}g`] = round(b ? b.g : 0);
+    out[`${n}q`] = round(b ? b.q : 1);
+  }
+  if (mids.filter(b => Number(b.g) !== 0).length > 4) {
+    warnings.push(loss('eq.mid-band-overflow', { label, count: mids.length, desk: DESK }));
+  }
+  return out;
+}
+
+// DCA and mute-group membership is a tag string ("#D5#M1"), not the bitmask the
+// X32 uses.
+function tagsFor(c) {
+  return (c.dcas || []).map(n => `#D${n}`).join('') +
+         (c.muteGroups || []).map(n => `#M${n}`).join('');
+}
+
+// X32 input classes map onto the Wing's own source groups. The Wing exposes
+// 24 local inputs in a snapshot (and only 8 physical XLRs on the desk), so a
+// scene patched to local inputs beyond that needs a stagebox on the day.
+const SRC_GROUP = { local: 'LCL', aes50a: 'A', aes50b: 'B', card: 'CRD', user: 'USR', aux: 'AUX' };
+
+function mapPatch(patch, warnings, label) {
+  if (!patch) return { grp: 'OFF', in: 1 };
+  const grp = SRC_GROUP[patch.group];
+  if (!grp) { warnings.push(loss('patch.group-unsupported', { label, group: patch.group, desk: DESK })); return { grp: 'OFF', in: 1 }; }
+  if (grp === 'LCL' && patch.input > LCL_INPUTS) {
+    warnings.push(loss('patch.input-overflow', { label, input: patch.input, desk: DESK, limit: LCL_INPUTS }));
+    return { grp: 'OFF', in: 1 };
+  }
+  return { grp, in: patch.input };
+}
+
+export function emitWingSnapshot(ir, opts = {}) {
+  const warnings = [...(ir.warnings || [])];
+  if (ir.channels.length > MAX_CH) warnings.push(loss('channel.over-limit', { count: ir.channels.length, desk: DESK, limit: MAX_CH }));
+  const include = Object.assign(
+    { names: true, colors: true, patch: true, preamp: true, levels: true,
+      eq: true, dynamics: true, sends: true, groups: true },
+    opts.include || {}
+  );
+
+  const ch = {};
+  const lcl = {};
+
+  const preview = [];
+
+  // The Wing has native stereo channels, so the IR's order is its order.
+  ir.channels.forEach((c, i) => {
+    const n = i + 1;
+    if (n > MAX_CH) { warnings.push(loss('channel.overflow-one', { n, name: c.name, desk: DESK, limit: MAX_CH }, { kind: 'channel', n, name: c.name })); return; }
+    const label = `ch ${n} "${c.name}"`;
+    const node = {};
+
+    if (include.names)  { node.name = c.name; node.icon = mapIcon(c.icon, 'wing'); }
+    if (include.colors) node.col = mapColor(c.color, 'wing');
+
+    if (include.levels) {
+      node.fdr  = dB(c.fader);
+      node.mute = !!c.muted;
+      // Both desks use -100..+100, but a stereo channel built from a linked
+      // mono pair inherits the LEFT strip's hard pan, and that -100 is how
+      // the source desk glued the pair together, not a balance anyone dialled.
+      // Copying it through would make every converted stereo channel arrive
+      // hard left, and would then read back as a deliberate balance.
+      node.pan  = c.stereo && c.srcChannels?.length === 2 ? 0 : round(c.pan || 0);
+      node.main = { 1: { on: c.toMain !== false, lvl: 0, pre: false } };
+    }
+
+    if (include.patch || include.preamp) {
+      node.in = { set: { inv: !!c.invert, trim: round(c.trim || 0) } };
+      if (include.patch) node.in.conn = mapPatch(c.patch, warnings, label);
+    }
+
+    if (include.preamp && c.hpf) {
+      node.flt = { lc: !!c.hpf.on, lcf: round(c.hpf.freq), lcs: String(c.hpf.slope || 24) };
+    }
+
+    if (include.eq && c.eq) {
+      const hpfUsed = !!(include.preamp && c.hpf && c.hpf.on);
+      const eqOut = mapEq(c.eq, warnings, label, !hpfUsed);
+      const cut = eqOut.cut;
+      delete eqOut.cut;
+      node.eq = eqOut;
+      if (cut) node.flt = { ...(node.flt || {}), ...cut };
+    }
+
+    if (include.dynamics) {
+      if (c.gate) node.gate = { on: !!c.gate.on, thr: round(c.gate.thr), range: round(c.gate.range),
+                                att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
+      if (c.dyn)  node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
+                                ratio: round(c.dyn.ratio), knee: round(c.dyn.knee),
+                                att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
+                                gain: round(c.dyn.gain), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
+                                env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG', mix: round(c.dyn.mix ?? 100) };
+    }
+
+    if (include.sends && c.sends?.length) {
+      const send = {};
+      for (const s of c.sends) {
+        send[String(s.bus)] = { on: !!s.on, lvl: dB(s.level),
+                                mode: String(s.tap).toUpperCase() === 'POST' ? 'POST' : 'PRE',
+                                pan: round(s.pan || 0) };
+      }
+      node.send = send;
+    }
+
+    if (include.groups) {
+      const t = tagsFor(c);
+      if (t) node.tags = t;
+    }
+
+    // Editing one channel of a default-linked pair breaks the link on the desk;
+    // mirror that so an imported channel doesn't drag its neighbour around.
+    node.clink = false;
+
+    // Stereo is recorded on the strip as well as on the input. The io entry is
+    // only written when the source had a headamp, so a stereo channel patched
+    // to an input with no preamp would otherwise read back as mono.
+    if (c.stereo) node.mode = 'ST';
+
+    ch[String(n)] = node;
+    preview.push({
+      n, name: c.name, colorHex: c.color?.hex || null,
+      outColorHex: codeToHex('wing', mapColor(c.color, 'wing')),
+      source: `ch ${c.srcChannels.join('+')}`, stereo: !!c.stereo,
+      patch: node.in?.conn && node.in.conn.grp !== 'OFF' ? `${node.in.conn.grp}${node.in.conn.in}` : '—',
+      groups: node.tags || '—',
+    });
+
+    // Preamp gain and phantom live on the physical input, not the strip.
+    if (include.preamp && c.headamp && node.in?.conn && node.in.conn.grp !== 'OFF') {
+      const grpStore = (lcl[node.in.conn.grp] ||= {});
+      grpStore[String(node.in.conn.in)] = {
+        g: round(c.headamp.gain), vph: !!c.headamp.phantom,
+        ...(c.stereo ? { mode: 'ST' } : {}),
+      };
+    }
+  });
+
+  // Same reasoning as the EQ bands, one level up: a channel the show does not
+  // reach keeps the last scene's name, colour and patch. Blank the rest of the
+  // desk so a converted show lands the same way every time.
+  for (let n = ir.channels.length + 1; n <= MAX_CH; n++) {
+    if (ch[String(n)]) continue;
+    ch[String(n)] = { name: '', fdr: NEG_INF, mute: true, pan: 0 };
+  }
+
+  const ae = { ch };
+
+  if (include.groups) {
+    const dca = {};
+    for (const d of ir.dcas || []) {
+      if (!d.name && d.fader === 0) continue;
+      dca[String(d.n)] = { name: d.name, icon: mapIcon(d.icon, 'wing'), col: mapColor(d.color, 'wing'), fdr: dB(d.fader), mute: !!d.muted };
+    }
+    if (Object.keys(dca).length) ae.dca = dca;
+  }
+
+  if (include.names) {
+    const bus = {};
+    (ir.buses || []).forEach(b => {
+      if (!b.name) return;
+      bus[String(b.n)] = { name: b.name, icon: mapIcon(b.icon, 'wing'), col: mapColor(b.color, 'wing'), fdr: dB(b.fader), mute: !!b.muted };
+    });
+    if (Object.keys(bus).length) ae.bus = bus;
+
+    const mtx = {};
+    (ir.matrices || []).forEach(b => {
+      if (!b.name) return;
+      mtx[String(b.n)] = { name: b.name, icon: mapIcon(b.icon, 'wing'), col: mapColor(b.color, 'wing'), fdr: dB(b.fader), mute: !!b.muted };
+    });
+    if (Object.keys(mtx).length) ae.mtx = mtx;
+  }
+
+  if (Object.keys(lcl).length) ae.io = { in: lcl };
+
+  return {
+    snapshot: { type: 'snapshot.11', creator: 'StageBuilder Pro',
+                creator_name: String(ir.name || '').slice(0, 32), creator_model: 'wing', ae_data: ae },
+    warnings: renderAll(warnings),
+    losses: warnings.filter(w => typeof w !== 'string'),
+    preview,
+    // The blanked slots are housekeeping, not channels the engineer converted.
+    stats: { channels: Object.values(ch).filter(c => c.name).length,
+             stereoPairs: ir.channels.filter(c => c.stereo).length },
+  };
+}

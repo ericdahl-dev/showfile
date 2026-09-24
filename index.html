@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#060610" />
+  <title>Console Scene Converter — X32, M32, X Air and Wing, any direction | StageBuilder Pro</title>
+  <meta name="description" content="Convert scene files between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of the three, in either direction, in your browser. Names, colours, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that cannot is listed channel by channel. Free, nothing uploaded." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/brand.css" />
+  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <link rel="canonical" href="https://stagebuilderpro.com/convert" />
+  <meta property="og:title" content="Console Scene Converter — X32, M32, X Air and Wing" />
+  <meta property="og:description" content="Move a show between the X32, M32, X Air, MR and Wing in either direction. Everything that cannot come across is listed channel by channel. Nothing is uploaded." />
+  <meta property="og:url" content="https://stagebuilderpro.com/convert" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://stagebuilderpro.com/og-image-convert.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="StageBuilder Pro" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Console Scene Converter — X32, M32, X Air and Wing" />
+  <meta name="twitter:description" content="Move a show between the X32, M32, X Air, MR and Wing, either direction. Names, colours, patch, gains, EQ and dynamics carry across; anything that cannot is listed. Free, nothing uploaded." />
+  <meta name="twitter:image" content="https://stagebuilderpro.com/og-image-convert.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Console Scene Converter",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "url": "https://stagebuilderpro.com/convert",
+    "description": "Convert mixing console scene files between the Behringer X32, Midas M32, Behringer X Air (XR12/XR16/XR18), Midas MR and Behringer Wing, in either direction, entirely in the browser. Channel names, strip colours, input patch, preamp gains, phantom power, filters, EQ, gate, compressor, bus sends, DCAs and mute groups carry across. Stereo handling is translated between desks that link mono pairs and desks with native stereo channels. Every setting the target console cannot represent is reported channel by channel rather than dropped silently.",
+    "featureList": [
+      "Converts between the Behringer X32 / Midas M32, the Behringer X Air / Midas MR and the Behringer Wing, in either direction",
+      "X32 and M32 .scn scene files, X Air .scn scene files and Wing .snap snapshots",
+      "Channel names and strip colours matched perceptually between each console's palette",
+      "Input patch, including per-channel patching on the X Air and Wing and blocks of eight on the X32",
+      "Preamp gain and phantom power",
+      "High-pass and low-pass filters, EQ, gate and compressor",
+      "Bus sends with their pre or post fader tap",
+      "DCA and mute group membership",
+      "Stereo translated between linked mono pairs and native stereo channels in both directions",
+      "A channel-by-channel report of everything the target console cannot represent, graded by whether it was dropped, degraded, approximated, relocated or merely needs checking",
+      "Runs entirely in the browser — no upload, no account, no cost"
+    ],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "StageBuilder Pro", "url": "https://stagebuilderpro.com/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which consoles does the scene converter support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Three, in any combination and either direction: the Behringer X32 and Midas M32, which share a .scn scene file; the Behringer X Air series (XR12, XR16, XR18) and Midas MR, which use their own .scn scene file; and the Behringer Wing, which uses a .snap snapshot. That gives six conversions in total. The X Air field positions were derived from real XR18 scene files."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert an X32 scene to a Behringer Wing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Drop an X32 or M32 .scn scene file in and you get a Wing .snap snapshot back. Channel names, icons, strip colours, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert a Wing snapshot to an X32 or M32 scene?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Drop a Wing .snap snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colours to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert to and from a Behringer X Air or Midas MR?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, in both directions and against either of the other two desks. An X Air show converts up to an X32, an M32 or a Wing, and a show from any of those converts down to an X Air. The X Air is the smallest console here \u2014 16 channels, six buses, four DCAs, four mute groups, four EQ bands and no matrices \u2014 so converting down to it loses the most, and the report names every channel affected."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the X Air patch inputs per channel or in blocks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Per channel, which makes it more flexible than the X32 in one specific way. An X Air channel can take any input, so a scattered patch survives a conversion to an X Air intact. Going the other way the X32's blocks of eight are a hard limit, and any channel that cannot be addressed inside its block is named individually so you know exactly what to repatch."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens to AES50 stageboxes when converting to an X Air?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The X Air has no AES50, so channels patched to a stagebox arrive unpatched and are listed in the report. You will need to repatch them to the X Air's local inputs or its USB returns on the day. Converting between the X32 and the Wing, AES50 patching carries across normally."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens to stereo channels between desks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends which way you are going. The X32 and X Air have no stereo channel, so they build stereo from two hard-panned mono strips linked together; the Wing has native stereo channels. Converting up, each linked pair collapses into one Wing channel, which is why channel numbers shift down the list. Converting down, each Wing stereo channel becomes two linked mono channels. The X32 and X Air only link odd-aligned pairs \u2014 1-2, 3-4, never 2-3 \u2014 so a stereo channel that would land on an even channel leaves that channel empty rather than renumbering the rest of the show. If a Wing stereo channel had its balance set away from centre, that balance cannot survive the trip down and is reported."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it work with a Midas M32 or MR18?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The M32 shares its scene file format with the X32, and the Midas MR series shares its format with the Behringer X Air, so both convert exactly the same way. Scene files saved from X32-Edit, M32-Edit and X AIR Edit all work, as do files saved on the console itself."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which firmware does this expect, and can an update break it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Scene files are a list of settings \u2014 plain text on the X32, M32, X Air and MR, JSON on the Wing \u2014 and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches \u2014 names, colours, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups \u2014 have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there \u2014 the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if my console will not load the converted file?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tell us, and name the desk and its firmware version. Every desk here was mapped from real scene files rather than from a specification, so a build that writes a field differently is exactly the kind of thing that only turns up when someone hits it. A report with the firmware version on it gets fixed and gets published; a converted file that will not load is a bug in the converter, not a limit of the idea."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will it overwrite the rest of my console?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It replaces the channel layer. A converted X32 or X Air scene is a full scene file covering every channel on the desk, and the Wing output is a snapshot covering all 40 channels \u2014 in each case, channels your show does not use are written blank rather than left holding the previous show. Buses, effects and routing outside the channel layer are not touched. Save your current show before loading a converted one."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the report tell me?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Everything the target console could not represent, channel by channel, graded by what you have to do about it: dropped means it did not make it at all, degraded means it arrived worse, approximated means it was mapped to the nearest available value, relocated means it is there but somewhere else, unsupported means the concept does not exist on that desk, and check means it is probably fine but worth a look. Treat a converted scene as a head start, not a finished show file."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my scene files uploaded anywhere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. One thing does leave the page: a count that a conversion happened and which desk went to which desk, so we know the tool is being used. No filename, no channel names, no settings, nothing from inside your file."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why are the channel colours different from other X32 to Wing converters?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Because the two consoles use unrelated colour palettes. The X32 has eight colours plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's colour index straight through lands a green channel on Wing colour 2, which is blue. This converter matches colours by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colours, so those two are exact in both directions."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --bg:      #060610;
+      --surface: rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.07);
+      --blue:    #3b82f6;
+      --purple:  #8b5cf6;
+      --text:    #f8fafc;
+      --muted:   #94a3b8;
+      --danger:  #ef4444;
+      --warn:    #f59e0b;
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(6,6,16,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .sbp-logo { --sbp-size: 17px; --sbp-word-size: 15px; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .nav-link:hover { color: var(--text); }
+    /* The homepage pill (home.html .nav-cta) — same button, same site.
+       #f5f4f0 is the homepage's --ink, a touch warmer than this page's --text. */
+    .nav-cta {
+      padding: 9px 20px;
+      background: #f5f4f0;
+      color: #000; border: none; border-radius: 100px;
+      font-size: 13.5px; font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: #fff; }
+
+    /* ── Tools dropdown ──────────────────────────────────────────────────── */
+    .nav-tools { position: relative; display: flex; }
+    .nav-tools-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: var(--font-body); font-size: 13px; font-weight: 300;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .nav-tools-btn:hover,
+    .nav-tools[data-open="true"] .nav-tools-btn { color: var(--text); }
+    .nav-tools-btn:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 4px; }
+    .nav-tools-btn svg { width: 9px; height: 9px; transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
+    .nav-tools[data-open="true"] .nav-tools-btn svg { transform: rotate(180deg); }
+
+    .nav-tools-menu {
+      position: absolute; top: 100%; right: 0;
+      margin-top: 14px; min-width: 290px; padding: 6px;
+      background: rgba(13,13,24,0.94);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: 0 20px 48px -14px rgba(0,0,0,0.8);
+      opacity: 0; visibility: hidden;
+      transform: translateY(-7px) scale(0.975); transform-origin: top right;
+      transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.4,0,0.2,1), visibility 0.2s;
+    }
+    /* Bridge the gap between button and panel so the pointer can cross it. */
+    .nav-tools-menu::before { content: ''; position: absolute; inset: -14px 0 100% 0; }
+    .nav-tools[data-open="true"] .nav-tools-menu {
+      opacity: 1; visibility: visible; transform: none;
+    }
+
+    .nav-tool {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 10px 11px; border-radius: 10px;
+      text-decoration: none; color: var(--text);
+      transition: background 0.15s;
+    }
+    .nav-tool:hover { background: rgba(255,255,255,0.055); }
+    .nav-tool:focus-visible { outline: none; background: rgba(139,92,246,0.16); }
+    .nav-tool[aria-current="page"] { background: rgba(139,92,246,0.11); }
+    .nav-tool-ico {
+      flex: none; width: 30px; height: 30px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+    }
+    .nav-tool-ico svg { width: 15px; height: 15px; }
+    /* These are spans inside a span, so they need an explicit display — inline
+       ignores the margin and runs the name and description onto one line. */
+    .nav-tool-text { display: block; min-width: 0; }
+    .nav-tool-name { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+    .nav-tool-desc { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-tools-menu { transition: opacity 0.01ms, visibility 0.01ms; transform: none; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 16px; }
+      .nav-right { gap: 16px; }
+      /* Keep Tools reachable on phones — it is the only route to the tools. */
+      .nav-link { display: none; }
+      .nav-tools-menu { min-width: 262px; }
+    }
+
+    .page { max-width: 860px; margin: 0 auto; padding: 110px 24px 60px; }
+
+    .hero { text-align: center; margin-bottom: 34px; }
+    h1 {
+      font-family: var(--font-head); font-weight: 800;
+      font-size: clamp(1.7rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .hero p { color: var(--muted); font-size: clamp(0.95rem, 2vw, 1.05rem); max-width: 58ch; margin: 0 auto; }
+
+    /* ── Converter ──────────────────────────────────────────────────────────── */
+    .tool {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(18px, 3.5vw, 28px);
+      margin-bottom: 30px;
+    }
+
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px; align-items: start; }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
+    /* With only two desks the "to" list holds a single entry, which reads as a
+       dead control — you cannot tell the other direction exists without first
+       changing "from". The swap button makes the direction the thing you act on. */
+    .swap {
+      margin-top: 25px; width: 38px; height: 38px; flex: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%; cursor: pointer;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.05);
+      color: var(--muted); font-size: 15px; line-height: 1;
+      transition: color 0.15s, background 0.15s, transform 0.15s;
+    }
+    .swap:hover { color: var(--text); background: rgba(255,255,255,0.1); transform: rotate(180deg); }
+    .swap:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    @media (max-width: 620px) { .swap { margin: 0 auto; transform: rotate(90deg); } .swap:hover { transform: rotate(270deg); } }
+
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .field label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .field .hint { font-size: 11.5px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+    select {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      font-family: var(--font-body); font-size: 14px;
+      padding: 10px 12px;
+      transition: border-color 0.15s;
+      appearance: none; -webkit-appearance: none; cursor: pointer;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+      background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px;
+    }
+    select:focus { outline: none; border-color: var(--purple); }
+    select option { background: #12121c; color: var(--text); }
+    select option:disabled { color: #5a6474; }
+
+    /* The drop target is a <label> wrapping a hidden input, so it needs an
+       explicit display — inline is the default and collapses the dashed box. */
+    .drop {
+      display: block;
+      margin-top: 18px;
+      padding: 34px 22px;
+      text-align: center;
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      background: rgba(0,0,0,0.22);
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .drop:hover, .drop.over { border-color: var(--purple); background: rgba(139,92,246,0.07); }
+    .drop:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+    .drop input { display: none; }
+    .drop-title { font-size: 15.5px; font-weight: 600; color: var(--text); }
+    .drop-title code { font-family: var(--font-mono); font-size: 0.92em; color: var(--purple); }
+    .drop-sub { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+    /* Once a file is in, the card below IS the file. A target still asking
+       for one is just clutter — the X on the card is how you get back here. */
+    .drop.loaded { display: none; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 22px; border-radius: 10px; border: 1px solid transparent;
+      font-family: var(--font-body); font-size: 14.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none; color: #fff;
+      transition: transform 0.06s ease, opacity 0.15s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-go { background: linear-gradient(135deg, var(--blue), var(--purple)); min-width: 190px; }
+    .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); }
+    .btn-ghost:hover:not(:disabled) { color: var(--text); }
+    .status { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 160px; }
+    .status.error { color: var(--danger); }
+
+    .disclaimer {
+      margin-top: 20px; padding: 13px 15px;
+      border: 1px solid rgba(255,255,255,0.09); border-left: 2px solid var(--accent);
+      border-radius: 8px; background: rgba(255,255,255,0.025);
+      font-size: 12.8px; line-height: 1.6; color: var(--muted);
+    }
+    .disclaimer strong { color: #cbd5e1; font-weight: 600; }
+
+    /* ── Report ─────────────────────────────────────────────────────────────── */
+    .report { display: none; flex-direction: column; gap: 16px; margin-bottom: 44px; }
+    .report.on { display: flex; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .card-head {
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    }
+    .card-head h2 {
+      font-family: var(--font-head); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
+    }
+    .card-head .meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin-left: auto; }
+    .card-body { padding: 16px 18px; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(124px, 1fr)); gap: 1px; background: var(--border); }
+    .stat { background: #0a0a14; padding: 15px 17px; }
+    .stat-n { font-family: var(--font-mono); font-size: 22px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--text); }
+    .stat-l { margin-top: 2px; font-size: 10.5px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.4; }
+
+    .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 9px 20px; }
+    .opt { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--muted); cursor: pointer; }
+    .opt input { accent-color: var(--purple); width: 15px; height: 15px; cursor: pointer; flex: none; }
+    .opt:hover { color: var(--text); }
+
+    .tscroll { overflow-x: auto; }
+    .chlist { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .chlist th {
+      text-align: left; padding: 7px 10px; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border); font-weight: 500; white-space: nowrap;
+    }
+    .chlist td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.035); vertical-align: middle; }
+    .chlist tr:last-child td { border-bottom: none; }
+    .chlist .n { font-family: var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; width: 1%; white-space: nowrap; }
+    .chlist .src { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .chlist .nm { color: var(--text); }
+    .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 8px; }
+    .pill {
+      display: inline-block; padding: 0 7px; border-radius: 20px; font-size: 10.5px;
+      font-family: var(--font-mono); background: rgba(139,92,246,0.16); color: #c4b5fd;
+    }
+
+    /* ── the file card ──────────────────────────────────────────────────── */
+    /* An explicit display on .btn beats the hidden attribute, so say it again. */
+    [hidden] { display: none !important; }
+
+    .filecard { display: none; position: relative; margin-top: 16px; }
+    .filecard.on { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 18px; }
+    .fc-clear {
+      position: absolute; top: 0; right: 0;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border); border-radius: 50%;
+      background: rgba(255,255,255,0.04); color: var(--muted);
+      font-size: 17px; line-height: 1; cursor: pointer;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .fc-clear:hover { color: var(--text); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); }
+    .fc-clear:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+    /* A sheet of paper with the corner turned down, big enough to be the
+       thing on screen rather than an icon beside some text. */
+    .fc-doc {
+      position: relative; width: 96px; height: 122px;
+      border-radius: 9px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.11), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 18px 38px -14px rgba(0,0,0,0.75);
+      display: flex; align-items: flex-end; justify-content: center; padding-bottom: 16px;
+      transition: transform 0.2s;
+    }
+    .fc-doc::after {
+      content: ''; position: absolute; top: -1px; right: -1px;
+      border-width: 0 26px 26px 0; border-style: solid;
+      border-color: transparent var(--bg) transparent transparent;
+    }
+    .filecard.done .fc-doc {
+      background: linear-gradient(160deg, rgba(59,130,246,0.32), rgba(139,92,246,0.32));
+      border-color: rgba(139,92,246,0.6);
+    }
+    .fc-ext {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--text);
+      padding: 3px 9px; border-radius: 5px; background: rgba(0,0,0,0.42);
+    }
+    .fc-meta { display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 100%; }
+    .fc-name { font-family: var(--font-mono); font-size: 14px; color: var(--text);
+               overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+    .fc-desk { font-size: 12.5px; color: var(--muted); }
+
+    /* ── the curtain ────────────────────────────────────────────────────── */
+    .tool { position: relative; }
+    .curtain {
+      position: absolute; inset: 0; overflow: hidden; border-radius: 16px;
+      visibility: hidden; z-index: 20;
+    }
+    .curtain.on { visibility: visible; }
+    .drape {
+      position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+      transform: translateY(-101%);
+      /* Durations are set by js/convert.js so the timing lives in one place. */
+      transition: transform var(--lift, 1100ms) cubic-bezier(0.32, 0, 0.2, 1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Heavier on the way down than on the way up, the way cloth falls. */
+    .curtain.down .drape { transform: translateY(0);
+      transition-duration: var(--drop, 1100ms);
+      transition-timing-function: cubic-bezier(0.45, 0.05, 0.35, 1); }
+    /* Velvet: the logo printed as a step-and-repeat, then vertical pleats
+       over the top of it so the cloth has weight. */
+    /* Velvet with the mark printed on it as a step-and-repeat, in the brand
+       ramp rather than flat white. The gradient is userSpaceOnUse across the
+       mark's full 285 units so it reads as one ramp — the default would
+       restart it inside every rectangle and the logo would lose its shape.
+       The tile is large and padded: small and dense, the mark's own gaps line
+       up into a grid and the whole thing turns into plaid. */
+    .drape-face {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(139,92,246,0.22), transparent 70%),
+        repeating-linear-gradient(90deg,
+          rgba(0,0,0,0.26) 0 2px,
+          rgba(255,255,255,0.022) 2px 36px,
+          rgba(0,0,0,0.12) 36px 70px,
+          rgba(0,0,0,0.26) 70px 72px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='148' viewBox='0 0 600 590'%3E%3Cdefs%3E%3ClinearGradient id='sbp' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='0' y2='285'%3E%3Cstop offset='0' stop-color='%237e7aff'/%3E%3Cstop offset='.26' stop-color='%23996cff'/%3E%3Cstop offset='.53' stop-color='%23b265fe'/%3E%3Cstop offset='1' stop-color='%23d77aba'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg transform='translate(155,152)' fill='url(%23sbp)' fill-opacity='0.5'%3E%3Crect width='139' height='62'/%3E%3Crect x='150' width='139' height='62'/%3E%3Crect y='74.33' width='139' height='62'/%3E%3Crect x='150' y='148.67' width='139' height='62'/%3E%3Crect y='223' width='139' height='62'/%3E%3Crect x='150' y='223' width='139' height='62'/%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(180deg, #1d1636 0%, #130f22 60%, #0b0914 100%);
+      background-position: center top;
+    }
+    /* A little weight at the bottom edge, so it hangs rather than floats. */
+    .drape-face::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40%;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.45));
+    }
+    .drape-hem {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+      background: linear-gradient(180deg, rgba(139,92,246,0.55), rgba(59,130,246,0.5));
+      box-shadow: 0 6px 18px -2px rgba(0,0,0,0.8);
+    }
+    .drape-label {
+      position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .curtain.down .drape-label { opacity: 1; transition-delay: calc(var(--drop, 1100ms) * 0.55); }
+    .drape-text {
+      font-family: var(--font-head); font-size: 14px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--text);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+    .drape-bar {
+      display: block; width: 190px; height: 5px; border-radius: 3px;
+      background: rgba(0,0,0,0.5); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10);
+      overflow: hidden;
+    }
+    .drape-bar i { display: block; width: 0; height: 100%; border-radius: 3px;
+                   background: linear-gradient(90deg, var(--blue), var(--purple)); }
+    /* Fills across the hold, so it finishes as the drape starts to lift. */
+    .curtain.down .drape-bar i { width: 100%;
+      transition: width var(--hold, 2800ms) cubic-bezier(0.25, 0.6, 0.3, 1) var(--drop, 1100ms); }
+
+    /* ── the report arriving ────────────────────────────────────────────── */
+    @keyframes warn-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .warns.staggered .warn-row { opacity: 0; animation: warn-in 0.28s ease-out forwards;
+                                 animation-delay: calc(var(--i) * 45ms); }
+
+    /* The swatch lands on the colour the channel will wear on the TARGET desk,
+       starting from the one it arrived with — so 18 colours collapsing onto 8
+       is something you watch happen, not just something the warning says. */
+    @keyframes swatch-land { from { background: var(--from); } to { background: var(--to); } }
+    .chlist.landing .swatch { animation: swatch-land 0.36s ease-out forwards;
+                              animation-delay: calc(var(--i) * 22ms); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .drape, .drape-label, .curtain.down .drape-bar i { transition: none; }
+      .warns.staggered .warn-row,
+      .chlist.landing .swatch { animation: none; opacity: 1; }
+    }
+
+    .warns { display: flex; flex-direction: column; gap: 9px; }
+    .warn-row { display: flex; gap: 10px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+    .warn-row .mk { color: var(--warn); flex: none; font-family: var(--font-mono); }
+
+    /* ── Explainer ──────────────────────────────────────────────────────────── */
+    .prose h2 {
+      font-family: var(--font-head); font-weight: 700;
+      font-size: 1.28rem; letter-spacing: -0.01em; margin-bottom: 12px;
+    }
+    .prose p { color: #cbd5e1; margin-bottom: 14px; }
+    .prose ul { color: #cbd5e1; margin: 0 0 16px 20px; }
+    .prose li { margin-bottom: 7px; }
+    .prose strong { font-weight: 600; color: var(--text); }
+    .prose code { font-family: var(--font-mono); font-size: 0.88em; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; }
+    .prose a { color: #93c5fd; }
+
+    .prose h3 {
+      font-family: var(--font-head); font-weight: 600;
+      font-size: 1.02rem; letter-spacing: -0.005em;
+      margin: 22px 0 7px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px 48px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="sbp-logo" href="/">
+    <span class="sbp-mark" aria-hidden="true">
+      <span class="sbp-row"><i></i><i></i></span>
+      <span class="sbp-row"><i></i><i class="sbp-void"></i></span>
+      <span class="sbp-row"><i class="sbp-void"></i><i></i></span>
+      <span class="sbp-row"><i></i><i></i></span>
+    </span>
+    <span class="sbp-word">StageBuilder&nbsp;Pro<span class="app-version-tag"></span></span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-tools" data-nav-tools data-open="false">
+      <button type="button" class="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="toolsMenu">
+        Free Tools
+        <svg viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-tools-menu" id="toolsMenu" role="menu">
+        <a class="nav-tool" href="/timecode-generator" role="menuitem">
+          <span class="nav-tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2-6 3 12 3-9 2 6 3-3h4"/></svg>
+          </span>
+          <span class="nav-tool-text">
+            <span class="nav-tool-name">LTC Generator</span>
+            <span class="nav-tool-desc">Timecode WAV files at any frame rate and start time.</span>
+          </span>
+        </a>
+        <a class="nav-tool" href="/convert" role="menuitem" aria-current="page">
+          <span class="nav-tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
+          </span>
+          <span class="nav-tool-text">
+            <span class="nav-tool-name">Console Scene Converter</span>
+            <span class="nav-tool-desc">Move a show between desks — X32, M32, X Air and Wing.</span>
+          </span>
+        </a>
+      </div>
+    </div>
+    <a href="/" class="nav-link">Home</a>
+    <a href="/app" class="nav-cta">Open App</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <h1>Console Scene Converter</h1>
+    <p>Move a show between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of them, in either direction, without retyping it. Pick the desk you're coming from and the desk you're going to, drop your scene file in, and read the report before you download.</p>
+  </div>
+
+  <div class="tool" id="tool">
+    <div class="grid">
+      <div class="field">
+        <label for="from">From console</label>
+        <select id="from"></select>
+        <span class="hint" id="fromHint"></span>
+      </div>
+      <button type="button" class="swap" id="swap" title="Swap direction" aria-label="Swap the two consoles">&#8646;</button>
+      <div class="field">
+        <label for="to">To console</label>
+        <select id="to"></select>
+        <span class="hint" id="toHint"></span>
+      </div>
+    </div>
+
+    <label class="drop" id="drop" tabindex="0" role="button">
+      <input type="file" id="file" />
+      <div class="drop-title" id="dropTitle">Drop a file here</div>
+      <div class="drop-sub" id="dropSub">or click to choose · converted locally, never uploaded</div>
+    </label>
+
+    <div class="filecard" id="filecard">
+      <button class="fc-clear" id="clear" type="button" aria-label="Remove this file" title="Remove this file">&times;</button>
+      <span class="fc-doc"><span class="fc-ext" id="fcExt">SCN</span></span>
+      <span class="fc-meta">
+        <span class="fc-name" id="fcName"></span>
+        <span class="fc-desk" id="fcDesk"></span>
+      </span>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-go" id="go" disabled>Convert</button>
+      <button class="btn btn-go" id="dl" hidden>Download</button>
+      <span class="status" id="status">Waiting for a file.</span>
+    </div>
+
+    <!-- A house drape. The conversion itself takes about five milliseconds,
+         so this is a transition and not a progress report — it is short
+         enough that nobody waits on it, long enough that the result reads as
+         something that happened rather than something that was always there. -->
+    <div class="curtain" id="curtain" aria-hidden="true">
+      <div class="drape">
+        <div class="drape-face"></div>
+        <div class="drape-label">
+          <span class="drape-text">Converting…</span>
+          <span class="drape-bar"><i></i></span>
+        </div>
+        <div class="drape-hem"></div>
+      </div>
+    </div>
+
+    <p class="disclaimer">
+      <strong>No two desks are built the same.</strong> Channel counts, stereo handling, input
+      routing, EQ bands and colour palettes all differ between consoles, so some settings have no
+      equivalent on the other desk and cannot be carried across. Converting to a smaller console
+      loses more than converting up. Anything that could not be transferred is listed under
+      <strong>Check these on the desk</strong> once you convert. Treat the result as a head start,
+      not a finished show file — always open it on the console and check it before doors.
+    </p>
+  </div>
+
+  <div class="report" id="report">
+    <div class="card">
+      <div class="card-head"><h2>Scene</h2><span class="meta" id="fname"></span></div>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="card" id="optcard">
+      <div class="card-head"><h2>Include</h2></div>
+      <div class="card-body"><div class="opts" id="opts"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Channels</h2><span class="meta" id="chcount"></span></div>
+      <div class="card-body tscroll"><table class="chlist" id="chlist"></table></div>
+    </div>
+
+    <div class="card" id="warncard" hidden>
+      <div class="card-head"><h2>Check these on the desk</h2><span class="meta" id="warncount"></span></div>
+      <div class="card-body"><div class="warns" id="warns"></div></div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <h2>What carries, and what doesn't</h2>
+    <p>
+      Two desks are never the same instrument, so a show can't move between them without some
+      judgement. Here's where this one makes it, and where it stops. Converting <em>up</em> to a
+      larger desk is mostly lossless; converting <em>down</em> gives things away, and the report
+      names every one of them.
+    </p>
+    <h3>The three desks</h3>
+    <ul>
+      <li><strong>Behringer X32 / Midas M32</strong> — 32 channels, 16 buses, 6 matrices, 8 DCAs, 6 mute groups, 4 EQ bands, 8 strip colours. Mono channels linked in pairs for stereo. Patches inputs in blocks of eight. AES50 stageboxes.</li>
+      <li><strong>Behringer X Air / Midas MR</strong> (XR12, XR16, XR18) — 16 channels, 6 buses, 4 FX sends, no matrices, 4 DCAs, 4 mute groups, 4 EQ bands, the same 8 strip colours as the X32. Mono channels linked in pairs. Patches <em>per channel</em>, which the X32 cannot. Local inputs and USB only, no AES50.</li>
+      <li><strong>Behringer Wing</strong> — 40 channels, 18 strip colours, 6 EQ bands, native stereo channels, local inputs and AES50.</li>
+    </ul>
+    <h3>How the differences are handled</h3>
+    <ul>
+      <li><strong>Stereo is translated, not copied.</strong> The X32 and X Air build stereo from two hard-panned mono strips; the Wing has real stereo channels. Going up, every linked pair collapses into one Wing channel — which is why channel numbers shift as you go down the list. Coming back, each Wing stereo channel becomes two linked mono channels. Both smaller desks only link odd-aligned pairs (1-2, 3-4 — never 2-3), so a stereo channel that would land on an even channel leaves that one empty rather than renumbering the rest of your show. A Wing stereo channel with its balance off centre loses that balance on the way down, and the report says so.</li>
+      <li><strong>Colours are matched, not copied.</strong> The X32 and X Air share the same eight colours, so those two are exact in both directions. The Wing's eighteen are entirely different, and an X32 green becomes the Wing's green rather than whichever Wing colour happens to share green's index number. Coming down from the Wing, eighteen colours collapse onto eight and the report counts how many groups merged.</li>
+      <li><strong>The patch is read from wherever that desk keeps it</strong> — the routing blocks on an X32, the channel itself on an X Air or Wing. That means a rig on an AES50 stagebox lands on the Wing's stagebox inputs instead of its local XLRs. The X Air has no AES50 at all, so those channels arrive unpatched and are named individually. And the X32's blocks of eight are a hard limit in reverse: a channel-by-channel patch can't always be expressed, so the converter picks the routing that fits the most channels per block and names the ones that fall outside it.</li>
+      <li><strong>You get the whole channel layer.</strong> An X32 or X Air conversion is a full scene file covering every channel on the desk; the Wing output is a snapshot covering all 40. Channels your show doesn't use are written blank rather than left holding whatever was on the console — so a converted show lands the same way every time instead of inheriting last night's band. Buses, effects and routing outside the channel layer are left alone.</li>
+      <li><strong>Going down costs something, and the report prices it.</strong> Every loss is graded by what you have to do about it: <em>dropped</em>, <em>degraded</em>, <em>approximated</em>, <em>relocated</em>, <em>unsupported</em>, or just <em>check</em>. Channels past the end, EQ bands that didn't fit, DCAs that don't exist on the target, colours that merged, a channel that fell out of a group you were riding — each one named with its channel number.</li>
+      <li><strong>Effects, inserts, graphic EQ and automix don't transfer.</strong> Neither does anything else the target desk has no equivalent for. Those are listed rather than guessed at.</li>
+      <li><strong>Check it on the desk before a show.</strong> Gain structure and dynamics especially. This saves you forty minutes of typing, not soundcheck.</li>
+    </ul>
+    <p>
+      Building a plot from scratch instead? The <a href="/app">stage plot builder</a> exports scene
+      files for the X32, M32 and Wing straight from your input list — and the
+      <a href="/blog/input-list-guide">input list guide</a> covers how to lay one out so it survives
+      contact with a house engineer.
+    </p>
+
+    <h2 id="faq">Common questions</h2>
+
+    <h3>Which consoles does the scene converter support?</h3>
+    <p>
+      Three, in any combination and either direction: the Behringer X32 and Midas M32, which share a <code>.scn</code> scene file; the Behringer X Air series (XR12, XR16, XR18) and Midas MR, which use their own <code>.scn</code> scene file; and the Behringer Wing, which uses a <code>.snap</code> snapshot. That gives six conversions in total. The X Air field positions were derived from real XR18 scene files.
+    </p>
+
+    <h3>Can I convert an X32 scene to a Behringer Wing?</h3>
+    <p>
+      Yes. Drop an X32 or M32 <code>.scn</code> scene file in and you get a Wing <code>.snap</code> snapshot back. Channel names, icons, strip colours, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not.
+    </p>
+
+    <h3>Can I convert a Wing snapshot to an X32 or M32 scene?</h3>
+    <p>
+      Yes. Drop a Wing <code>.snap</code> snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colours to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently.
+    </p>
+
+    <h3>Can I convert to and from a Behringer X Air or Midas MR?</h3>
+    <p>
+      Yes, in both directions and against either of the other two desks. An X Air show converts up to an X32, an M32 or a Wing, and a show from any of those converts down to an X Air. The X Air is the smallest console here — 16 channels, six buses, four DCAs, four mute groups, four EQ bands and no matrices — so converting down to it loses the most, and the report names every channel affected.
+    </p>
+
+    <h3>Does the X Air patch inputs per channel or in blocks?</h3>
+    <p>
+      Per channel, which makes it more flexible than the X32 in one specific way. An X Air channel can take any input, so a scattered patch survives a conversion to an X Air intact. Going the other way the X32's blocks of eight are a hard limit, and any channel that cannot be addressed inside its block is named individually so you know exactly what to repatch.
+    </p>
+
+    <h3>What happens to AES50 stageboxes when converting to an X Air?</h3>
+    <p>
+      The X Air has no AES50, so channels patched to a stagebox arrive unpatched and are listed in the report. You will need to repatch them to the X Air's local inputs or its USB returns on the day. Converting between the X32 and the Wing, AES50 patching carries across normally.
+    </p>
+
+    <h3>What happens to stereo channels between desks?</h3>
+    <p>
+      It depends which way you are going. The X32 and X Air have no stereo channel, so they build stereo from two hard-panned mono strips linked together; the Wing has native stereo channels. Converting up, each linked pair collapses into one Wing channel, which is why channel numbers shift down the list. Converting down, each Wing stereo channel becomes two linked mono channels. The X32 and X Air only link odd-aligned pairs — 1-2, 3-4, never 2-3 — so a stereo channel that would land on an even channel leaves that channel empty rather than renumbering the rest of the show. If a Wing stereo channel had its balance set away from centre, that balance cannot survive the trip down and is reported.
+    </p>
+
+    <h3>Does it work with a Midas M32 or MR18?</h3>
+    <p>
+      Yes. The M32 shares its scene file format with the X32, and the Midas MR series shares its format with the Behringer X Air, so both convert exactly the same way. Scene files saved from X32-Edit, M32-Edit and X AIR Edit all work, as do files saved on the console itself.
+    </p>
+
+    <h3>Which firmware does this expect, and can an update break it?</h3>
+    <p>
+      Scene files are a list of settings — plain text on the X32, M32, X Air and MR, JSON on the Wing — and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches — names, colours, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups — have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there — the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors.
+    </p>
+
+    <h3>What if my console will not load the converted file?</h3>
+    <p>
+      <a href="/contact">Tell us</a>, and name the desk and its firmware version. Every desk here was mapped from real scene files rather than from a specification, so a build that writes a field differently is exactly the kind of thing that only turns up when someone hits it. A report with the firmware version on it gets fixed and gets published; a converted file that will not load is a bug in the converter, not a limit of the idea.
+    </p>
+
+    <h3>Will it overwrite the rest of my console?</h3>
+    <p>
+      It replaces the channel layer. A converted X32 or X Air scene is a full scene file covering every channel on the desk, and the Wing output is a snapshot covering all 40 channels — in each case, channels your show does not use are written blank rather than left holding the previous show. Buses, effects and routing outside the channel layer are not touched. Save your current show before loading a converted one.
+    </p>
+
+    <h3>What does the report tell me?</h3>
+    <p>
+      Everything the target console could not represent, channel by channel, graded by what you have to do about it: dropped means it did not make it at all, degraded means it arrived worse, approximated means it was mapped to the nearest available value, relocated means it is there but somewhere else, unsupported means the concept does not exist on that desk, and check means it is probably fine but worth a look. Treat a converted scene as a head start, not a finished show file.
+    </p>
+
+    <h3>Are my scene files uploaded anywhere?</h3>
+    <p>
+      No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. One thing does leave the page: a count that a conversion happened and which desk went to which desk, so we know the tool is being used. No filename, no channel names, no settings, nothing from inside your file.
+    </p>
+
+    <h3>Why are the channel colours different from other X32 to Wing converters?</h3>
+    <p>
+      Because the two consoles use unrelated colour palettes. The X32 has eight colours plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's colour index straight through lands a green channel on Wing colour 2, which is blue. This converter matches colours by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colours, so those two are exact in both directions.
+    </p>
+
+  </div>
+</div>
+
+<footer>
+  <p style="margin-bottom:8px">
+    <a href="/">Home</a> &nbsp;&middot;&nbsp;
+    <a href="/timecode-generator">LTC Generator</a> &nbsp;&middot;&nbsp;
+    <a href="/blog">Blog</a> &nbsp;&middot;&nbsp;
+    <a href="/changelog">Changelog</a> &nbsp;&middot;&nbsp;
+    <a href="/terms">Terms</a> &nbsp;&middot;&nbsp;
+    <a href="/privacy">Privacy</a>
+  </p>
+  <p>&copy; 2026 StageBuilder Pro</p>
+</footer>
+
+<script type="module" src="/js/nav-tools.js"></script>
+<script type="module" src="/js/convert.js"></script>
+<script type="module" src="/js/version-tag.js"></script>
+</body>
+</html>

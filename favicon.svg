@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289 285" role="img" aria-label="StageBuilder Pro">
+  <defs>
+    <linearGradient id="sbp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7e7aff"/>
+      <stop offset="0.26" stop-color="#996cff"/>
+      <stop offset="0.53" stop-color="#b265fe"/>
+      <stop offset="1" stop-color="#d77aba"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#sbp)">
+    <rect x="0" y="0" width="139" height="62"/>
+    <rect x="150" y="0" width="139" height="62"/>
+    <rect x="0" y="74.33" width="139" height="62"/>
+    <rect x="150" y="148.67" width="139" height="62"/>
+    <rect x="0" y="223" width="139" height="62"/>
+    <rect x="150" y="223" width="139" height="62"/>
+  </g>
+</svg>
