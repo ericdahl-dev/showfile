@@ -17,11 +17,13 @@
 // accepts a partial snapshot, so every node a real scene contains is written
 // here, with the desk's own defaults where the IR has nothing to say.
 
-import { mapColor, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
+import { mapColor, codeToHex, snapRatio, tapTo } from './console-map.js';
 import {
-  q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
+  q, pad2, onOff, sign1, allocate, fitBands, stripName,
+  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
+import { membership, eqLine } from './scn-codec.js';
+import { source, gateLine, dynLine } from './xair-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X Air';
@@ -32,12 +34,6 @@ const FX_SENDS = 4;
 const DCAS = 4;
 const MUTE_GROUPS = 4;
 
-// Neutral groups -> the X Air's source tokens. It has local XLRs, one stereo
-// aux input and USB, and nothing else: no AES50, no expansion card. The aux
-// input is LINE 17/18 in X-AIR-Edit, which saves it as a bare L and R (AuxL /
-// AuxR are its names in the USB routing, not valid channel sources).
-const SRC = { local: 'In', card: 'U' };
-const AUX = ['L', 'R'];
 const NAME_MAX = 16;
 
 const panTok = (v) => ((Math.round(v) || 0) >= 0 ? '+' : '') + Math.round(v || 0);
@@ -113,13 +109,13 @@ export function emitXAirScene(ir, opts = {}) {
     let rtn = `U${id}`;           // the USB return this channel would switch to
     let onReturn = false;
     if (include.patch && c.patch?.group === 'aux') {
-      const aux = AUX[c.patch.input + half - 1];
+      const aux = source.aux(c.patch.input + half);
       if (aux) src = aux;
       else losses.push(loss('patch.aux-overflow',
-        { label: `ch ${n} "${name}"`, input: c.patch.input + half, desk: DESK, limit: AUX.length },
+        { label: `ch ${n} "${name}"`, input: c.patch.input + half, desk: DESK, limit: source.auxInputs },
         { kind: 'channel', n, name }));
     } else if (include.patch && c.patch) {
-      const prefix = SRC[c.patch.group];
+      const prefix = source.prefix(c.patch.group);
       if (!prefix) {
         losses.push(loss('patch.group-unsupported',
           { label: `ch ${n} "${name}"`, group: c.patch.group, desk: DESK },
@@ -285,11 +281,11 @@ export function emitXAirScene(ir, opts = {}) {
   }
   function pushChannelTail(out, id, gate, dyn, eq, sends, dcas, mgs, mix) {
     out.push(gate
-      ? `/ch/${id}/gate ${onOff(gate.on)} ${gateToken(gate)} ${dec(gate.thr, 1)} ${dec(gate.range, 1)} ${Math.round(gate.att ?? 1)} ${dec(gate.hold, 1)} ${Math.round(gate.rel || 983)} SELF`
+      ? `/ch/${id}/gate ${gateLine.write(gate)}`
       : `/ch/${id}/gate OFF GATE -80.0 60.0 1  502 983 SELF`);
     out.push(`/ch/${id}/gate/filter OFF 3.0 990.9`);
     out.push(dyn
-      ? `/ch/${id}/dyn ${onOff(dyn.on)} ${dyn.mode === 'exp' ? 'EXP' : 'COMP'} ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee ?? 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att ?? 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
+      ? `/ch/${id}/dyn ${dynLine.write(dyn, snapRatio(dyn.ratio, 'xair').value)}`
       : `/ch/${id}/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF`);
     out.push(`/ch/${id}/dyn/filter OFF 3.0 990.9`);
     out.push(`/ch/${id}/insert OFF OFF`);
@@ -300,7 +296,7 @@ export function emitXAirScene(ir, opts = {}) {
       const DEF = ['PEQ 124.7 +0.00 2.0', 'PEQ 496.6 +0.00 2.0', 'PEQ 1k97 +0.00 2.0', 'HShv 10k02 +0.00 2.0'];
       for (let i = 0; i < MAX_EQ_BANDS; i++) {
         const b = bands[i];
-        out.push(`/ch/${id}/eq/${i + 1} ${b ? `${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign2(b.g)} ${dec(b.q, 1)}` : DEF[i]}`);
+        out.push(`/ch/${id}/eq/${i + 1} ${b ? eqLine.write(b) : DEF[i]}`);
       }
     } else {
       pushEq4(out, `/ch/${id}`);
@@ -318,7 +314,7 @@ export function emitXAirScene(ir, opts = {}) {
       out.push(`/ch/${id}/mix/${pad2(b)} ${s ? lvl(s.level) : '  -oo'} ${onOff(!!s?.on)} ${tap}${trailingPan}`);
     }
 
-    out.push(`/ch/${id}/grp ${mask(dcas, DCAS)} ${mask(mgs, MUTE_GROUPS)}`);
+    out.push(`/ch/${id}/grp ${membership.write(dcas, DCAS)} ${membership.write(mgs, MUTE_GROUPS)}`);
     out.push(`/ch/${id}/automix OFF  +0.0`);
   }
 }

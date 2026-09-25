@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tokenize, num, bool, bits, parseNodes, INF } from '../js/scene-text.js';
+import { tokenize, num, bool, parseNodes, INF } from '../js/scene-text.js';
+import { membership } from '../js/scn-codec.js';
+const bits = membership.read;
 
 test('tokenize keeps quoted names whole and collapses right-aligned padding', () => {
   assert.deepEqual(tokenize('"Kick In" 1 RD 1'), ['Kick In', '1', 'RD', '1']);

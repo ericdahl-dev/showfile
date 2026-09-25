@@ -17,11 +17,13 @@
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
-import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
 import {
-  q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
+  q, pad2, onOff, dec, sign1, allocate, fitBands, stripName,
+  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
+import { membership, eqLine } from './scn-codec.js';
+import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine } from './x32-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -38,26 +40,6 @@ const FLAT_BANDS = [
   { type: 'highshelf', f: 10020, g: 0, q: 2 },
 ];
 
-// Neutral groups -> X32 routing-block prefixes. The card has no preamp behind
-// it, so it still patches but has no /headamp node. User signals are left out:
-// a UIN block only means something through /config/userrout/in, which this
-// writer does not fill, so the desk would play nothing.
-const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD' };
-
-// Inputs the X32 reaches through a channel's own source rather than a routing
-// block: /ch/NN/config source = base + input (33-38 Aux, 39-40 USB, 41-48 FX
-// returns, 49-64 buses), up to each group's size.
-const SOURCE_GROUP = {
-  aux: { base: 32, size: 6, label: 'AUX' },
-  usb: { base: 38, size: 2, label: 'USB' },
-  fx:  { base: 40, size: 8, label: 'FX' },
-  bus: { base: 48, size: 16, label: 'BUS' },
-};
-const bySource = (patch) => {
-  const g = patch && SOURCE_GROUP[patch.group];
-  return g && patch.input >= 1 && patch.input <= g.size ? g : null;
-};
-const HEADAMP_BASE = { local: 0, aes50a: 32, aes50b: 80 };
 
 // The X32 writes signed one-decimal values and uses "-oo" for silence.
 function lvl(v) {
@@ -77,7 +59,7 @@ function routingBlocks(placed, warnings) {
     const members = [];
     for (let i = 0; i < BLOCK; i++) {
       const p = byCh.get(first + i);
-      if (BLOCK_PREFIX[p?.c.patch?.group]) members.push({ offset: i, ch: first + i, patch: p.c.patch, name: p.c.name });
+      if (routingBlock.prefix(p?.c.patch?.group)) members.push({ offset: i, ch: first + i, patch: p.c.patch, name: p.c.name });
     }
     if (!members.length) { tokens.push(`AN${first}-${first + BLOCK - 1}`); continue; }
 
@@ -112,11 +94,11 @@ function routingBlocks(placed, warnings) {
     if (stray.length) {
       warnings.push(loss('patch.block-granularity', {
         desk: DESK, first, last: first + BLOCK - 1,
-        token: `${BLOCK_PREFIX[group] || 'AN'}${start}-${start + BLOCK - 1}`,
+        token: `${routingBlock.prefix(group) || 'AN'}${start}-${start + BLOCK - 1}`,
         stray: stray.map(m => `ch ${m.ch}${m.name ? ` "${m.name}"` : ''} → ${m.patch.group} ${m.patch.input}`),
       }, { kind: 'block', first, last: first + BLOCK - 1 }));
     }
-    tokens.push(`${BLOCK_PREFIX[group] || 'AN'}${start}-${start + BLOCK - 1}`);
+    tokens.push(`${routingBlock.prefix(group) || 'AN'}${start}-${start + BLOCK - 1}`);
   }
 
   // The aux inputs are really six, but the desk keeps the token AUX1-4 for
@@ -137,7 +119,7 @@ export function emitX32Scene(ir, opts = {}) {
   // USB audio, an internal bus) cannot be patched. Say so and leave the channel
   // unpatched, rather than letting it fall into a block of local inputs.
   const placed = allocate(ir, warnings, { desk: DESK, slots: MAX_CH }).map(p => {
-    if (!p.c.patch || BLOCK_PREFIX[p.c.patch.group] || bySource(p.c.patch)) return p;
+    if (!p.c.patch || routingBlock.prefix(p.c.patch.group) || channelSource.write(p.c.patch)) return p;
     if (include.patch) {
       warnings.push(loss('patch.group-unsupported',
         { label: `ch ${p.ch} "${p.c.name}"`, group: p.c.patch.group, desk: DESK },
@@ -164,11 +146,7 @@ export function emitX32Scene(ir, opts = {}) {
   const used = new Set();
   for (const { ch, width } of placed) { used.add(ch); if (width === 2) used.add(ch + 1); }
   for (let n = 1; n <= MAX_CH; n++) {
-    if (used.has(n)) continue;
-    const id = pad2(n);
-    lines.push(`/ch/${id}/config "" 1 OFF ${n}`);
-    if (include.levels) lines.push(`/ch/${id}/mix ON ${lvl(-Infinity)} ON +0 OFF ${lvl(-Infinity)}`);
-    if (include.groups) lines.push(`/ch/${id}/grp %00000000 %000000`);
+    if (!used.has(n)) lines.push(...spareSlot.write(n, include, lvl));
   }
 
   for (const { c, ch, width } of placed) {
@@ -195,7 +173,7 @@ export function emitX32Scene(ir, opts = {}) {
       const at = { label: `ch ${n} "${name}"`, n, name };
       const icon = include.names ? mapIcon(c.icon, 'x32') : 1;
       const color = include.colors ? mapColor(c.color, 'x32') : 'OFF';
-      const via = bySource(c.patch);
+      const via = channelSource.write(c.patch);
       const source = via ? via.base + c.patch.input + k : n;
       lines.push(`/ch/${id}/config "${name}" ${icon} ${color} ${source}`);
 
@@ -212,14 +190,14 @@ export function emitX32Scene(ir, opts = {}) {
       if (include.dynamics) {
         const g = c.gate;
         if (k === 0) reportGateRatio(warnings, g, { desk: DESK }, at);
-        lines.push(`/ch/${id}/gate ${onOff(g.on)} ${gateToken(g)} ${dec(g.thr, 1)} ${dec(g.range, 1)} ${dec(g.att, 0)} ${dec(g.hold, 2)} ${dec(g.rel, 0)} 0`);
+        lines.push(`/ch/${id}/gate ${gateLine.write(g)}`);
       }
       if (include.dynamics) {
         const d = c.dyn;
         const ratio = k === 0
           ? snapRatioReported(warnings, d.ratio, { desk: DESK, target: 'x32' }, at)
           : snapRatio(d.ratio, 'x32');
-        lines.push(`/ch/${id}/dyn ${onOff(d.on)} ${d.mode === 'exp' ? 'EXP' : 'COMP'} ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
+        lines.push(`/ch/${id}/dyn ${dynLine.write(d, ratio.value)}`);
       }
 
       if (include.eq) {
@@ -231,7 +209,7 @@ export function emitX32Scene(ir, opts = {}) {
         // the desk before, so a source with fewer bands pads out flat.
         for (let i = 0; i < MAX_EQ_BANDS; i++) {
           const b = bands[i] || FLAT_BANDS[i];
-          lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign2(b.g)} ${dec(b.q, 1)}`);
+          lines.push(`/ch/${id}/eq/${i + 1} ${eqLine.write(b)}`);
         }
       }
 
@@ -258,15 +236,12 @@ export function emitX32Scene(ir, opts = {}) {
       }
 
       if (include.groups) {
-        lines.push(`/ch/${id}/grp ${mask(c.dcas, 8)} ${mask(c.muteGroups, 6)}`);
+        lines.push(`/ch/${id}/grp ${membership.write(c.dcas, 8)} ${membership.write(c.muteGroups, 6)}`);
       }
 
       if (include.preamp && c.patch && c.headamp) {
-        const base2 = HEADAMP_BASE[c.patch.group];
-        if (base2 !== undefined) {
-          const idx = base2 + (c.patch.input + k) - 1;
-          if (idx >= 0 && idx < 128) headamps.set(idx, c.headamp);
-        }
+        const idx = headampIndex({ ...c.patch, input: c.patch.input + k });
+        if (idx !== null && idx >= 0 && idx < 128) headamps.set(idx, c.headamp);
       }
     }
 
@@ -274,7 +249,7 @@ export function emitX32Scene(ir, opts = {}) {
       n: ch, name: c.name, colorHex: c.color?.hex || null,
       outColorHex: codeToHex('x32', mapColor(c.color, 'x32')),
       source: `ch ${c.srcChannels.join('+')}`, stereo: !!c.stereo,
-      patch: c.patch ? `${BLOCK_PREFIX[c.patch.group] || bySource(c.patch)?.label || '?'}${c.patch.input}` : '—',
+      patch: c.patch ? `${routingBlock.prefix(c.patch.group) || channelSource.write(c.patch)?.label || '?'}${c.patch.input}` : '—',
       groups: [...c.dcas.map(n2 => `#D${n2}`), ...c.muteGroups.map(n2 => `#M${n2}`)].join('') || '—',
       span: c.stereo ? `${ch}+${ch + 1}` : String(ch),
     });

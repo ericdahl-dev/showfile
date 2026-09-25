@@ -22,7 +22,9 @@
 
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
-import { INF, num, bool, bits, parseNodes, eqType, gateMode, collapsePairs } from './scene-text.js';
+import { INF, num, bool, parseNodes, collapsePairs } from './scene-text.js';
+import { membership, eqLine } from './scn-codec.js';
+import { source, gateLine, dynLine } from './xair-codec.js';
 import { loss, render } from './losses.js';
 
 const MAX_CH = 16;
@@ -31,20 +33,6 @@ const FX_SENDS = 4;
 
 // The X Air high-pass is fixed at 12 dB/oct — there is no slope field to read.
 const HPF_SLOPE = 12;
-
-// "In01" is a local XLR, "U01" a USB return. The neutral groups describe the
-// physical thing, so USB lands on 'card' the same way the X32's expansion
-// card does.
-function parseSource(tok) {
-  const s = String(tok || '').trim();
-  let m = /^In(\d+)$/i.exec(s);
-  if (m) return { group: 'local', input: parseInt(m[1], 10) };
-  m = /^U(\d+)$/i.exec(s);
-  if (m) return { group: 'card', input: parseInt(m[1], 10) };
-  // The stereo aux input (LINE 17/18) is a bare L or R; older files may say AuxL.
-  if (/^(Aux)?[LR]$/i.test(s)) return { group: 'aux', input: /R$/i.test(s) ? 2 : 1 };
-  return null;
-}
 
 export function parseXAirScene(text, fileName = '') {
   const { nodes } = parseNodes(text);
@@ -90,7 +78,7 @@ export function parseXAirScene(text, fileName = '') {
     const bands = [];
     for (let b = 1; b <= 4; b++) {
       const e = get(`/ch/${id}/eq/${b}`);
-      if (e.length) bands.push({ type: eqType(e[0]), f: num(e[1]), g: num(e[2]), q: num(e[3]) });
+      if (e.length) bands.push(eqLine.read(e));
     }
 
     // /ch/NN/mix/01..10 — level on tap [pan]. The X32 writes on BEFORE level;
@@ -123,7 +111,7 @@ export function parseXAirScene(text, fileName = '') {
     // instead of its input, and the trim is that return's. The X Air has no
     // digital trim on the input path: mic gain is the headamp's.
     const onReturn = bool(pre[1]);
-    const patch = parseSource(onReturn ? cfg[3] : cfg[2]);
+    const patch = source.read(onReturn ? cfg[3] : cfg[2]);
 
     strips.push({
       ch: n,
@@ -142,24 +130,16 @@ export function parseXAirScene(text, fileName = '') {
       toMain: mix.length > 2 ? bool(mix[2]) : true,
       pan:   num(mix[3]),
 
-      gate: gate.length ? {
-        on: bool(gate[0]), ...gateMode(gate[1]), thr: num(gate[2]), range: num(gate[3]),
-        att: num(gate[4]), hold: num(gate[5]), rel: num(gate[6]),
-      } : null,
+      gate: gate.length ? gateLine.read(gate) : null,
 
       // dyn: on mode det env thr ratio knee gain att hold rel mix keysrc auto
       // The X32 carries a pre/post position token here; the X Air does not.
-      dyn: dyn.length ? {
-        on: bool(dyn[0]), mode: dyn[1] === 'EXP' ? 'exp' : 'comp', det: dyn[2] || 'PEAK', env: dyn[3] || 'LOG',
-        thr: num(dyn[4]), ratio: num(dyn[5], 3), knee: num(dyn[6]),
-        gain: num(dyn[7]), att: num(dyn[8]), hold: num(dyn[9]),
-        rel: num(dyn[10]), mix: num(dyn[11], 100),
-      } : null,
+      dyn: dyn.length ? dynLine.read(dyn) : null,
 
       eq: { on: bool(get(`/ch/${id}/eq`)[0]), bands },
       sends,
-      dcas:       bits(grp[0]),
-      muteGroups: bits(grp[1]),
+      dcas:       membership.read(grp[0]),
+      muteGroups: membership.read(grp[1]),
     });
   }
 
