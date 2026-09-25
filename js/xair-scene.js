@@ -24,7 +24,7 @@ import { colorFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { INF, num, bool, parseNodes, collapsePairs } from './scene-text.js';
 import { membership, eqLine } from './scn-codec.js';
-import { source, gateLine, dynLine, sendTap } from './xair-codec.js';
+import { source, gateLine, dynLine, sendTap, xairDesk } from './xair-codec.js';
 import { loss, render } from './losses.js';
 
 const MAX_CH = 16;
@@ -178,10 +178,17 @@ export function parseXAirScene(text, fileName = '') {
   // No header line to read a name out of, so the filename is the show name.
   const name = String(fileName).replace(/\.[^.]+$/, '').trim();
 
+  // Each bus has a 31-band graphic EQ: /bus/N/geq, one gain per band.
+  const geq = (path) => get(path).map(v => num(v));
+  const outputGeqs = { from: xairDesk.short, buses: {} };
+  for (let b = 1; b <= BUSES; b++) outputGeqs.buses[b] = geq(`/bus/${b}/geq`);
+  outputGeqs.main = geq('/lr/geq');
+
   return {
     format: 'xair',
     name,
     channels,
+    outputGeqs,
     buses:    named('/bus', BUSES),
     matrices: [],                                   // the X Air has none
     dcas,

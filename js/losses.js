@@ -118,6 +118,9 @@ const CODES = {
   'dca.overflow': { severity: 'dropped', render: (d) =>
     `The source has ${d.count} DCAs; the ${d.desk} has ${d.limit}, so the rest were dropped.` },
 
+  'fx.geq-slots': { severity: 'check', render: (d) =>
+    `FX 5-8 hold the ${d.from}'s output GEQs: dual GEQs inserted on buses 1-6 and a stereo GEQ on the main. Anything in those FX slots on the ${d.desk} is replaced.` },
+
   'fx.engine-unsupported': { severity: 'unsupported', render: (d) =>
     `${d.count} FX send${d.count === 1 ? ' is' : 's are'} active. The ${d.desk}'s four internal FX engines have no equivalent on the target desk, so the sends were not carried across — rebuild the effects and their sends on the desk.` },
 
