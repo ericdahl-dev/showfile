@@ -89,7 +89,7 @@ const CODES = {
     `${d.label}: compressor ratio ${d.from}:1 is not on the ${d.desk}; set to ${d.to}:1.` },
 
   'color.palette-collapse': { severity: 'degraded', render: (d) =>
-    `The ${d.desk} has ${d.to} strip colours to the source's ${d.from}, so ${d.count} colour group${plural(d.count)} collapsed — channels that looked different now share a colour.` },
+    `The ${d.desk} has ${d.to} strip colors to the source's ${d.from}, so ${d.count} color group${plural(d.count)} collapsed — channels that looked different now share a color.` },
 
   'eq.band-overflow': { severity: 'dropped', render: (d) =>
     `${d.label}: ${d.count} EQ bands did not fit the ${d.desk}'s ${d.limit}; the extras were dropped.` },

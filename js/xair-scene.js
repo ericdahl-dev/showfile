@@ -11,8 +11,8 @@
 //   * No header line. The X32 opens with #4.0# "Scene name"; an X Air file
 //     starts straight at /config/chlink, so the show name lives only in the
 //     filename and the IR takes it from there.
-//   * /ch/NN/config is "name" COLOUR analogSrc usbSrc. There is no icon
-//     field at all, and the colour is the palette INDEX where the X32 writes
+//   * /ch/NN/config is "name" COLOR analogSrc usbSrc. There is no icon
+//     field at all, and the color is the palette INDEX where the X32 writes
 //     the mnemonic (1 not RD) — see console-map.js.
 //   * Input patch is PER CHANNEL ("In10" on channel 9), not per block of
 //     eight. This is the one place the smaller desk is more expressive than
@@ -172,7 +172,7 @@ export function parseXAirScene(text, fileName = '') {
     makeChannel({ ...s, ...pair, headamp: headampFor(s.patch) }));
 
   // /bus/N and /dca/N are single-digit here, and their config is name +
-  // colour with no icon.
+  // color with no icon.
   const named = (prefix, count) => {
     const out = [];
     for (let n = 1; n <= count; n++) {

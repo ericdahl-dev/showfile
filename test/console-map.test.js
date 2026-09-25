@@ -29,7 +29,7 @@ test('X32 green does not land on Wing blue (the index pass-through bug)', () => 
   assert.equal(WING_PALETTE.find(e => e.col === wing).name, 'green');
 });
 
-test('mapColor falls back to the target default with no colour', () => {
+test('mapColor falls back to the target default with no color', () => {
   assert.equal(mapColor(null, 'x32'), 'WH');
   assert.equal(mapColor(null, 'wing'), 17);
   assert.equal(mapColor(null, 'xair'), 7);
@@ -42,7 +42,7 @@ test('codeToHex resolves each desk format', () => {
   assert.equal(codeToHex('nope', 1), null);
 });
 
-test('all 16 X32 colours, inverted ones included, survive X32 -> X Air -> X32 (#25)', () => {
+test('all 16 X32 colors, inverted ones included, survive X32 -> X Air -> X32 (#25)', () => {
   // The real GDQ show uses RDi, GNi, MGi, OFFi...; real X Air scenes write 8-15.
   const codes = ['OFF', 'RD', 'GN', 'YE', 'BL', 'MG', 'CY', 'WH',
                  'OFFi', 'RDi', 'GNi', 'YEi', 'BLi', 'MGi', 'CYi', 'WHi'];

@@ -47,7 +47,7 @@ test('X32 -> Wing -> X32 comes back unchanged', () => {
   assert.deepEqual(essentials(parseX32Scene(x32.text)), X32_EXPECTED);
 });
 
-test('X32 -> X Air keeps names, colours, levels and DCAs', () => {
+test('X32 -> X Air keeps names, colors, levels and DCAs', () => {
   const out = emitXAirScene(parseX32Scene(scn));
   assert.deepEqual(essentials(parseXAirScene(out.text, 'converted.scn')), X32_EXPECTED);
 });

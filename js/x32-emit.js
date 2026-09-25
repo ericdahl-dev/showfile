@@ -13,14 +13,14 @@
 //   * Input patching is per BLOCK OF EIGHT, not per channel. A source with a
 //     scattered patch cannot be represented; the dominant group per block wins
 //     and every channel that disagrees is named in a warning.
-//   * 32 channels, 4 EQ bands, 6 matrices, 8 strip colours.
+//   * 32 channels, 4 EQ bands, 6 matrices, 8 strip colors.
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
 import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import {
   q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
+  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
 } from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
@@ -151,7 +151,7 @@ export function emitX32Scene(ir, opts = {}) {
   const sceneName = q(ir.name || 'Converted').slice(0, 12) || 'Converted';
   lines.push(`#4.0# "${sceneName}" "" %000000000 1`);
 
-  if (include.colors) reportColourCollapse(warnings, placed, { desk: DESK, target: 'x32' });
+  if (include.colors) reportColorCollapse(warnings, placed, { desk: DESK, target: 'x32' });
 
   const chlink = Array(MAX_CH / 2).fill(false);
   const headamps = new Map();

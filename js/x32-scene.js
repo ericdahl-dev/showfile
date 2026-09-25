@@ -20,7 +20,7 @@ export function parseX32Scene(text) {
   if (!nodes.size) throw new Error('No scene data found — is this an X32/M32 .scn file?');
 
   // The X Air series writes .scn too, and its channel nodes are named the
-  // same, so an X Air file parses here into plausible nonsense — colours and
+  // same, so an X Air file parses here into plausible nonsense — colors and
   // the patch both read as empty rather than failing. Two markers separate
   // them: the X Air has FX send masters, and its chlink is 8 pairs to the
   // X32's 16.

@@ -9,8 +9,8 @@
 //
 //   * Input patch is per channel ("In10" on channel 9), so there is no block
 //     of eight to negotiate and a scattered patch survives intact.
-//   * The colour is the palette index of the same eight colours the X32 uses,
-//     so x32 <-> xair colour is lossless.
+//   * The color is the palette index of the same eight colors the X32 uses,
+//     so x32 <-> xair color is lossless.
 //
 // And one that makes it harder: a scene is only loadable if the whole node
 // set is present. X AIR Edit will not take a partial file the way the Wing
@@ -20,7 +20,7 @@
 import { mapColor, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import {
   q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
+  reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
 } from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
@@ -67,7 +67,7 @@ export function emitXAirScene(ir, opts = {}) {
     losses.push(loss('dca.overflow', { count: ir.dcas.length, desk: DESK, limit: DCAS }));
   }
 
-  if (include.colors) reportColourCollapse(losses, placed, { desk: DESK, target: 'xair' });
+  if (include.colors) reportColorCollapse(losses, placed, { desk: DESK, target: 'xair' });
 
   // ── /config ──────────────────────────────────────────────────────────────
   const chlink = Array(MAX_CH / 2).fill(false);

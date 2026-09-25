@@ -94,8 +94,8 @@ export function stripName(raw, { width, half, max, names = true }) {
 // the report names the channel: { label, n, name }.
 const scope = (at) => ({ kind: 'channel', n: at.n, name: at.name });
 
-// Colour loss is real on the way down: a Wing's 18 colours collapse onto 8.
-export function reportColourCollapse(losses, placed, { desk, target }) {
+// Color loss is real on the way down: a Wing's 18 colors collapse onto 8.
+export function reportColorCollapse(losses, placed, { desk, target }) {
   const seen = new Map();
   for (const { c } of placed) {
     const from = c.color?.code;
