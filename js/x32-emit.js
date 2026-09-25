@@ -18,6 +18,7 @@
 // Everything that does not fit is reported. Nothing is dropped silently.
 
 import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
+import { q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands } from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -25,12 +26,6 @@ const MAX_CH = 32;
 const MAX_EQ_BANDS = 4;
 const MAX_MATRIX = 6;
 const BLOCK = 8;
-
-// Neutral band types -> the X32's own tokens.
-const EQ_TOKEN = {
-  lowcut: 'LCut', lowshelf: 'LShv', bell: 'PEQ',
-  highshelf: 'HShv', highcut: 'HCut',
-};
 
 // The X32's own flat channel EQ, used for any band the source did not carry.
 const FLAT_BANDS = [
@@ -59,59 +54,10 @@ const bySource = (patch) => {
 };
 const HEADAMP_BASE = { local: 0, aes50a: 32, aes50b: 80 };
 
-const q = (s) => String(s ?? '').replace(/"/g, '');
-const pad2 = (n) => String(n).padStart(2, '0');
-
 // The X32 writes signed one-decimal values and uses "-oo" for silence.
 function lvl(v) {
   if (v === -Infinity || v === null || v === undefined) return '-oo';
   return (v >= 0 ? '+' : '') + Number(v).toFixed(1);
-}
-const dec = (v, p = 1) => (Number(v) || 0).toFixed(p);
-const sign = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(2);
-// Trim and headamp gain are written with one decimal; EQ and comp gain with two.
-const sign1 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(1);
-const onOff = (b) => (b ? 'ON' : 'OFF');
-
-// Least-significant-bit-first membership mask: group 1 is the RIGHTMOST char.
-function mask(members, width) {
-  const bits = Array(width).fill('0');
-  for (const n of members || []) if (n >= 1 && n <= width) bits[n - 1] = '1';
-  return '%' + bits.reverse().join('');
-}
-
-// Lay the IR's channels out on the X32's 32 mono slots. Stereo takes an
-// odd-aligned pair; a stereo channel that would land on an even slot leaves the
-// slot empty rather than reordering the show.
-function allocate(ir, warnings) {
-  const placed = [];
-  const gaps = [];
-  let slot = 1;
-
-  for (const c of ir.channels) {
-    if (c.stereo && slot % 2 === 0) {
-      gaps.push(slot);
-      slot += 1;                                   // step to the next odd slot
-    }
-    const width = c.stereo ? 2 : 1;
-    if (slot + width - 1 > MAX_CH) {
-      warnings.push(loss('channel.overflow-from',
-        { name: c.name || 'ch ' + c.index, desk: DESK, limit: MAX_CH },
-        { kind: 'channel', n: c.index, name: c.name }));
-      break;
-    }
-    placed.push({ c, ch: slot, width });
-    slot += width;
-  }
-
-  if (gaps.length) {
-    warnings.push(loss('stereo.pair-alignment', { desk: DESK, gaps }));
-  }
-  const dropped = ir.channels.length - placed.length;
-  if (dropped > 0 && !warnings.some(w => w.code === 'channel.overflow-from')) {
-    warnings.push(loss('channel.overflow-count', { count: dropped, desk: DESK, limit: MAX_CH }));
-  }
-  return placed;
 }
 
 // One routing token per block of eight. The block's start input is inferred
@@ -174,23 +120,6 @@ function routingBlocks(placed, warnings) {
   return tokens;
 }
 
-// When a source has more EQ bands than the target has slots, the ones doing
-// nothing go first. A 0 dB band is audibly absent, so keeping it while
-// discarding a real cut would throw away the only part that mattered — and
-// flat bands are common now that the Wing writer fills all six slots so a
-// converted channel cannot inherit the last show's curve.
-function fitBands(bands, limit) {
-  if (bands.length <= limit) return bands;
-  // A cut does its work at 0 dB, so it counts as active whatever its gain, and
-  // it is kept before any bell or shelf: losing a rolloff changes a channel
-  // more than losing a boost. Low cut goes first, high cut last, as on a desk.
-  const lowCuts = bands.filter(b => b.type === 'lowcut');
-  const highCuts = bands.filter(b => b.type === 'highcut');
-  const shaped = bands.filter(b => b.type !== 'lowcut' && b.type !== 'highcut' && Number(b.g) !== 0);
-  const room = Math.max(0, limit - lowCuts.length - highCuts.length);
-  return [...lowCuts, ...shaped.slice(0, room), ...highCuts].slice(0, limit);
-}
-
 export function emitX32Scene(ir, opts = {}) {
   const warnings = [...(ir.losses || [])];
   const include = Object.assign(
@@ -202,7 +131,7 @@ export function emitX32Scene(ir, opts = {}) {
   // A source the X32 has no routing block for (a Wing's third AES50 port, its
   // USB audio, an internal bus) cannot be patched. Say so and leave the channel
   // unpatched, rather than letting it fall into a block of local inputs.
-  const placed = allocate(ir, warnings).map(p => {
+  const placed = allocate(ir, warnings, { desk: DESK, slots: MAX_CH }).map(p => {
     if (!p.c.patch || BLOCK_PREFIX[p.c.patch.group] || bySource(p.c.patch)) return p;
     if (include.patch) {
       warnings.push(loss('patch.group-unsupported',
@@ -274,7 +203,6 @@ export function emitX32Scene(ir, opts = {}) {
         { kind: 'channel', n: ch, name: c.name }));
     }
 
-
     for (let k = 0; k < width; k++) {
       const n = ch + k;
       const id = pad2(n);
@@ -329,7 +257,7 @@ export function emitX32Scene(ir, opts = {}) {
         // the desk before, so a source with fewer bands pads out flat.
         for (let i = 0; i < MAX_EQ_BANDS; i++) {
           const b = bands[i] || FLAT_BANDS[i];
-          lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign(b.g)} ${dec(b.q, 1)}`);
+          lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign2(b.g)} ${dec(b.q, 1)}`);
         }
       }
 
