@@ -12,6 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/brand.css" />
+  <link rel="stylesheet" href="/css/site.css" />
   <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -176,108 +177,18 @@
   }
   </script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-weight: 300;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
 
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-      background: rgba(11,16,38,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-    .sf-logo { --sf-size: 17px; --sf-word-size: 15px; }
-    .nav-right { display: flex; align-items: center; gap: 24px; }
-    .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .nav-link:hover { color: var(--text); }
 
     /* ── Tools dropdown ──────────────────────────────────────────────────── */
-    .nav-tools { position: relative; display: flex; }
-    .nav-tools-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: none; border: none; padding: 0; cursor: pointer;
-      font-family: var(--font-body); font-size: 13px; font-weight: 300;
-      color: var(--muted); transition: color 0.2s;
-    }
-    .nav-tools-btn:hover,
-    .nav-tools[data-open="true"] .nav-tools-btn { color: var(--text); }
-    .nav-tools-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
-    .nav-tools-btn svg { width: 9px; height: 9px; transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
-    .nav-tools[data-open="true"] .nav-tools-btn svg { transform: rotate(180deg); }
 
-    .nav-tools-menu {
-      position: absolute; top: 100%; right: 0;
-      margin-top: 14px; min-width: 290px; padding: 6px;
-      background: rgba(13,13,24,0.94);
-      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-      border: 1px solid var(--border); border-radius: 14px;
-      box-shadow: 0 20px 48px -14px rgba(0,0,0,0.8);
-      opacity: 0; visibility: hidden;
-      transform: translateY(-7px) scale(0.975); transform-origin: top right;
-      transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.4,0,0.2,1), visibility 0.2s;
-    }
     /* Bridge the gap between button and panel so the pointer can cross it. */
-    .nav-tools-menu::before { content: ''; position: absolute; inset: -14px 0 100% 0; }
-    .nav-tools[data-open="true"] .nav-tools-menu {
-      opacity: 1; visibility: visible; transform: none;
-    }
 
-    .nav-tool {
-      display: flex; align-items: flex-start; gap: 11px;
-      padding: 10px 11px; border-radius: 10px;
-      text-decoration: none; color: var(--text);
-      transition: background 0.15s;
-    }
-    .nav-tool:hover { background: rgba(255,255,255,0.055); }
-    .nav-tool:focus-visible { outline: none; background: rgba(255,179,71,0.16); }
-    .nav-tool[aria-current="page"] { background: rgba(255,179,71,0.11); }
-    .nav-tool-ico {
-      flex: none; width: 30px; height: 30px; border-radius: 8px;
-      display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--amber), var(--magenta));
-      color: #fff;
-    }
-    .nav-tool-ico svg { width: 15px; height: 15px; }
     /* These are spans inside a span, so they need an explicit display — inline
        ignores the margin and runs the name and description onto one line. */
-    .nav-tool-text { display: block; min-width: 0; }
-    .nav-tool-name { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.3; }
-    .nav-tool-desc { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .nav-tools-menu { transition: opacity 0.01ms, visibility 0.01ms; transform: none; }
-    }
 
-    @media (max-width: 600px) {
-      nav { padding: 14px 16px; }
-      .nav-right { gap: 16px; }
-      /* Keep Tools reachable on phones — it is the only route to the tools. */
-      .nav-link { display: none; }
-      .nav-tools-menu { min-width: 262px; }
-    }
 
-    .page { max-width: 860px; margin: 0 auto; padding: 110px 24px 60px; }
 
-    .hero { text-align: center; margin-bottom: 34px; }
-    h1 {
-      font-family: var(--font-display); font-weight: 500; font-variation-settings: "opsz" 144;
-      font-size: clamp(1.7rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em;
-      margin-bottom: 14px;
-    }
-    .hero p { color: var(--muted); font-size: clamp(0.95rem, 2vw, 1.05rem); max-width: 58ch; margin: 0 auto; }
 
     /* ── Converter ──────────────────────────────────────────────────────────── */
     .tool {
@@ -306,12 +217,6 @@
     .swap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     @media (max-width: 620px) { .swap { margin: 0 auto; transform: rotate(90deg); } .swap:hover { transform: rotate(270deg); } }
 
-    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-    .field label {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
-      text-transform: uppercase; color: var(--muted);
-    }
-    .field .hint { font-size: 11.5px; color: var(--muted); font-weight: 300; line-height: 1.5; }
     select {
       width: 100%;
       background: rgba(0,0,0,0.3);
@@ -327,7 +232,6 @@
       background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px;
     }
     select:focus { outline: none; border-color: var(--accent); }
-    select option { background: #12121c; color: var(--text); }
     select option:disabled { color: #5a6474; }
 
     /* The drop target is a <label> wrapping a hidden input, so it needs an
@@ -353,21 +257,8 @@
        for one is just clutter — the X on the card is how you get back here. */
     .drop.loaded { display: none; }
 
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; align-items: center; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-      padding: 12px 22px; border-radius: 10px; border: 1px solid transparent;
-      font-family: var(--font-body); font-size: 14.5px; font-weight: 600;
-      cursor: pointer; text-decoration: none; color: #fff;
-      transition: transform 0.06s ease, opacity 0.15s;
-    }
-    .btn:active { transform: translateY(1px); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-go { background: var(--accent); color: var(--on-accent); min-width: 190px; }
     .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); }
     .btn-ghost:hover:not(:disabled) { color: var(--text); }
-    .status { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 160px; }
-    .status.error { color: var(--danger); }
 
     .disclaimer {
       margin-top: 20px; padding: 13px 15px;
@@ -577,10 +468,6 @@
       font-family: var(--font-display); font-weight: 600; font-variation-settings: "opsz" 72;
       font-size: 1.28rem; letter-spacing: -0.01em; margin-bottom: 12px;
     }
-    .prose p { color: #cbd5e1; margin-bottom: 14px; }
-    .prose ul { color: #cbd5e1; margin: 0 0 16px 20px; }
-    .prose li { margin-bottom: 7px; }
-    .prose strong { font-weight: 600; color: var(--text); }
     .prose code { font-family: var(--font-mono); font-size: 0.88em; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; }
     .prose a { color: #FFC978; }
 
@@ -590,15 +477,6 @@
       margin: 22px 0 7px;
     }
 
-    footer {
-      text-align: center;
-      padding: 32px 24px 48px;
-      color: var(--muted);
-      font-size: 13px;
-      border-top: 1px solid var(--border);
-    }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--text); }
 
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
   </style>
