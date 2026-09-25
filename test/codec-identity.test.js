@@ -19,11 +19,12 @@ const CANNOT_HOLD = {
 
 // Report codes that excuse a field changing on the channel they name.
 const EXCUSES = {
-  eq: ['eq.band-overflow', 'eq.lowcut-no-slot', 'eq.mid-band-overflow', 'eq.model-unsupported'],
+  eq: ['eq.band-overflow', 'eq.lowcut-no-slot', 'eq.lowcut-to-filter', 'eq.mid-band-overflow', 'eq.model-unsupported'],
+  hpf: ['eq.lowcut-to-filter'],
   gate: ['dyn.gate-ratio-snapped', 'dyn.model-unsupported'],
   dyn: ['dyn.ratio-snapped', 'dyn.model-unsupported'],
-  sends: ['send.bus-overflow', 'send.tap-approximated'],
-  patch: ['patch.group-unsupported', 'patch.group-unknown', 'patch.input-overflow', 'patch.block-granularity'],
+  sends: ['send.bus-overflow', 'send.tap-approximated', 'send.tap-shared'],
+  patch: ['patch.aux-overflow', 'patch.group-unsupported', 'patch.group-unknown', 'patch.input-overflow', 'patch.block-granularity'],
   headamp: ['patch.group-unsupported', 'patch.input-overflow'],
   pan: ['stereo.balance-lost'],
   dcas: ['group.membership-dropped', 'dca.overflow'],
@@ -78,9 +79,9 @@ function unexplained(desk) {
 // so the suite stays green; each has its own todo test, which starts passing
 // (and should then be removed from here) when the issue is fixed.
 const KNOWN = {
-  x32:  [{ issue: 57, line: /^Kick sends:/, what: 'an even bus send takes its odd partner\'s tap' }],
-  xair: [{ issue: 50, line: /^Vox patch:/, what: 'an aux input is written as a local one' }],
-  wing: [{ issue: 51, line: /^Vox hpf:/, what: 'an EQ low cut becomes the HPF, unreported' }],
+  x32:  [],
+  xair: [],
+  wing: [],
 };
 
 for (const [desk, label] of [['x32', 'X32'], ['xair', 'X Air'], ['wing', 'Wing']]) {

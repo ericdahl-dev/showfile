@@ -41,7 +41,8 @@ function parseSource(tok) {
   if (m) return { group: 'local', input: parseInt(m[1], 10) };
   m = /^U(\d+)$/i.exec(s);
   if (m) return { group: 'card', input: parseInt(m[1], 10) };
-  if (/^Aux/i.test(s)) return { group: 'aux', input: /R$/i.test(s) ? 2 : 1 };
+  // The stereo aux input (LINE 17/18) is a bare L or R; older files may say AuxL.
+  if (/^(Aux)?[LR]$/i.test(s)) return { group: 'aux', input: /R$/i.test(s) ? 2 : 1 };
   return null;
 }
 

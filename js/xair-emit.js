@@ -32,9 +32,12 @@ const FX_SENDS = 4;
 const DCAS = 4;
 const MUTE_GROUPS = 4;
 
-// Neutral groups -> the X Air's source tokens. It has local XLRs and USB and
-// nothing else — no AES50, no expansion card.
-const SRC = { local: 'In', card: 'U', aux: 'In' };
+// Neutral groups -> the X Air's source tokens. It has local XLRs, one stereo
+// aux input and USB, and nothing else: no AES50, no expansion card. The aux
+// input is LINE 17/18 in X-AIR-Edit, which saves it as a bare L and R (AuxL /
+// AuxR are its names in the USB routing, not valid channel sources).
+const SRC = { local: 'In', card: 'U' };
+const AUX = ['L', 'R'];
 const NAME_MAX = 16;
 
 const panTok = (v) => ((Math.round(v) || 0) >= 0 ? '+' : '') + Math.round(v || 0);
@@ -109,7 +112,13 @@ export function emitXAirScene(ir, opts = {}) {
     let src = `In${id}`;
     let rtn = `U${id}`;           // the USB return this channel would switch to
     let onReturn = false;
-    if (include.patch && c.patch) {
+    if (include.patch && c.patch?.group === 'aux') {
+      const aux = AUX[c.patch.input + half - 1];
+      if (aux) src = aux;
+      else losses.push(loss('patch.aux-overflow',
+        { label: `ch ${n} "${name}"`, input: c.patch.input + half, desk: DESK, limit: AUX.length },
+        { kind: 'channel', n, name }));
+    } else if (include.patch && c.patch) {
       const prefix = SRC[c.patch.group];
       if (!prefix) {
         losses.push(loss('patch.group-unsupported',

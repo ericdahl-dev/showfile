@@ -236,6 +236,17 @@ export function emitX32Scene(ir, opts = {}) {
       }
 
       if (include.sends) {
+        // An even bus has no tap of its own on the X32; say so when the
+        // source gave it a different one from its odd partner.
+        if (k === 0) {
+          const tapOf = (bus) => c.sends.find(o => o.bus === bus)?.tap;
+          const shared = c.sends.filter(s => s.bus % 2 === 0 && s.bus <= 16 && tapOf(s.bus - 1) !== undefined
+            && tapTo('x32', s.tap).token !== tapTo('x32', tapOf(s.bus - 1)).token).map(s => s.bus);
+          if (shared.length) {
+            warnings.push(loss('send.tap-shared', { label: `ch ${n} "${name}"`, buses: shared, desk: DESK },
+              { kind: 'channel', n, name }));
+          }
+        }
         for (const s of c.sends) {
           if (s.bus < 1 || s.bus > 16) continue;
           // Odd buses carry on, level, pan, tap and pan-follow; an even bus
