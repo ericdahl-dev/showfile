@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Tools for Live Production | Showfile</title>
   <meta name="description" content="Free browser tools for live production: convert console scenes between the X32, M32, X Air and Wing, and generate SMPTE LTC timecode WAV files. No upload, no account." />
+  <meta name="theme-color" content="#0B1026" />
   <link rel="canonical" href="https://showfile.ericdahl.dev/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Showfile" />
@@ -19,59 +20,141 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/fonts/fonts.css" />
   <link rel="stylesheet" href="/css/brand.css" />
   <style>
-    :root {
-      --bg:      #060610;
-      --surface: rgba(255,255,255,0.04);
-      --border:  rgba(255,255,255,0.07);
-      --purple:  #8b5cf6;
-      --text:    #f8fafc;
-      --muted:   #94a3b8;
-      --font-head: 'Plus Jakarta Sans', sans-serif;
-      --font-body: 'Inter', sans-serif;
-    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: var(--font-body);
-      font-weight: 300;
-      line-height: 1.7;
+      font-weight: 400;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
-    nav {
-      display: flex;
-      align-items: center;
-      padding: 20px 40px;
-      border-bottom: 1px solid var(--border);
+
+    nav { padding: 28px 40px; }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+      text-align: center;
+      position: relative;
     }
-    .sf-logo { --sf-size: 17px; --sf-word-size: 15px; }
-    .page { max-width: 860px; margin: 0 auto; padding: 72px 24px 60px; }
-    h1 { font-family: var(--font-head); font-weight: 700; font-size: 34px; line-height: 1.2; letter-spacing: -0.02em; }
-    .lede { color: var(--muted); margin: 12px 0 40px; max-width: 560px; }
-    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-    .tool {
-      display: block;
-      padding: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+    /* A soft spotlight cone falling on the headline. */
+    main::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: -120px;
+      width: min(880px, 110vw); height: 620px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(245,239,224,0.07), transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 7.4vw, 5.1rem);
+      line-height: 1.04;
+      max-width: 13ch;
+      margin: 0 auto;
+    }
+    .lede {
+      margin: 22px auto 0;
+      max-width: 40ch;
+      font-size: clamp(1.02rem, 2.2vw, 1.18rem);
+      color: var(--muted);
+    }
+
+    .cues {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      text-align: left;
+    }
+    .cue {
+      --gel: var(--amber);
+      --gel-rgb: 255,179,71;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 250px;
+      padding: 26px 26px 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(var(--gel-rgb), 0.28);
+      background:
+        radial-gradient(130% 100% at 0% 0%, rgba(var(--gel-rgb), 0.40), transparent 68%),
+        rgba(255,255,255,0.03);
       color: inherit;
       text-decoration: none;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     }
-    .tool:hover, .tool:focus-visible { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.06); }
-    .tool h2 { font-family: var(--font-head); font-weight: 600; font-size: 18px; margin-bottom: 6px; }
-    .tool p { color: var(--muted); font-size: 14px; }
-    footer { max-width: 860px; margin: 0 auto; padding: 24px; color: var(--muted); font-size: 13px; }
-    @media (max-width: 640px) {
-      nav { padding: 14px 16px; }
-      .page { padding: 48px 16px 40px; }
-      h1 { font-size: 28px; }
+    .cue.cyan { --gel: var(--cyan); --gel-rgb: 53,198,232; }
+    .cue:hover, .cue:focus-visible {
+      border-color: rgba(var(--gel-rgb), 0.6);
+      box-shadow: 0 18px 60px -20px rgba(var(--gel-rgb), 0.45);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .cue-no {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--gel);
+    }
+    .cue h2 {
+      margin-top: 10px;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-variation-settings: 'opsz' 72;
+      font-size: 1.85rem;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+    }
+    .cue p { margin-top: 10px; color: var(--muted); font-size: 15px; max-width: 34ch; }
+    .cue-open {
+      margin-top: auto;
+      align-self: flex-end;
+      padding: 8px 18px;
+      border: 1px solid rgba(245,239,224,0.3);
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .cue:hover .cue-open, .cue:focus-visible .cue-open {
+      background: var(--gel);
+      border-color: var(--gel);
+      color: var(--on-accent);
+    }
+
+    .note { margin-top: 34px; font-size: 13.5px; color: var(--muted); }
+
+    footer {
+      padding: 26px 40px 34px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 680px) {
+      nav { padding: 18px 20px; }
+      main { padding: 36px 20px 48px; }
+      .cues { grid-template-columns: 1fr; margin-top: 44px; gap: 16px; }
+      .cue { min-height: 0; }
+      .cue-open { margin-top: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cue { transition: none; }
+      .cue:hover, .cue:focus-visible { transform: none; }
     }
   </style>
 </head>
@@ -84,20 +167,26 @@
   </a>
 </nav>
 
-<main class="page">
-  <h1>Free tools for live production</h1>
-  <p class="lede">Everything runs in your browser. Nothing is uploaded and there is no account.</p>
+<main>
+  <h1 class="display">Everything&rsquo;s ready before doors.</h1>
+  <p class="lede">Free show-day tools that run in your browser.</p>
 
-  <div class="tools">
-    <a class="tool" href="/convert/">
+  <div class="cues">
+    <a class="cue" href="/convert/">
+      <span class="cue-no">Q1</span>
       <h2>Console Scene Converter</h2>
-      <p>Move a show between desks: X32, M32, X Air and Wing, in any direction, with a report of everything that did not carry.</p>
+      <p>Move a show between the X32, M32, X Air and Wing, in any direction.</p>
+      <span class="cue-open">Open</span>
     </a>
-    <a class="tool" href="/timecode-generator/">
-      <h2>LTC Generator</h2>
-      <p>SMPTE timecode WAV files at any frame rate and start time, one at a time or as a batch.</p>
+    <a class="cue cyan" href="/timecode-generator/">
+      <span class="cue-no">Q2</span>
+      <h2>LTC Timecode Generator</h2>
+      <p>SMPTE timecode WAV files at any frame rate and start time.</p>
+      <span class="cue-open">Open</span>
     </a>
   </div>
+
+  <p class="note">Nothing is uploaded. No account.</p>
 </main>
 
 <footer>&copy; 2026 Showfile</footer>

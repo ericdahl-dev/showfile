@@ -35,7 +35,8 @@ with Python's `zipfile`.
 | `js/convert.js` | Converter page UI |
 | `js/ltc.js`, `js/zip.js` | LTC encoder and the zip writer for batch export |
 | `js/nav-tools.js`, `js/version-tag.js`, `css/brand.css`, `fonts/` | Shared chrome |
-| `favicon.svg` | The mark; also used as the logo in the lockup. PNG icons are rendered from it |
+| `favicon.svg` | The mark (a fresnel, head-on); also the logo in the lockup. PNG icons are rendered from it |
+| `css/brand.css` | Every colour and font token, the stage-wash background and the logo lockup |
 | `index.html` | Home page listing the tools |
 | `og/index.html` | Source for the share images (not linked from the site) |
 
@@ -69,6 +70,6 @@ with their own name, mark, domain and version (starting at 1.0).
 
 ```sh
 rsvg-convert -w 32 -h 32 favicon.svg -o favicon.png
-rsvg-convert -w 116 -h 116 favicon.svg -o /tmp/mark.png
-magick -size 180x180 xc:'#060610' /tmp/mark.png -gravity center -composite -strip apple-touch-icon.png
+rsvg-convert -w 120 -h 120 favicon.svg -o /tmp/mark.png
+magick -size 180x180 xc:'#0B1026' /tmp/mark.png -gravity center -composite -strip apple-touch-icon.png
 ```

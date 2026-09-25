@@ -9,7 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/brand.css" />
-  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/fonts/fonts.css" />
@@ -71,19 +71,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:      #060610;
-      --surface: rgba(255,255,255,0.04);
-      --border:  rgba(255,255,255,0.07);
-      --blue:    #3b82f6;
-      --purple:  #8b5cf6;
-      --text:    #f8fafc;
-      --muted:   #94a3b8;
-      --danger:  #ef4444;
-      --font-head: 'Plus Jakarta Sans', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
 
     body {
       background: var(--bg);
@@ -102,7 +89,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 40px;
-      background: rgba(6,6,16,0.85);
+      background: rgba(11,16,38,0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
@@ -121,7 +108,7 @@
     }
     .nav-tools-btn:hover,
     .nav-tools[data-open="true"] .nav-tools-btn { color: var(--text); }
-    .nav-tools-btn:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 4px; }
+    .nav-tools-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
     .nav-tools-btn svg { width: 9px; height: 9px; transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
     .nav-tools[data-open="true"] .nav-tools-btn svg { transform: rotate(180deg); }
 
@@ -149,12 +136,12 @@
       transition: background 0.15s;
     }
     .nav-tool:hover { background: rgba(255,255,255,0.055); }
-    .nav-tool:focus-visible { outline: none; background: rgba(139,92,246,0.16); }
-    .nav-tool[aria-current="page"] { background: rgba(139,92,246,0.11); }
+    .nav-tool:focus-visible { outline: none; background: rgba(255,179,71,0.16); }
+    .nav-tool[aria-current="page"] { background: rgba(255,179,71,0.11); }
     .nav-tool-ico {
       flex: none; width: 30px; height: 30px; border-radius: 8px;
       display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
+      background: linear-gradient(135deg, var(--amber), var(--magenta));
       color: #fff;
     }
     .nav-tool-ico svg { width: 15px; height: 15px; }
@@ -182,10 +169,10 @@
     .eyebrow {
       display: inline-block;
       font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--purple); margin-bottom: 12px;
+      color: var(--accent); margin-bottom: 12px;
     }
     h1 {
-      font-family: var(--font-head); font-weight: 800;
+      font-family: var(--font-display); font-weight: 500; font-variation-settings: "opsz" 144;
       font-size: clamp(1.7rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em;
       margin-bottom: 14px;
     }
@@ -219,7 +206,7 @@
       padding: 10px 12px;
       transition: border-color 0.15s;
     }
-    input:focus, select:focus { outline: none; border-color: var(--purple); }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
     input.mono { font-family: var(--font-mono); letter-spacing: 0.06em; }
     input.invalid { border-color: var(--danger); }
     select { appearance: none; -webkit-appearance: none; cursor: pointer;
@@ -238,7 +225,7 @@
     }
     .btn:active { transform: translateY(1px); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-go { background: linear-gradient(135deg, var(--blue), var(--purple)); min-width: 190px; }
+    .btn-go { background: var(--accent); color: var(--on-accent); min-width: 190px; }
     .status { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 160px; }
     .status.error { color: var(--danger); }
 
@@ -279,7 +266,7 @@
 
     /* ── Explainer ──────────────────────────────────────────────────────────── */
     .prose h2 {
-      font-family: var(--font-head); font-weight: 700;
+      font-family: var(--font-display); font-weight: 600; font-variation-settings: "opsz" 72;
       font-size: 1.28rem; letter-spacing: -0.01em;
       margin: 40px 0 12px;
     }

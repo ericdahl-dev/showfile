@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
-  <meta name="theme-color" content="#060610" />
+  <meta name="theme-color" content="#0B1026" />
   <title>Console Scene Converter — X32, M32, X Air and Wing, any direction | Showfile</title>
   <meta name="description" content="Convert scene files between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of the three, in either direction, in your browser. Names, colours, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that cannot is listed channel by channel. Free, nothing uploaded." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/brand.css" />
-  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/fonts/fonts.css" />
@@ -176,20 +176,6 @@
   }
   </script>
   <style>
-    :root {
-      --bg:      #060610;
-      --surface: rgba(255,255,255,0.04);
-      --border:  rgba(255,255,255,0.07);
-      --blue:    #3b82f6;
-      --purple:  #8b5cf6;
-      --text:    #f8fafc;
-      --muted:   #94a3b8;
-      --danger:  #ef4444;
-      --warn:    #f59e0b;
-      --font-head: 'Plus Jakarta Sans', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
@@ -208,7 +194,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 40px;
-      background: rgba(6,6,16,0.85);
+      background: rgba(11,16,38,0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
@@ -228,7 +214,7 @@
     }
     .nav-tools-btn:hover,
     .nav-tools[data-open="true"] .nav-tools-btn { color: var(--text); }
-    .nav-tools-btn:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 4px; }
+    .nav-tools-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
     .nav-tools-btn svg { width: 9px; height: 9px; transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
     .nav-tools[data-open="true"] .nav-tools-btn svg { transform: rotate(180deg); }
 
@@ -256,12 +242,12 @@
       transition: background 0.15s;
     }
     .nav-tool:hover { background: rgba(255,255,255,0.055); }
-    .nav-tool:focus-visible { outline: none; background: rgba(139,92,246,0.16); }
-    .nav-tool[aria-current="page"] { background: rgba(139,92,246,0.11); }
+    .nav-tool:focus-visible { outline: none; background: rgba(255,179,71,0.16); }
+    .nav-tool[aria-current="page"] { background: rgba(255,179,71,0.11); }
     .nav-tool-ico {
       flex: none; width: 30px; height: 30px; border-radius: 8px;
       display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
+      background: linear-gradient(135deg, var(--amber), var(--magenta));
       color: #fff;
     }
     .nav-tool-ico svg { width: 15px; height: 15px; }
@@ -287,7 +273,7 @@
 
     .hero { text-align: center; margin-bottom: 34px; }
     h1 {
-      font-family: var(--font-head); font-weight: 800;
+      font-family: var(--font-display); font-weight: 500; font-variation-settings: "opsz" 144;
       font-size: clamp(1.7rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em;
       margin-bottom: 14px;
     }
@@ -317,7 +303,7 @@
       transition: color 0.15s, background 0.15s, transform 0.15s;
     }
     .swap:hover { color: var(--text); background: rgba(255,255,255,0.1); transform: rotate(180deg); }
-    .swap:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .swap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     @media (max-width: 620px) { .swap { margin: 0 auto; transform: rotate(90deg); } .swap:hover { transform: rotate(270deg); } }
 
     .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
@@ -340,7 +326,7 @@
       background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
       background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px;
     }
-    select:focus { outline: none; border-color: var(--purple); }
+    select:focus { outline: none; border-color: var(--accent); }
     select option { background: #12121c; color: var(--text); }
     select option:disabled { color: #5a6474; }
 
@@ -357,11 +343,11 @@
       cursor: pointer;
       transition: border-color 0.18s, background 0.18s;
     }
-    .drop:hover, .drop.over { border-color: var(--purple); background: rgba(139,92,246,0.07); }
-    .drop:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+    .drop:hover, .drop.over { border-color: var(--accent); background: rgba(255,179,71,0.07); }
+    .drop:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     .drop input { display: none; }
     .drop-title { font-size: 15.5px; font-weight: 600; color: var(--text); }
-    .drop-title code { font-family: var(--font-mono); font-size: 0.92em; color: var(--purple); }
+    .drop-title code { font-family: var(--font-mono); font-size: 0.92em; color: var(--accent); }
     .drop-sub { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
     /* Once a file is in, the card below IS the file. A target still asking
        for one is just clutter — the X on the card is how you get back here. */
@@ -377,7 +363,7 @@
     }
     .btn:active { transform: translateY(1px); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-go { background: linear-gradient(135deg, var(--blue), var(--purple)); min-width: 190px; }
+    .btn-go { background: var(--accent); color: var(--on-accent); min-width: 190px; }
     .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); }
     .btn-ghost:hover:not(:disabled) { color: var(--text); }
     .status { font-size: 12.5px; color: var(--muted); flex: 1; min-width: 160px; }
@@ -419,7 +405,7 @@
 
     .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 9px 20px; }
     .opt { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--muted); cursor: pointer; }
-    .opt input { accent-color: var(--purple); width: 15px; height: 15px; cursor: pointer; flex: none; }
+    .opt input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; flex: none; }
     .opt:hover { color: var(--text); }
 
     .tscroll { overflow-x: auto; }
@@ -437,7 +423,7 @@
     .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 8px; }
     .pill {
       display: inline-block; padding: 0 7px; border-radius: 20px; font-size: 10.5px;
-      font-family: var(--font-mono); background: rgba(139,92,246,0.16); color: #c4b5fd;
+      font-family: var(--font-mono); background: rgba(255,179,71,0.16); color: #FFD59E;
     }
 
     /* ── the file card ──────────────────────────────────────────────────── */
@@ -455,7 +441,7 @@
       transition: color 0.15s, background 0.15s, border-color 0.15s;
     }
     .fc-clear:hover { color: var(--text); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); }
-    .fc-clear:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+    .fc-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     /* A sheet of paper with the corner turned down, big enough to be the
        thing on screen rather than an icon beside some text. */
     .fc-doc {
@@ -473,8 +459,8 @@
       border-color: transparent var(--bg) transparent transparent;
     }
     .filecard.done .fc-doc {
-      background: linear-gradient(160deg, rgba(59,130,246,0.32), rgba(139,92,246,0.32));
-      border-color: rgba(139,92,246,0.6);
+      background: linear-gradient(160deg, rgba(224,64,154,0.32), rgba(255,179,71,0.32));
+      border-color: rgba(255,179,71,0.6);
     }
     .fc-ext {
       font-family: var(--font-mono); font-size: 13px; font-weight: 700;
@@ -506,23 +492,20 @@
       transition-timing-function: cubic-bezier(0.45, 0.05, 0.35, 1); }
     /* Velvet: the logo printed as a step-and-repeat, then vertical pleats
        over the top of it so the cloth has weight. */
-    /* Velvet with the mark printed on it as a step-and-repeat, in the brand
-       ramp rather than flat white. The gradient is userSpaceOnUse across the
-       mark's full 285 units so it reads as one ramp — the default would
-       restart it inside every rectangle and the logo would lose its shape.
-       The tile is large and padded: small and dense, the mark's own gaps line
+    /* Crimson house velvet with the fresnel mark printed on it as a
+       step-and-repeat, in the amber-to-magenta gel. The tile is large and padded: small and dense, the mark's own gaps line
        up into a grid and the whole thing turns into plaid. */
     .drape-face {
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(139,92,246,0.22), transparent 70%),
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(255,179,71,0.22), transparent 70%),
         repeating-linear-gradient(90deg,
           rgba(0,0,0,0.26) 0 2px,
           rgba(255,255,255,0.022) 2px 36px,
           rgba(0,0,0,0.12) 36px 70px,
           rgba(0,0,0,0.26) 70px 72px),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 600 600'%3E%3Cdefs%3E%3ClinearGradient id='sf' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%237e7aff'/%3E%3Cstop offset='.5' stop-color='%23b265fe'/%3E%3Cstop offset='1' stop-color='%23d77aba'/%3E%3C/linearGradient%3E%3Cmask id='c'%3E%3Crect width='64' height='64' fill='%23fff'/%3E%3Cpath d='M38 0 V14 Q38 22 46 22 H60' fill='none' stroke='%23000' stroke-width='5'/%3E%3Cpolyline points='16,46 26,46 26,34 38,34 38,46 48,46' fill='none' stroke='%23000' stroke-width='6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/mask%3E%3C/defs%3E%3Cg transform='translate(156,156) scale(4.5)'%3E%3Cpath mask='url(%23c)' fill='url(%23sf)' fill-opacity='0.5' d='M15 2 H40 L58 20 V52 Q58 62 48 62 H15 Q5 62 5 52 V12 Q5 2 15 2 Z'/%3E%3C/g%3E%3C/svg%3E"),
-        linear-gradient(180deg, #1d1636 0%, #130f22 60%, #0b0914 100%);
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 600 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFB347'/%3E%3Cstop offset='1' stop-color='%23E0409A'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg transform='translate(156,156) scale(4.5)' fill='none' stroke='url(%23g)' stroke-width='6' opacity='0.3'%3E%3Ccircle cx='32' cy='32' r='26' stroke-dasharray='120 44' stroke-linecap='round' transform='rotate(20 32 32)'/%3E%3Ccircle cx='32' cy='32' r='14'/%3E%3Ccircle cx='32' cy='32' r='4.5' fill='url(%23g)' stroke='none'/%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(180deg, #3B0D24 0%, #26081A 60%, #13050E 100%);
       background-position: center top;
     }
     /* A little weight at the bottom edge, so it hangs rather than floats. */
@@ -532,7 +515,7 @@
     }
     .drape-hem {
       position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
-      background: linear-gradient(180deg, rgba(139,92,246,0.55), rgba(59,130,246,0.5));
+      background: linear-gradient(180deg, rgba(255,179,71,0.55), rgba(224,64,154,0.5));
       box-shadow: 0 6px 18px -2px rgba(0,0,0,0.8);
     }
     .drape-label {
@@ -551,7 +534,7 @@
       overflow: hidden;
     }
     .drape-bar i { display: block; width: 0; height: 100%; border-radius: 3px;
-                   background: linear-gradient(90deg, var(--blue), var(--purple)); }
+                   background: linear-gradient(90deg, var(--amber), var(--magenta)); }
     /* Fills across the hold, so it finishes as the drape starts to lift. */
     .curtain.down .drape-bar i { width: 100%;
       transition: width var(--hold, 2800ms) cubic-bezier(0.25, 0.6, 0.3, 1) var(--drop, 1100ms); }
@@ -580,7 +563,7 @@
 
     /* ── Explainer ──────────────────────────────────────────────────────────── */
     .prose h2 {
-      font-family: var(--font-head); font-weight: 700;
+      font-family: var(--font-display); font-weight: 600; font-variation-settings: "opsz" 72;
       font-size: 1.28rem; letter-spacing: -0.01em; margin-bottom: 12px;
     }
     .prose p { color: #cbd5e1; margin-bottom: 14px; }
@@ -588,7 +571,7 @@
     .prose li { margin-bottom: 7px; }
     .prose strong { font-weight: 600; color: var(--text); }
     .prose code { font-family: var(--font-mono); font-size: 0.88em; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; }
-    .prose a { color: #93c5fd; }
+    .prose a { color: #FFC978; }
 
     .prose h3 {
       font-family: var(--font-head); font-weight: 600;
