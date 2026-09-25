@@ -2,70 +2,33 @@
 // Everything runs in the browser: the file is read with FileReader, converted
 // in memory, and handed back as a download. Nothing is uploaded.
 //
-// Formats are declared in two registries — CONSOLES (what a desk's file looks
-// like) and ROUTES (which conversions actually exist). Adding a desk means
-// adding a reader or a writer, not touching the page.
+// Reading and writing scenes lives in conversion.js, which has no DOM and is
+// tested directly. This page owns only what a person sees: the desk pickers,
+// the wording for each pairing, the report and the download.
 
-import { parseX32Scene } from './x32-scene.js';
-import { parseXAirScene } from './xair-scene.js';
-import { emitWingSnapshot } from './wing-snap.js';
-import { parseWingSnapshot } from './wing-scene.js';
-import { emitX32Scene } from './x32-emit.js';
-import { emitXAirScene } from './xair-emit.js';
+import { DESKS, canConvert, readScene, writeScene } from './conversion.js';
 
 const $ = (id) => document.getElementById(id);
 
-const CONSOLES = {
-  x32:  { label: 'Behringer X32 / Midas M32', ext: 'scn',  what: 'scene file', read: parseX32Scene },
-  xair: { label: 'Behringer X Air / Midas MR', ext: 'scn',  what: 'scene file', read: parseXAirScene },
-  wing: { label: 'Behringer Wing',            ext: 'snap', what: 'snapshot',   read: parseWingSnapshot },
-};
+const CONSOLES = DESKS;
 
-// Each writer returns { text, warnings, preview, stats }. The preview is a
-// plain per-channel row list so this page never has to know a desk's key names.
-const ROUTES = {
-  'x32>wing': {
-    ext: 'snap', mime: 'application/json',
-    pairLabel: 'stereo pairs merged',
-    hint: 'Snapshot covering all 40 channels. Ones your show does not use are cleared.',
-    run: (ir, include) => {
-      const r = emitWingSnapshot(ir, { include });
-      return { ...r, text: JSON.stringify(r.snapshot, null, 2) };
-    },
-  },
-  'xair>wing': {
-    ext: 'snap', mime: 'application/json',
-    pairLabel: 'stereo pairs merged',
-    hint: 'Snapshot covering all 40 channels. Ones your show does not use are cleared.',
-    run: (ir, include) => {
-      const r = emitWingSnapshot(ir, { include });
-      return { ...r, text: JSON.stringify(r.snapshot, null, 2) };
-    },
-  },
-  'xair>x32': {
-    ext: 'scn', mime: 'text/plain',
-    pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 32 channels. The X32 is the bigger desk, so they all fit — the patch is what to check.',
-    run: (ir, include) => emitX32Scene(ir, { include }),
-  },
-  'x32>xair': {
-    ext: 'scn', mime: 'text/plain',
-    pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 16 channels. The X Air is the smaller desk, so expect to check the notes below.',
-    run: (ir, include) => emitXAirScene(ir, { include }),
-  },
-  'wing>xair': {
-    ext: 'scn', mime: 'text/plain',
-    pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 16 channels. The X Air is the smallest desk here, so expect the most to check.',
-    run: (ir, include) => emitXAirScene(ir, { include }),
-  },
-  'wing>x32': {
-    ext: 'scn', mime: 'text/plain',
-    pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 32 channels. The X32 is the smaller desk, so expect to check the notes below.',
-    run: (ir, include) => emitX32Scene(ir, { include }),
-  },
+// What the page says about each pairing. Which pairings exist is conversion.js's
+// call (canConvert); this is only the wording.
+const TO_WING = {
+  pairLabel: 'stereo pairs merged',
+  hint: 'Snapshot covering all 40 channels. Ones your show does not use are cleared.',
+};
+const COPY = {
+  'x32>wing':  TO_WING,
+  'xair>wing': TO_WING,
+  'xair>x32': { pairLabel: 'stereo split to pairs',
+    hint: 'Full scene file, all 32 channels. The X32 is the bigger desk, so they all fit — the patch is what to check.' },
+  'x32>xair': { pairLabel: 'stereo split to pairs',
+    hint: 'Full scene file, all 16 channels. The X Air is the smaller desk, so expect to check the notes below.' },
+  'wing>xair': { pairLabel: 'stereo split to pairs',
+    hint: 'Full scene file, all 16 channels. The X Air is the smallest desk here, so expect the most to check.' },
+  'wing>x32': { pairLabel: 'stereo split to pairs',
+    hint: 'Full scene file, all 32 channels. The X32 is the smaller desk, so expect to check the notes below.' },
 };
 
 const SECTIONS = [
@@ -80,7 +43,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const routeKey = () => `${$('from').value}>${$('to').value}`;
-const route    = () => ROUTES[routeKey()] || null;
+const route    = () => canConvert($('from').value, $('to').value) ? COPY[routeKey()] : null;
 
 function setStatus(msg, isError = false) {
   const el = $('status');
@@ -133,7 +96,7 @@ function paintCard() {
 
   card.classList.add('on');
   card.classList.toggle('done', state.shown);
-  const ext = state.shown && r ? r.ext : src.ext;
+  const ext = state.shown && r ? CONSOLES[$('to').value].ext : src.ext;
   const desk = state.shown ? CONSOLES[$('to').value]?.label : src.label;
   $('fcExt').textContent = ext.toUpperCase();
   $('fcName').textContent = `${state.baseName}.${ext}`;
@@ -186,7 +149,7 @@ function syncTargets() {
   to.innerHTML = Object.entries(CONSOLES)
     .map(([id, c]) => {
       const same = id === fromId;
-      const ok = !same && !!ROUTES[`${fromId}>${id}`];
+      const ok = canConvert(fromId, id);
       const why = same ? ' — same as source, use swap' : (ok ? '' : ' — not yet');
       return `<option value="${id}"${ok ? '' : ' disabled'}>${esc(c.label)}${why}</option>`;
     }).join('');
@@ -202,7 +165,7 @@ function syncHints() {
   $('toHint').textContent = r ? r.hint : 'No converter for this pairing yet.';
   $('file').setAttribute('accept', '.' + src.ext);
   $('dropTitle').innerHTML = `Drop a <code>.${esc(src.ext)}</code> file here`;
-  $('optcard').hidden = r ? r.sections === false : true;
+  $('optcard').hidden = !r;
   if (state.ir) { state.shown = false; cancelCurtain(); render(); } else reset(false);
 }
 
@@ -229,17 +192,16 @@ function render() {
   if (!ir || !r) { $('report').classList.remove('on'); return; }
 
   renderOptions();
-  const out = r.run(ir, currentInclude());
+  const out = writeScene(ir, $('to').value, currentInclude());
   state.out = out;
 
   const rows = out.preview || [];
-  const named = rows.filter(p => p.name).length;
   $('stats').innerHTML = [
     [out.stats.channels, 'channels out'],
     [out.stats.stereoPairs, r.pairLabel],
-    [named, 'named'],
-    [(ir.dcas || []).filter(d => d.name).length, 'DCAs'],
-    [(out.text.length / 1024).toFixed(0) + ' KB', 'output'],
+    [out.stats.named, 'named'],
+    [out.stats.dcas, 'DCAs'],
+    [(out.stats.bytes / 1024).toFixed(0) + ' KB', 'output'],
   ].map(([n, l]) => `<div class="stat"><div class="stat-n">${esc(n)}</div><div class="stat-l">${esc(l)}</div></div>`).join('');
 
   $('chcount').textContent = `${rows.length} channels`;
@@ -297,7 +259,7 @@ function handleFile(file) {
   fr.onload = () => {
     try {
       state.shown = false;
-      state.ir = src.read(String(fr.result), file.name);
+      state.ir = readScene($('from').value, String(fr.result), file.name);
       state.baseName = file.name.replace(/\.[^.]+$/, '') || 'scene';
       $('fname').textContent = file.name + (state.ir.name ? ` — “${state.ir.name}”` : '');
       $('drop').classList.add('loaded');
@@ -336,7 +298,7 @@ $('to').addEventListener('change', syncHints);
 $('swap').addEventListener('click', () => {
   const from = $('from').value, to = $('to').value;
   if (!from || !to) return;
-  if (!ROUTES[`${to}>${from}`]) {
+  if (!canConvert(to, from)) {
     setStatus(`There's no converter from ${CONSOLES[to].label} to ${CONSOLES[from].label} yet.`, true);
     return;
   }
@@ -367,11 +329,10 @@ $('go').addEventListener('click', () => {
 });
 
 $('dl').addEventListener('click', () => {
-  const r = route();
-  if (!state.out || !r) return;
+  if (!state.out || !route()) return;
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([state.out.text], { type: r.mime }));
-  a.download = `${state.baseName}.${r.ext}`;
+  a.href = URL.createObjectURL(new Blob([state.out.file.text], { type: state.out.file.mime }));
+  a.download = `${state.baseName}.${state.out.file.ext}`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 });
