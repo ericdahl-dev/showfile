@@ -8,10 +8,10 @@
 // section yields a missing IR field rather than a throw, and anything actively
 // surprising becomes a warning the user sees rather than a silent default.
 
-import { colorFrom, wingIconToX32, tapFrom } from './console-map.js';
+import { colorFrom, wingIconToX32 } from './console-map.js';
 import { loss, render } from './losses.js';
 import { makeChannel } from './scene.js';
-import { NEG_INF, tags, conn as wingConn, spare, gateModel, dynModel, EQ_MODEL, filter } from './wing-codec.js';
+import { NEG_INF, tags, conn as wingConn, spare, gateModel, dynModel, EQ_MODEL, filter, sendTap } from './wing-codec.js';
 
 const INF = -Infinity;
 
@@ -72,7 +72,7 @@ function readSends(send) {
       on: s.on !== false,
       level: dB(s.lvl),
       pan: numOr(s.pan, 0),
-      tap: tapFrom('wing', s.mode),
+      tap: sendTap.read(s.mode),
     });
   }
   return out.sort((a, b) => a.bus - b.bus);

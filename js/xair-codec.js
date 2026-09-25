@@ -3,8 +3,8 @@
 // xair-emit.js (tokens both .scn desks share are in scn-codec.js).
 
 import { num } from './scene-text.js';
-import { onOff, dec, gateMode, dynModes, readGateHead, readDynHead } from './scn-codec.js';
-import { ratioToken } from './console-map.js';
+import { onOff, dec, gateMode, dynModes, readGateHead, readDynHead, ratioToken } from './scn-codec.js';
+import { tapCodec } from './console-map.js';
 
 // A channel's source: local XLRs "In01"-"In16", USB returns "U01"-"U18", and
 // one stereo aux input. X-AIR-Edit offers the aux input as LINE 17/18 and saves
@@ -51,4 +51,10 @@ export const xairDesk = {
   label: 'Behringer X Air / Midas MR', short: 'X Air', ext: 'scn', what: 'scene file', mime: 'text/plain',
   reads: ['scn'], partials: {},
   channels: 16, dcas: 4, muteGroups: 4, buses: 6, stereo: 'linked',
+  // Compressor ratios: the X32 and X Air store an index into this list.
+  ratios: [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
 };
+
+// Send taps, as this desk spells them (in console-map.js's neutral order:
+// input, pre-EQ, post-EQ, pre-fader, post-fader, group; null where it has none).
+export const sendTap = tapCodec(['IN', 'PREEQ', 'POSTEQ', 'PRE', 'POST', 'GRP']);

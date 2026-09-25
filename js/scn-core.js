@@ -111,8 +111,8 @@ export function reportBalanceLost(losses, c, { desk }, at) {
 }
 
 // The nearest ratio the desk has; a ratio that had to move is reported.
-export function snapRatioReported(losses, ratio, { desk, target }, at) {
-  const r = snapRatio(ratio, target);
+export function snapRatioReported(losses, ratio, { desk, ratios }, at) {
+  const r = snapRatio(ratio, ratios);
   if (!r.exact) losses.push(loss('dyn.ratio-snapped', { label: at.label, from: ratio, to: r.value, desk }, scope(at)));
   return r;
 }

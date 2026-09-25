@@ -13,6 +13,9 @@ export const dec = (v, p = 1) => (Number(v) || 0).toFixed(p);
 export const sign1 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(1);
 export const sign2 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(2);
 
+// A compressor ratio: one decimal below 10, whole above.
+export const ratioToken = (r) => (r >= 10 ? String(r) : r.toFixed(1));
+
 // Membership mask, least-significant-bit first: group 1 is the RIGHTMOST
 // character, so "%0001" is group 1 and "%0100" is group 3. Reading it
 // left-to-right files every channel under the wrong group, and still looks

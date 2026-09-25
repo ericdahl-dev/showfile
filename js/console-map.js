@@ -1,5 +1,8 @@
-// ─── Console color / icon mapping tables ──────────────────────────────────
-// Shared by the Input List console exporter (ui.js) and the scene converter.
+// ─── Matching between desks ────────────────────────────────────────────────
+// What has to be judged BETWEEN desks rather than spelled by one: which color
+// and which icon on one desk is the same as on another, the nearest ratio a
+// desk offers, and the neutral names for send taps. Each desk's own spellings
+// (its ratio list, its tap tokens) live in its codec module.
 //
 // The Wing palette below was derived empirically: eighteen channels were set to
 // the eighteen swatches in picker order and the resulting `col` integers read
@@ -75,8 +78,8 @@ function nearest(rgb, palette, key, fallback) {
   return best;
 }
 
-export function hexToWingCol(hex)  { return nearest(hexToRgb(hex), WING_PALETTE, 'col',  17); }
-export function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'code', 'WH'); }
+function hexToWingCol(hex)  { return nearest(hexToRgb(hex), WING_PALETTE, 'col',  17); }
+function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'code', 'WH'); }
 
 // X32 color code -> Wing col.
 //
@@ -88,14 +91,11 @@ export function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.s
 //
 // The `i` (inverted) variants have no Wing equivalent and collapse onto the base
 // color; OFF becomes grey, since the Wing has no "no color" state.
-export const X32_COLOR_TO_WING = {
+const X32_COLOR_TO_WING = {
   OFF: 17, RD:  9, GN:  5, YE:  7, BL:  2, MG: 11, CY:  4, WH: 18,
   OFFi: 17, RDi: 9, GNi: 5, YEi: 7, BLi: 2, MGi: 11, CYi: 4, WHi: 18,
 };
 
-export function x32ColorToWing(code) {
-  return X32_COLOR_TO_WING[String(code || '').trim()] ?? 17;
-}
 
 // X32 icon index -> Wing icon. Wing icons are group base + position: general
 // 0-14, vocals and mics 100-114, drums 200-224, strings and winds 300-319, keys
@@ -157,7 +157,7 @@ const CURATED = {
 // Wing col -> X32 color code. The Wing's 18 collapse onto the X32's 8, so
 // several entries share a target; that loss is real and is warned about at the
 // call site rather than hidden here.
-export const WING_COL_TO_X32 = {
+const WING_COL_TO_X32 = {
   1: 'BL',  2: 'BL',  3: 'MG', 4: 'CY',  5: 'GN',  6: 'GN',
   7: 'YE',  8: 'YE',  9: 'RD', 10: 'RD', 11: 'MG', 12: 'MG',
   13: 'YE', 14: 'CY', 15: 'RD', 16: 'GN', 17: 'OFF', 18: 'WH',
@@ -176,7 +176,7 @@ const PALETTES = {
 // X Air palette index <-> X32 color code, both directions, off the one table.
 export const xairIdxToX32Code = (idx) => X32_PALETTE.find(e => e.idx === Number(idx))?.code;
 export const x32CodeToXairIdx = (code) => X32_PALETTE.find(e => e.code === String(code).trim())?.idx;
-export function hexToXairIdx(hex) { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'idx', 7); }
+function hexToXairIdx(hex) { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'idx', 7); }
 
 const toHexStr = (rgb) => '#' + rgb.map(v => v.toString(16).padStart(2, '0')).join('');
 
@@ -211,7 +211,7 @@ export function mapColor(color, target) {
 // Icons travel in the X32's numbering, which is simply the space we have a
 // table for — it is a canonical choice, not a claim that the X32 is special.
 // Where two X32 icons share a Wing picture, the first one comes back.
-export const WING_ICON_TO_X32 = {};
+const WING_ICON_TO_X32 = {};
 for (const [x, w] of Object.entries(X32_ICON_TO_WING)) {
   if (w && !(w in WING_ICON_TO_X32)) WING_ICON_TO_X32[w] = Number(x);
 }
@@ -227,46 +227,32 @@ export function mapIcon(icon, target) {
   return 0;
 }
 
-// Compressor ratios each desk offers. The X32 stores an index into its list,
-// so anything else is not a setting it can hold; the Wing's list is finer.
-const RATIOS = {
-  x32:  [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
-  xair: [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
-  wing: [1.1, 1.2, 1.3, 1.5, 1.7, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 20, 50, 100],
-};
-
-// The nearest ratio the desk has (a tie goes to the gentler one), and whether
-// that is the ratio asked for.
-export function snapRatio(value, desk) {
-  const list = RATIOS[desk];
+// The nearest compressor ratio in a desk's list (a tie goes to the gentler
+// one), and whether that is the ratio asked for. Each desk's list is in its
+// descriptor (x32Desk.ratios ...).
+export function snapRatio(value, list) {
   const v = Number(value) || 3;
   const best = list.reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a));
   return { value: best, exact: Math.abs(best - v) < 1e-9 };
 }
 
-// How an X32/X Air scene file spells a ratio: one decimal below 10, whole above.
-export const ratioToken = (r) => (r >= 10 ? String(r) : r.toFixed(1));
-
-// Send taps: where along the channel a send is taken. The X32 and X Air have
-// the same six (spelled differently); the Wing has pre-fader, post-fader and
-// group. Neutral names, in signal order.
+// Send taps: where along the channel a send is taken, by neutral name in
+// signal order. A desk spells the ones it has in its codec, as a list in this
+// order with null for a tap it lacks; tapCodec turns that list into the pair.
 const TAP_NEUTRAL = ['input', 'preeq', 'posteq', 'pre', 'post', 'group'];
-const TAP_TOKENS = {
-  x32:  ['IN/LC', '<-EQ', 'EQ->', 'PRE', 'POST', 'GRP'],
-  xair: ['IN', 'PREEQ', 'POSTEQ', 'PRE', 'POST', 'GRP'],
-  wing: [null, null, null, 'PRE', 'POST', 'GRP'],
-};
 
-// A desk's token -> the neutral tap. Unknown or missing reads as pre-fader.
-export function tapFrom(desk, token) {
-  const i = TAP_TOKENS[desk].indexOf(String(token ?? '').toUpperCase());
-  return i >= 0 ? TAP_NEUTRAL[i] : 'pre';
-}
-
-// The neutral tap -> a desk's token. A tap the desk lacks (the Wing has no
-// input, pre-EQ or post-EQ send) falls back to pre-fader, which is the nearest
-// it has, and says it did.
-export function tapTo(desk, tap) {
-  const token = TAP_TOKENS[desk][TAP_NEUTRAL.indexOf(tap)];
-  return token ? { token, exact: true } : { token: TAP_TOKENS[desk][3], exact: false };
+export function tapCodec(tokens) {
+  return {
+    // A desk's token -> the neutral tap. Unknown or missing reads as pre-fader.
+    read(token) {
+      const i = tokens.indexOf(String(token ?? '').toUpperCase());
+      return i >= 0 ? TAP_NEUTRAL[i] : 'pre';
+    },
+    // The neutral tap -> the desk's token. A tap the desk lacks falls back to
+    // pre-fader, the nearest it has, and says it did.
+    write(tap) {
+      const token = tokens[TAP_NEUTRAL.indexOf(tap)];
+      return token ? { token, exact: true } : { token: tokens[3], exact: false };
+    },
+  };
 }

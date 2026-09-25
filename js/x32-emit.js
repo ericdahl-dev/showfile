@@ -17,13 +17,13 @@
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
-import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio } from './console-map.js';
 import {
   q, pad2, onOff, dec, sign1, allocate, fitBands, stripName,
   reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
 import { membership, eqLine } from './scn-codec.js';
-import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine, x32Desk } from './x32-codec.js';
+import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine, x32Desk, sendTap } from './x32-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = x32Desk.short;
@@ -195,8 +195,8 @@ export function emitX32Scene(ir, opts = {}) {
       if (include.dynamics) {
         const d = c.dyn;
         const ratio = k === 0
-          ? snapRatioReported(warnings, d.ratio, { desk: DESK, target: 'x32' }, at)
-          : snapRatio(d.ratio, 'x32');
+          ? snapRatioReported(warnings, d.ratio, { desk: DESK, ratios: x32Desk.ratios }, at)
+          : snapRatio(d.ratio, x32Desk.ratios);
         lines.push(`/ch/${id}/dyn ${dynLine.write(d, ratio.value)}`);
       }
 
@@ -219,7 +219,7 @@ export function emitX32Scene(ir, opts = {}) {
         if (k === 0) {
           const tapOf = (bus) => c.sends.find(o => o.bus === bus)?.tap;
           const shared = c.sends.filter(s => s.bus % 2 === 0 && s.bus <= x32Desk.buses && tapOf(s.bus - 1) !== undefined
-            && tapTo('x32', s.tap).token !== tapTo('x32', tapOf(s.bus - 1)).token).map(s => s.bus);
+            && sendTap.write(s.tap).token !== sendTap.write(tapOf(s.bus - 1)).token).map(s => s.bus);
           if (shared.length) {
             warnings.push(loss('send.tap-shared', { label: `ch ${n} "${name}"`, buses: shared, desk: DESK },
               { kind: 'channel', n, name }));
@@ -230,7 +230,7 @@ export function emitX32Scene(ir, opts = {}) {
           // Odd buses carry on, level, pan, tap and pan-follow; an even bus
           // carries on and level only, and shares its odd partner's tap.
           lines.push(s.bus % 2 === 1
-            ? `/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)} ${(s.pan || 0) >= 0 ? '+' : ''}${Math.round(s.pan || 0)} ${tapTo('x32', s.tap).token} 0`
+            ? `/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)} ${(s.pan || 0) >= 0 ? '+' : ''}${Math.round(s.pan || 0)} ${sendTap.write(s.tap).token} 0`
             : `/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)}`);
         }
       }

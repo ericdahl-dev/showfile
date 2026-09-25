@@ -5,8 +5,8 @@
 // than any desk's spelling.
 
 import { num } from './scene-text.js';
-import { onOff, dec, gateMode, dynModes, readGateHead, readDynHead } from './scn-codec.js';
-import { ratioToken } from './console-map.js';
+import { onOff, dec, gateMode, dynModes, readGateHead, readDynHead, ratioToken } from './scn-codec.js';
+import { tapCodec } from './console-map.js';
 
 // /config/routing/IN patches channels in blocks of eight: "A1-8" means the
 // block's channels come from AES50-A inputs 1-8. A UIN block points into the
@@ -90,4 +90,10 @@ export const x32Desk = {
   label: 'Behringer X32 / Midas M32', short: 'X32', ext: 'scn', what: 'scene file', mime: 'text/plain',
   reads: ['scn', 'chn', 'snp'], partials: { chn: 'channel preset', snp: 'snippet' },
   channels: 32, dcas: 8, muteGroups: 6, buses: 16, stereo: 'linked',
+  // Compressor ratios: the X32 and X Air store an index into this list.
+  ratios: [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
 };
+
+// Send taps, as this desk spells them (in console-map.js's neutral order:
+// input, pre-EQ, post-EQ, pre-fader, post-fader, group; null where it has none).
+export const sendTap = tapCodec(['IN/LC', '<-EQ', 'EQ->', 'PRE', 'POST', 'GRP']);

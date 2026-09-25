@@ -17,13 +17,13 @@
 // accepts a partial snapshot, so every node a real scene contains is written
 // here, with the desk's own defaults where the IR has nothing to say.
 
-import { mapColor, codeToHex, snapRatio, tapTo } from './console-map.js';
+import { mapColor, codeToHex, snapRatio } from './console-map.js';
 import {
   q, pad2, onOff, sign1, allocate, fitBands, stripName,
   reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
 import { membership, eqLine } from './scn-codec.js';
-import { source, gateLine, dynLine, xairDesk } from './xair-codec.js';
+import { source, gateLine, dynLine, xairDesk, sendTap } from './xair-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = xairDesk.short;
@@ -158,7 +158,7 @@ export function emitXAirScene(ir, opts = {}) {
 
     if (half === 0) {
       if (include.sends) reportLostBuses(losses, c.sends, { desk: DESK, limit: BUSES }, at);
-      if (include.dynamics) snapRatioReported(losses, c.dyn.ratio, { desk: DESK, target: 'xair' }, at);
+      if (include.dynamics) snapRatioReported(losses, c.dyn.ratio, { desk: DESK, ratios: xairDesk.ratios }, at);
       if (include.dynamics) reportGateRatio(losses, c.gate, { desk: DESK }, at);
       reportBalanceLost(losses, c, { desk: DESK }, at);
     }
@@ -285,7 +285,7 @@ export function emitXAirScene(ir, opts = {}) {
       : `/ch/${id}/gate OFF GATE -80.0 60.0 1  502 983 SELF`);
     out.push(`/ch/${id}/gate/filter OFF 3.0 990.9`);
     out.push(dyn
-      ? `/ch/${id}/dyn ${dynLine.write(dyn, snapRatio(dyn.ratio, 'xair').value)}`
+      ? `/ch/${id}/dyn ${dynLine.write(dyn, snapRatio(dyn.ratio, xairDesk.ratios).value)}`
       : `/ch/${id}/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF`);
     out.push(`/ch/${id}/dyn/filter OFF 3.0 990.9`);
     out.push(`/ch/${id}/insert OFF OFF`);
@@ -309,7 +309,7 @@ export function emitXAirScene(ir, opts = {}) {
     const byBus = new Map((sends || []).map(s => [s.bus, s]));
     for (let b = 1; b <= BUSES + FX_SENDS; b++) {
       const s = b <= BUSES ? byBus.get(b) : null;
-      const tap = b > BUSES ? 'POST' : (s ? tapTo('xair', s.tap).token : 'POSTEQ');
+      const tap = b > BUSES ? 'POST' : (s ? sendTap.write(s.tap).token : 'POSTEQ');
       const trailingPan = b <= BUSES && b % 2 === 1 ? ' +0' : '';
       out.push(`/ch/${id}/mix/${pad2(b)} ${s ? lvl(s.level) : '  -oo'} ${onOff(!!s?.on)} ${tap}${trailingPan}`);
     }
