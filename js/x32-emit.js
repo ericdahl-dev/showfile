@@ -215,6 +215,18 @@ export function emitX32Scene(ir, opts = {}) {
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
+    // A send to a bus the X32 lacks cannot be written. One at -oo carries
+    // nothing, and a real scene holds sixteen of those per channel, so only
+    // sends with a level are worth a line in the report.
+    const lostBuses = include.sends
+      ? c.sends.filter(s => (s.bus < 1 || s.bus > 16) && s.level > -Infinity).map(s => s.bus)
+      : [];
+    if (lostBuses.length) {
+      warnings.push(loss('send.bus-overflow',
+        { label: `ch ${ch} "${c.name}"`, buses: lostBuses, desk: DESK, limit: 16 },
+        { kind: 'channel', n: ch, name: c.name }));
+    }
+
     if (c.pairing === 'native' && Math.round(c.pan) !== 0) {
       warnings.push(loss('stereo.balance-lost',
         { label: `ch ${ch} "${c.name || ""}"`, balance: Math.round(c.pan), desk: DESK },

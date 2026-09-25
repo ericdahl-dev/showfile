@@ -64,6 +64,9 @@ const CODES = {
   'patch.input-overflow': { severity: 'check', render: (d) =>
     `${d.label}: local input ${d.input} is past the ${d.desk}'s ${d.limit}; repatch to a stagebox.` },
 
+  'send.bus-overflow': { severity: 'dropped', render: (d) =>
+    `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} dropped — the ${d.desk} has ${d.limit} buses. Rebuild ${d.buses.length === 1 ? 'that mix' : 'those mixes'} on the desk.` },
+
   'color.palette-collapse': { severity: 'degraded', render: (d) =>
     `The ${d.desk} has ${d.to} strip colours to the source's ${d.from}, so ${d.count} colour group${plural(d.count)} collapsed — channels that looked different now share a colour.` },
 

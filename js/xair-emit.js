@@ -209,6 +209,17 @@ export function emitXAirScene(ir, opts = {}) {
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
+    // Sends past the X Air's six buses cannot be written. Only sends with a
+    // level are reported; a send at -oo carries nothing.
+    const lostBuses = half === 0 && include.sends
+      ? c.sends.filter(s => (s.bus < 1 || s.bus > BUSES) && s.level > -Infinity).map(s => s.bus)
+      : [];
+    if (lostBuses.length) {
+      losses.push(loss('send.bus-overflow',
+        { label: `ch ${n} "${name}"`, buses: lostBuses, desk: DESK, limit: BUSES },
+        { kind: 'channel', n, name }));
+    }
+
     if (half === 0 && c.pairing === 'native' && Math.round(c.pan) !== 0) {
       losses.push(loss('stereo.balance-lost',
         { label: `ch ${n} "${name}"`, balance: Math.round(c.pan), desk: DESK },

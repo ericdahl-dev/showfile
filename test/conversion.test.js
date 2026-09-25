@@ -81,6 +81,24 @@ test('include options turn sections off', () => {
   assert.doesNotMatch(writeScene(scene, 'xair', { names: false }).file.text, /"Vox"/);
 });
 
+test('sends to buses the target lacks are reported, not dropped silently (#3)', () => {
+  // Vox (ch 3) sends to bus 10 at -6 dB; ch 3 also has a silent send to bus 12.
+  const scene = readScene('x32', x32Text + '/ch/03/mix/10 ON -6.0 +0 POST\n/ch/03/mix/12 ON -oo +0 POST\n');
+  const out = writeScene(scene, 'xair');                  // the X Air has six buses
+  const lost = out.losses.filter(l => l.code === 'send.bus-overflow');
+  assert.equal(lost.length, 1);
+  assert.deepEqual(lost[0].detail.buses, [10]);           // a silent send is not worth a line
+  assert.ok(out.warnings.some(w => /bus 10/.test(w) && /Vox/.test(w)), out.warnings.join('\n'));
+  assert.equal(writeScene(scene, 'wing').losses.filter(l => l.code === 'send.bus-overflow').length, 0);
+});
+
+test('the X32 reports sends past its 16 buses', () => {
+  const scene = readScene('x32', x32Text);
+  scene.channels.find(c => c.name === 'Vox').sends.push({ bus: 20, on: true, level: -3, pan: 0, tap: 'POST' });
+  const lost = writeScene(scene, 'x32').losses.filter(l => l.code === 'send.bus-overflow');
+  assert.deepEqual(lost.map(l => l.detail.buses), [[20]]);
+});
+
 test('reading the wrong kind of file fails with a message a person can act on', () => {
   assert.throws(() => readScene('x32', 'not a scene'), /X32\/M32 \.scn/);
   assert.throws(() => readScene('nope', x32Text), /Unknown desk/);
