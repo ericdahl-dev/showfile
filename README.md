@@ -41,6 +41,13 @@ with Python's `zipfile`.
 | `index.html` | Home page listing the tools |
 | `og/index.html` | Source for the share images (not linked from the site) |
 
+## Testing on a desk
+
+`test/desk-pack/` holds each real fixture converted to every other desk, with a checklist
+(`test/desk-pack/README.md`) of what to look for when loading it: on an XR18 through X-AIR-Edit, or
+offline in X32-Edit and WING-EDIT. Regenerate with `npm run desk-pack`; the tests fail if the pack
+no longer matches the converter.
+
 ## Share images
 
 `og-image.jpg`, `og-image-convert.jpg` and `og-image-timecode.jpg` are screenshots of

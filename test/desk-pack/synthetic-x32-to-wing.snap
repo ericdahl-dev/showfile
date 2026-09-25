@@ -1,0 +1,435 @@
+{
+  "type": "snapshot.11",
+  "creator": "Showfile",
+  "creator_name": "Synthetic",
+  "creator_model": "wing",
+  "ae_data": {
+    "ch": {
+      "1": {
+        "name": "Keys L",
+        "icon": 0,
+        "col": 5,
+        "fdr": -5,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 100,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 200,
+          "1g": 2,
+          "1q": 2,
+          "2f": 3430,
+          "2g": -3.5,
+          "2q": 1.4,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": true,
+            "lvl": -10,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "tags": "#D1",
+        "clink": false
+      },
+      "2": {
+        "name": "Vox",
+        "icon": 0,
+        "col": 9,
+        "fdr": 0,
+        "mute": true,
+        "pan": -20,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 3
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 80,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 1.5,
+          "hq": 0.7,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "tags": "#D3#M1",
+        "clink": false
+      },
+      "3": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "4": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "5": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "6": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "7": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "8": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "9": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "10": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "11": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "12": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "13": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "14": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "15": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "16": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "17": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "18": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "19": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "20": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "21": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "22": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "23": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "24": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "25": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "26": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "27": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "28": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "29": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "30": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "31": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "32": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "33": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "34": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "35": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "36": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "37": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "38": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "39": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "40": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      }
+    },
+    "dca": {
+      "1": {
+        "name": "Keys",
+        "icon": 0,
+        "col": 5,
+        "fdr": 0,
+        "mute": false
+      },
+      "3": {
+        "name": "Vox",
+        "icon": 0,
+        "col": 9,
+        "fdr": -2,
+        "mute": false
+      }
+    },
+    "io": {
+      "in": {
+        "LCL": {
+          "1": {
+            "g": 32.5,
+            "vph": true,
+            "mode": "ST"
+          },
+          "3": {
+            "g": 20,
+            "vph": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,8 @@
   "description": "Showfile: free browser tools for live production. Console scene converter and LTC timecode generator.",
   "scripts": {
     "dev": "python3 -m http.server 8080",
-    "test": "node --test"
+    "test": "node --test",
+    "desk-pack": "node scripts/desk-pack.mjs"
   },
   "engines": {
     "node": ">=20"
