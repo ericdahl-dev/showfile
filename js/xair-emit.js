@@ -276,11 +276,11 @@ export function emitXAirScene(ir, opts = {}) {
   }
   function pushChannelTail(out, id, gate, dyn, eq, sends, dcas, mgs, mix) {
     out.push(gate
-      ? `/ch/${id}/gate ${onOff(gate.on)} ${gateToken(gate)} ${dec(gate.thr, 1)} ${dec(gate.range, 1)} ${Math.round(gate.att || 1)} ${dec(gate.hold, 1)} ${Math.round(gate.rel || 983)} SELF`
+      ? `/ch/${id}/gate ${onOff(gate.on)} ${gateToken(gate)} ${dec(gate.thr, 1)} ${dec(gate.range, 1)} ${Math.round(gate.att ?? 1)} ${dec(gate.hold, 1)} ${Math.round(gate.rel || 983)} SELF`
       : `/ch/${id}/gate OFF GATE -80.0 60.0 1  502 983 SELF`);
     out.push(`/ch/${id}/gate/filter OFF 3.0 990.9`);
     out.push(dyn
-      ? `/ch/${id}/dyn ${onOff(dyn.on)} ${dyn.mode === 'exp' ? 'EXP' : 'COMP'} ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee || 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att || 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
+      ? `/ch/${id}/dyn ${onOff(dyn.on)} ${dyn.mode === 'exp' ? 'EXP' : 'COMP'} ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee ?? 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att ?? 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
       : `/ch/${id}/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF`);
     out.push(`/ch/${id}/dyn/filter OFF 3.0 990.9`);
     out.push(`/ch/${id}/insert OFF OFF`);

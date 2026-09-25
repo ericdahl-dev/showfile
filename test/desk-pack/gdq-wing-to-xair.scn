@@ -7,9 +7,9 @@
 /config/mute OFF OFF OFF OFF
 /ch/01/config "Headset 1" 4 In01 U01
 /ch/01/preamp +0.0 OFF OFF ON  100
-/ch/01/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/01/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/01/gate/filter OFF 3.0 990.9
-/ch/01/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/01/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/01/dyn/filter OFF 3.0 990.9
 /ch/01/insert OFF OFF
 /ch/01/eq ON
@@ -32,9 +32,9 @@
 /ch/01/automix OFF  +0.0
 /ch/02/config "Headset 2" 3 In02 U02
 /ch/02/preamp +0.0 OFF OFF ON  100
-/ch/02/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/02/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/02/gate/filter OFF 3.0 990.9
-/ch/02/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/02/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/02/dyn/filter OFF 3.0 990.9
 /ch/02/insert OFF OFF
 /ch/02/eq ON
@@ -57,9 +57,9 @@
 /ch/02/automix OFF  +0.0
 /ch/03/config "Headset 3" 3 In03 U03
 /ch/03/preamp +0.0 OFF OFF ON  100
-/ch/03/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/03/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/03/gate/filter OFF 3.0 990.9
-/ch/03/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/03/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/03/dyn/filter OFF 3.0 990.9
 /ch/03/insert OFF OFF
 /ch/03/eq ON
@@ -82,9 +82,9 @@
 /ch/03/automix OFF  +0.0
 /ch/04/config "Headset 4" 5 In04 U04
 /ch/04/preamp +0.0 OFF OFF ON  100
-/ch/04/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/04/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/04/gate/filter OFF 3.0 990.9
-/ch/04/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/04/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/04/dyn/filter OFF 3.0 990.9
 /ch/04/insert OFF OFF
 /ch/04/eq ON
@@ -107,9 +107,9 @@
 /ch/04/automix OFF  +0.0
 /ch/05/config "Headset 5" 1 In05 U05
 /ch/05/preamp +0.0 OFF OFF ON  100
-/ch/05/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/05/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/05/gate/filter OFF 3.0 990.9
-/ch/05/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/05/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/05/dyn/filter OFF 3.0 990.9
 /ch/05/insert OFF OFF
 /ch/05/eq ON
@@ -132,9 +132,9 @@
 /ch/05/automix OFF  +0.0
 /ch/06/config "Headset 6" 6 In06 U06
 /ch/06/preamp +0.0 OFF OFF ON  100
-/ch/06/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/06/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/06/gate/filter OFF 3.0 990.9
-/ch/06/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/06/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/06/dyn/filter OFF 3.0 990.9
 /ch/06/insert OFF OFF
 /ch/06/eq ON
@@ -157,9 +157,9 @@
 /ch/06/automix OFF  +0.0
 /ch/07/config "Headset 7" 2 In07 U07
 /ch/07/preamp +0.0 OFF OFF ON  100
-/ch/07/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/07/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/07/gate/filter OFF 3.0 990.9
-/ch/07/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/07/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/07/dyn/filter OFF 3.0 990.9
 /ch/07/insert OFF OFF
 /ch/07/eq ON
@@ -182,9 +182,9 @@
 /ch/07/automix OFF  +0.0
 /ch/08/config "Headset 8" 5 In08 U08
 /ch/08/preamp +0.0 OFF OFF ON  100
-/ch/08/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/08/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/08/gate/filter OFF 3.0 990.9
-/ch/08/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 10 7.0 76 100 SELF OFF
+/ch/08/dyn ON COMP RMS LOG -45.0 3.0 1 6.00 0 7.0 76 100 SELF OFF
 /ch/08/dyn/filter OFF 3.0 990.9
 /ch/08/insert OFF OFF
 /ch/08/eq ON

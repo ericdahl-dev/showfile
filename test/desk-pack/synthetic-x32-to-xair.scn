@@ -7,9 +7,9 @@
 /config/mute OFF OFF OFF OFF
 /ch/01/config "Keys L" 2 In01 U01
 /ch/01/preamp +0.0 OFF OFF ON  100
-/ch/01/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/01/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/01/gate/filter OFF 3.0 990.9
-/ch/01/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF
+/ch/01/dyn OFF COMP PEAK LOG 0.0 3.0 0 0.00 10 10.0 151 100 SELF OFF
 /ch/01/dyn/filter OFF 3.0 990.9
 /ch/01/insert OFF OFF
 /ch/01/eq ON
@@ -32,9 +32,9 @@
 /ch/01/automix OFF  +0.0
 /ch/02/config "Keys R" 2 In02 U02
 /ch/02/preamp +0.0 OFF OFF ON  100
-/ch/02/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/02/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/02/gate/filter OFF 3.0 990.9
-/ch/02/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF
+/ch/02/dyn OFF COMP PEAK LOG 0.0 3.0 0 0.00 10 10.0 151 100 SELF OFF
 /ch/02/dyn/filter OFF 3.0 990.9
 /ch/02/insert OFF OFF
 /ch/02/eq ON
@@ -57,9 +57,9 @@
 /ch/02/automix OFF  +0.0
 /ch/03/config "Vox" 1 In03 U03
 /ch/03/preamp +0.0 OFF OFF ON  80
-/ch/03/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/03/gate OFF GATE -80.0 60.0 0 50.0 200 SELF
 /ch/03/gate/filter OFF 3.0 990.9
-/ch/03/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF
+/ch/03/dyn OFF COMP PEAK LOG 0.0 3.0 0 0.00 10 10.0 151 100 SELF OFF
 /ch/03/dyn/filter OFF 3.0 990.9
 /ch/03/insert OFF OFF
 /ch/03/eq ON
