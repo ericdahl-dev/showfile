@@ -56,7 +56,10 @@ function mapEq(eq, warnings, label, filterFree) {
   // low cut — in the dedicated filter section — so use that when the channel
   // high-pass has not already claimed it, and say so when it has.
   if (lowCut) {
-    if (filterFree) { out.cut = { lc: true, lcf: round(lowCut.f), lcs: '12' }; }
+    if (filterFree) {
+      out.cut = { lc: true, lcf: round(lowCut.f), lcs: '12' };
+      warnings.push(loss('eq.lowcut-to-filter', { label, freq: Math.round(lowCut.f), desk: DESK }));
+    }
     else {
       warnings.push(loss('eq.lowcut-no-slot',
         { label, freq: Math.round(lowCut.f), desk: DESK }));

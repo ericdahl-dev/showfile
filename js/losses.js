@@ -61,6 +61,9 @@ const CODES = {
   'patch.group-unknown': { severity: 'unsupported', render: (d) =>
     `${d.label}: source group "${d.group}" is not one this converter knows; left unpatched.` },
 
+  'patch.aux-overflow': { severity: 'unsupported', render: (d) =>
+    `${d.label}: aux input ${d.input} has no equivalent; the ${d.desk} has ${d.limit} (L and R). Left on its local input.` },
+
   'patch.input-overflow': { severity: 'check', render: (d) =>
     `${d.label}: local input ${d.input} is past the ${d.desk}'s ${d.limit}; repatch to a stagebox.` },
 
@@ -69,6 +72,9 @@ const CODES = {
 
   'preamp.trim-dropped': { severity: 'dropped', render: (d) =>
     `${d.label}: ${d.trim > 0 ? '+' : ''}${d.trim} dB digital trim dropped — the ${d.desk} has no trim on an input channel. Set it with the preamp gain.` },
+
+  'send.tap-shared': { severity: 'approximated', render: (d) =>
+    `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} ${d.buses.length === 1 ? 'takes' : 'take'} the tap of ${d.buses.length === 1 ? 'its' : 'their'} odd partner; the ${d.desk} sets one tap per bus pair.` },
 
   'send.tap-approximated': { severity: 'approximated', render: (d) =>
     `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} taken before the EQ or at the input — the ${d.desk} has no such tap, so ${d.buses.length === 1 ? 'it is' : 'they are'} now pre-fader.` },
@@ -93,6 +99,9 @@ const CODES = {
 
   'eq.band-overflow': { severity: 'dropped', render: (d) =>
     `${d.label}: ${d.count} EQ bands did not fit the ${d.desk}'s ${d.limit}; the extras were dropped.` },
+
+  'eq.lowcut-to-filter': { severity: 'relocated', render: (d) =>
+    `${d.label}: the low-cut EQ band at ${d.freq} Hz is now the ${d.desk}'s filter-section low cut (12 dB/oct), since its EQ has no cut band. It reads back as the channel high-pass.` },
 
   'eq.lowcut-no-slot': { severity: 'dropped', render: (d) =>
     `${d.label}: a low-cut EQ band at ${d.freq} Hz could not come across — the ${d.desk}'s own low cut is already carrying the channel high-pass, and its EQ has no cut band. Add the rolloff by hand if you need both.` },
