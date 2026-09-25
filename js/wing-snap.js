@@ -8,10 +8,10 @@
 
 import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
 import { loss, renderAll } from './losses.js';
-import { NEG_INF, tags, conn, spare, gateModel, dynModel, EQ_MODEL, filter } from './wing-codec.js';
+import { NEG_INF, tags, conn, spare, gateModel, dynModel, EQ_MODEL, filter, wingDesk } from './wing-codec.js';
 
-const DESK = 'Wing';
-const MAX_CH = 40;
+const DESK = wingDesk.short;
+const MAX_CH = wingDesk.channels;
 const LCL_INPUTS = 24;                // local inputs present in the snapshot
 
 const dB = (v) => (v === -Infinity || v === null || v === undefined ? NEG_INF : round(v));
@@ -254,7 +254,11 @@ export function emitWingSnapshot(ir, opts = {}) {
 
   if (include.groups) {
     const dca = {};
+    if ((ir.dcas || []).some(d => d.n > wingDesk.dcas)) {
+      warnings.push(loss('dca.overflow', { count: ir.dcas.length, desk: DESK, limit: wingDesk.dcas }));
+    }
     for (const d of ir.dcas || []) {
+      if (d.n < 1 || d.n > wingDesk.dcas) continue;
       if (!d.name && d.fader === 0) continue;
       dca[String(d.n)] = { name: d.name, icon: mapIcon(d.icon, 'wing'), col: mapColor(d.color, 'wing'), fdr: dB(d.fader), mute: !!d.muted };
     }
@@ -279,9 +283,11 @@ export function emitWingSnapshot(ir, opts = {}) {
 
   if (Object.keys(lcl).length) ae.io = { in: lcl };
 
+  const snapshot = { type: 'snapshot.11', creator: 'Showfile',
+                    creator_name: String(ir.name || '').slice(0, 32), creator_model: 'wing', ae_data: ae };
   return {
-    snapshot: { type: 'snapshot.11', creator: 'Showfile',
-                creator_name: String(ir.name || '').slice(0, 32), creator_model: 'wing', ae_data: ae },
+    snapshot,
+    text: JSON.stringify(snapshot, null, 2),
     warnings: renderAll(warnings),
     losses: warnings,
     preview,

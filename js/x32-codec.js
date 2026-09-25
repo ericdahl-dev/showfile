@@ -83,3 +83,11 @@ export const dynLine = {
   }),
   write: (d, ratio) => `${onOff(d.on)} ${dynModes.write(d)} ${dec(d.thr, 1)} ${ratioToken(ratio)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`,
 };
+
+// What the X32 / M32 is, for everything that has to know (#55): the writer's
+// limits, the page's wording, which files its reader takes.
+export const x32Desk = {
+  label: 'Behringer X32 / Midas M32', short: 'X32', ext: 'scn', what: 'scene file', mime: 'text/plain',
+  reads: ['scn', 'chn', 'snp'], partials: { chn: 'channel preset', snp: 'snippet' },
+  channels: 32, dcas: 8, muteGroups: 6, buses: 16, stereo: 'linked',
+};

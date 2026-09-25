@@ -95,3 +95,10 @@ export const filter = {
   readHpf: (flt) => ({ on: flt.lc === true, slope: num(parseInt(flt.lcs, 10), 24), freq: num(flt.lcf, 20) }),
   readHighCut: (flt) => (flt?.hc === true ? { type: 'highcut', f: num(flt.hcf, 20000), g: 0, q: 1 } : null),
 };
+
+// What the Wing is, for everything that has to know (#55).
+export const wingDesk = {
+  label: 'Behringer Wing', short: 'Wing', ext: 'snap', what: 'snapshot', mime: 'application/json',
+  reads: ['snap'], partials: {},
+  channels: 40, dcas: 16, muteGroups: 8, buses: 16, stereo: 'native',
+};

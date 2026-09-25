@@ -23,11 +23,11 @@ import {
   reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
 import { membership, eqLine } from './scn-codec.js';
-import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine } from './x32-codec.js';
+import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine, x32Desk } from './x32-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
-const DESK = 'X32';
-const MAX_CH = 32;
+const DESK = x32Desk.short;
+const MAX_CH = x32Desk.channels;
 const MAX_EQ_BANDS = 4;
 const MAX_MATRIX = 6;
 const BLOCK = 8;
@@ -151,13 +151,13 @@ export function emitX32Scene(ir, opts = {}) {
 
   for (const { c, ch, width } of placed) {
     if (width === 2) chlink[Math.ceil(ch / 2) - 1] = true;
-    if (include.groups) reportLostMembership(warnings, c, ch, c.name || '', DESK, 8, 6);
+    if (include.groups) reportLostMembership(warnings, c, ch, c.name || '', DESK, x32Desk.dcas, x32Desk.muteGroups);
     // A stereo channel that came from a natively-stereo desk carries a real
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
     const whole = { label: `ch ${ch} "${c.name}"`, n: ch, name: c.name };
-    if (include.sends) reportLostBuses(warnings, c.sends, { desk: DESK, limit: 16 }, whole);
+    if (include.sends) reportLostBuses(warnings, c.sends, { desk: DESK, limit: x32Desk.buses }, whole);
 
     reportBalanceLost(warnings, c, { desk: DESK }, { ...whole, label: `ch ${ch} "${c.name || ''}"` });
 
@@ -218,7 +218,7 @@ export function emitX32Scene(ir, opts = {}) {
         // source gave it a different one from its odd partner.
         if (k === 0) {
           const tapOf = (bus) => c.sends.find(o => o.bus === bus)?.tap;
-          const shared = c.sends.filter(s => s.bus % 2 === 0 && s.bus <= 16 && tapOf(s.bus - 1) !== undefined
+          const shared = c.sends.filter(s => s.bus % 2 === 0 && s.bus <= x32Desk.buses && tapOf(s.bus - 1) !== undefined
             && tapTo('x32', s.tap).token !== tapTo('x32', tapOf(s.bus - 1)).token).map(s => s.bus);
           if (shared.length) {
             warnings.push(loss('send.tap-shared', { label: `ch ${n} "${name}"`, buses: shared, desk: DESK },
@@ -226,7 +226,7 @@ export function emitX32Scene(ir, opts = {}) {
           }
         }
         for (const s of c.sends) {
-          if (s.bus < 1 || s.bus > 16) continue;
+          if (s.bus < 1 || s.bus > x32Desk.buses) continue;
           // Odd buses carry on, level, pan, tap and pan-follow; an even bus
           // carries on and level only, and shares its odd partner's tap.
           lines.push(s.bus % 2 === 1
@@ -236,7 +236,7 @@ export function emitX32Scene(ir, opts = {}) {
       }
 
       if (include.groups) {
-        lines.push(`/ch/${id}/grp ${membership.write(c.dcas, 8)} ${membership.write(c.muteGroups, 6)}`);
+        lines.push(`/ch/${id}/grp ${membership.write(c.dcas, x32Desk.dcas)} ${membership.write(c.muteGroups, x32Desk.muteGroups)}`);
       }
 
       if (include.preamp && c.patch && c.headamp) {
@@ -267,7 +267,7 @@ export function emitX32Scene(ir, opts = {}) {
 
   if (include.names) {
     (ir.buses || []).forEach(b => {
-      if (b.n < 1 || b.n > 16 || !b.name) return;
+      if (b.n < 1 || b.n > x32Desk.buses || !b.name) return;
       lines.push(`/bus/${pad2(b.n)}/config "${q(b.name).slice(0, 12)}" ${mapIcon(b.icon, 'x32')} ${mapColor(b.color, 'x32')}`);
       lines.push(`/bus/${pad2(b.n)}/mix ${onOff(!b.muted)} ${lvl(b.fader)} ON +0 OFF ${lvl(-Infinity)}`);
     });
@@ -280,8 +280,8 @@ export function emitX32Scene(ir, opts = {}) {
   }
 
   if (include.groups) {
-    const dcas = (ir.dcas || []).filter(d => d.n >= 1 && d.n <= 8);
-    if ((ir.dcas || []).length > 8) warnings.push(loss('dca.overflow', { count: ir.dcas.length, desk: DESK, limit: 8 }));
+    const dcas = (ir.dcas || []).filter(d => d.n >= 1 && d.n <= x32Desk.dcas);
+    if ((ir.dcas || []).length > x32Desk.dcas) warnings.push(loss('dca.overflow', { count: ir.dcas.length, desk: DESK, limit: x32Desk.dcas }));
     dcas.forEach(d => {
       lines.push(`/dca/${d.n} ${onOff(!d.muted)} ${lvl(d.fader)}`);
       lines.push(`/dca/${d.n}/config "${q(d.name).slice(0, 12)}" ${mapIcon(d.icon, 'x32')} ${mapColor(d.color, 'x32')}`);

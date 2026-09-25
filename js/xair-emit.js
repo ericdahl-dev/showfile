@@ -23,16 +23,16 @@ import {
   reportColorCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, reportGateRatio,
 } from './scn-core.js';
 import { membership, eqLine } from './scn-codec.js';
-import { source, gateLine, dynLine } from './xair-codec.js';
+import { source, gateLine, dynLine, xairDesk } from './xair-codec.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
-const DESK = 'X Air';
-const MAX_CH = 16;
+const DESK = xairDesk.short;
+const MAX_CH = xairDesk.channels;
 const MAX_EQ_BANDS = 4;
-const BUSES = 6;
+const BUSES = xairDesk.buses;
 const FX_SENDS = 4;
-const DCAS = 4;
-const MUTE_GROUPS = 4;
+const DCAS = xairDesk.dcas;
+const MUTE_GROUPS = xairDesk.muteGroups;
 
 const NAME_MAX = 16;
 

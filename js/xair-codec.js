@@ -45,3 +45,10 @@ export const dynLine = {
   }),
   write: (d, ratio) => `${onOff(d.on)} ${dynModes.write(d)} ${dec(d.thr, 1)} ${ratioToken(ratio)} ${Math.round(d.knee ?? 1)} ${dec(d.gain, 2)} ${Math.round(d.att ?? 10)} ${dec(d.hold, 1)} ${Math.round(d.rel || 151)} ${Math.round(d.mix ?? 100)} SELF OFF`,
 };
+
+// What the X Air / MR is, for everything that has to know (#55).
+export const xairDesk = {
+  label: 'Behringer X Air / Midas MR', short: 'X Air', ext: 'scn', what: 'scene file', mime: 'text/plain',
+  reads: ['scn'], partials: {},
+  channels: 16, dcas: 4, muteGroups: 4, buses: 6, stereo: 'linked',
+};
