@@ -1,0 +1,2732 @@
+{
+  "type": "snapshot.11",
+  "creator": "Showfile",
+  "creator_name": "Icons 41-74",
+  "creator_model": "wing",
+  "ae_data": {
+    "ch": {
+      "1": {
+        "name": "41 male vox",
+        "icon": 114,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "2": {
+        "name": "42 female vox",
+        "icon": 113,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "3": {
+        "name": "43 choir",
+        "icon": 112,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "4": {
+        "name": "44 hand sign",
+        "icon": 600,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "5": {
+        "name": "45 talk A",
+        "icon": 603,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "6": {
+        "name": "46 talk B",
+        "icon": 604,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "7": {
+        "name": "47 big mic",
+        "icon": 100,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "8": {
+        "name": "48 pencil mic",
+        "icon": 103,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "9": {
+        "name": "49 pencil mic 2",
+        "icon": 103,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "10": {
+        "name": "50 handheld",
+        "icon": 101,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "11": {
+        "name": "51 wireless",
+        "icon": 102,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "12": {
+        "name": "52 podium",
+        "icon": 105,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "13": {
+        "name": "53 ear",
+        "icon": 601,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "14": {
+        "name": "54 XLR",
+        "icon": 1,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "15": {
+        "name": "55 jack",
+        "icon": 2,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "16": {
+        "name": "56 jack L",
+        "icon": 3,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "17": {
+        "name": "57 jack R",
+        "icon": 3,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "18": {
+        "name": "58 RCA L",
+        "icon": 4,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "19": {
+        "name": "59 RCA R",
+        "icon": 4,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "20": {
+        "name": "60 reel to reel",
+        "icon": 612,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "21": {
+        "name": "61 FX",
+        "icon": 6,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "22": {
+        "name": "62 laptop",
+        "icon": 605,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "23": {
+        "name": "63 twin speaker",
+        "icon": 508,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "24": {
+        "name": "64 speaker L",
+        "icon": 510,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "25": {
+        "name": "65 speaker R",
+        "icon": 503,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "26": {
+        "name": "66 line array",
+        "icon": 523,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "27": {
+        "name": "67 speaker stand",
+        "icon": 512,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "28": {
+        "name": "68 rack",
+        "icon": 614,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "29": {
+        "name": "69 routing",
+        "icon": 7,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "30": {
+        "name": "70 faders",
+        "icon": 5,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "31": {
+        "name": "71 bus",
+        "icon": 12,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "32": {
+        "name": "72 matrix",
+        "icon": 10,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "33": {
+        "name": "73 grid",
+        "icon": 11,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "34": {
+        "name": "74 smiley",
+        "icon": 13,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "24"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 250,
+          "1g": 0,
+          "1q": 1,
+          "2f": 1000,
+          "2g": 0,
+          "2q": 1,
+          "3f": 4000,
+          "3g": 0,
+          "3q": 1,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 0,
+          "hld": 50,
+          "rel": 200,
+          "ratio": "gate"
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 0,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "clink": false
+      },
+      "35": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "36": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "37": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "38": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "39": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "40": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      }
+    }
+  }
+}

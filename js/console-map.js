@@ -97,13 +97,33 @@ export function x32ColorToWing(code) {
   return X32_COLOR_TO_WING[String(code || '').trim()] ?? 17;
 }
 
-// X32 icon index -> Wing icon. Wing icons are category * 100 + index, which is
-// why these land in bands (200s drums, 300s guitar, 600s keys).
-// Observed pairs come from converting real scenes; unmapped icons fall back to
-// 0 ("no icon") rather than guessing a wrong picture.
+// X32 icon index -> Wing icon. Wing icons are group base + position: general
+// 0-14, vocals and mics 100-114, drums 200-224, strings and winds 300-319, keys
+// 400-409, speakers 500-524, specials 600-614.
+//
+// Matched by picture: both desks draw their icons from the same artwork, and
+// the two protocol documents' icon appendices (X32 p.139, WING p.246) show
+// them side by side. The pictures win over the X32's published name list,
+// which is out of step in places (53 is drawn as an ear, 69 as the routing
+// diagram). Where the Wing has a picture with no X32 twin it is simply never
+// written; where a few X32 variants share one Wing picture (the L/R plugs)
+// they collapse onto it.
 export const X32_ICON_TO_WING = {
-  1: 0, 2: 200, 3: 201, 4: 202, 5: 203, 6: 206,
-  8: 209, 9: 211, 10: 205, 12: 213, 17: 300, 50: 101, 62: 605,
+  1: 0,                                                        // none
+  2: 200, 3: 201, 4: 202, 5: 203,                              // kick back/front, snare top/bottom
+  6: 206, 7: 207, 8: 209, 9: 211, 10: 205,                     // toms, hi-hat, ride
+  11: 210, 12: 213, 13: 215, 14: 216, 15: 214, 16: 220,        // kit, cowbell, bongos, congas, tambourine, vibraphone
+  17: 300, 18: 301, 19: 302, 20: 305, 21: 306, 22: 307, 23: 303, // basses and guitars
+  24: 500, 25: 502, 26: 501,                                   // bass amp, guitar amp, cabinet
+  27: 400, 28: 401, 29: 407, 30: 408, 31: 405, 32: 402, 33: 404, 34: 406, // keys
+  35: 314, 36: 313, 37: 312, 38: 311, 39: 308, 40: 310,        // brass, winds, violin, cello
+  41: 114, 42: 113, 43: 112,                                   // male, female, choir
+  44: 600, 45: 603, 46: 604,                                   // hand sign, talk A/B
+  47: 100, 48: 103, 49: 103, 50: 101, 51: 102, 52: 105, 53: 601, // mics, podium, ear
+  54: 1, 55: 2, 56: 3, 57: 3, 58: 4, 59: 4,                    // XLR, jack and RCA plugs
+  60: 612, 61: 6, 62: 605,                                     // reel to reel, FX, computer
+  63: 508, 64: 510, 65: 503, 66: 523, 67: 512, 68: 614,        // speakers, line array, rack
+  69: 7, 70: 5, 71: 12, 72: 10, 73: 11, 74: 13,                // routing, faders, bus, matrix, smiley
 };
 
 export function x32IconToWing(icon) {
@@ -190,9 +210,11 @@ export function mapColor(color, target) {
 
 // Icons travel in the X32's numbering, which is simply the space we have a
 // table for — it is a canonical choice, not a claim that the X32 is special.
-export const WING_ICON_TO_X32 = Object.fromEntries(
-  Object.entries(X32_ICON_TO_WING).filter(([, w]) => w).map(([x, w]) => [w, Number(x)])
-);
+// Where two X32 icons share a Wing picture, the first one comes back.
+export const WING_ICON_TO_X32 = {};
+for (const [x, w] of Object.entries(X32_ICON_TO_WING)) {
+  if (w && !(w in WING_ICON_TO_X32)) WING_ICON_TO_X32[w] = Number(x);
+}
 
 export function wingIconToX32(icon) {
   return WING_ICON_TO_X32[Number(icon)] ?? 1;      // 1 is the X32's blank icon

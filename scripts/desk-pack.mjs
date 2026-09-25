@@ -5,6 +5,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { DESKS, readScene, writeScene, reportRows } from '../js/conversion.js';
+import { makeChannel } from '../js/scene.js';
+import { X32_ICON_TO_WING } from '../js/console-map.js';
 
 const FIXTURES = new URL('../test/fixtures/', import.meta.url);
 const OUT = new URL('../test/desk-pack/', import.meta.url);
@@ -21,6 +23,32 @@ const LOAD_WITH = {
   x32:  'X32-Edit, offline: open the scene file',
   wing: 'WING-EDIT, offline: load the snapshot',
 };
+
+// What each X32 icon is drawn as (X32 protocol doc p.139), short enough for a
+// channel name. The icon check snapshots name each channel after its X32
+// picture and give it the Wing icon the converter maps it to, so opening them
+// in WING-EDIT shows every pairing at once.
+const X32_ICON_PICTURES = [
+  'none', 'kick back', 'kick front', 'snare top', 'snare bottom', 'tom H', 'tom M', 'floor tom',
+  'hi-hat', 'ride', 'drum kit', 'cowbell', 'bongos', 'congas', 'tambourine', 'vibraphone',
+  'bass', 'bass 2', 'guitar', 'les paul', 'pointy guitar', 'flying V', 'acoustic', 'bass amp',
+  'guitar amp', 'cabinet', 'grand piano', 'upright', 'keys on table', 'keys on X', 'synth 1',
+  'synth 2', 'synth 3', 'keytar', 'trumpet', 'trombone', 'sax', 'clarinet', 'violin', 'cello',
+  'male vox', 'female vox', 'choir', 'hand sign', 'talk A', 'talk B', 'big mic', 'pencil mic',
+  'pencil mic 2', 'handheld', 'wireless', 'podium', 'ear', 'XLR', 'jack', 'jack L', 'jack R',
+  'RCA L', 'RCA R', 'reel to reel', 'FX', 'laptop', 'twin speaker', 'speaker L', 'speaker R',
+  'line array', 'speaker stand', 'rack', 'routing', 'faders', 'bus', 'matrix', 'grid', 'smiley',
+];
+
+function iconCheck(first, last) {
+  const channels = [];
+  for (let x = first; x <= last; x++) {
+    const ch = x - first + 1;
+    channels.push(makeChannel({ ch, index: ch, name: `${x} ${X32_ICON_PICTURES[x - 1]}`.slice(0, 16), icon: x }));
+  }
+  const scene = { name: `Icons ${first}-${last}`, channels, dcas: [], buses: [], matrices: [], losses: [] };
+  return writeScene(scene, 'wing').file.text;
+}
 
 export function buildDeskPack() {
   const files = [];
@@ -56,6 +84,9 @@ export function buildDeskPack() {
     }
   }
 
+  files.push({ path: 'icons-1-40.snap', content: iconCheck(1, 40) });
+  files.push({ path: 'icons-41-74.snap', content: iconCheck(41, 74) });
+
   files.push({ path: 'README.md', content: [
     '# Desk test pack',
     '',
@@ -78,6 +109,14 @@ export function buildDeskPack() {
     '- Does the Wing honour the `#M` mute-group tags we write? Only `#D` (DCA) is documented.',
     '- Does the Wing accept `"type": "snapshot.11"`? WING-EDIT 3.1 writes `snapshot.9`.',
     '- Do the X32 and X Air accept frequencies written as `10020.0` rather than `10k02`?',
+    '',
+    '## Icons (#42)',
+    '',
+    '`icons-1-40.snap` and `icons-41-74.snap` need only WING-EDIT, offline. Each channel is named',
+    'after an X32 icon (its number and what the X32 draws) and carries the Wing icon the converter',
+    'maps it to. The picture on each strip should match its name; note any that do not.',
+    '',
+    ...Object.entries(X32_ICON_TO_WING).map(([x, w]) => `- X32 ${x} ${X32_ICON_PICTURES[x - 1]} → Wing ${w}`),
     '',
     '## Files',
     '',
