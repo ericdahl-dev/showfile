@@ -38,9 +38,11 @@ const FLAT_BANDS = [
   { type: 'highshelf', f: 10020, g: 0, q: 2 },
 ];
 
-// Neutral groups -> X32 routing-block prefixes. Groups with no preamp behind
-// them (card, user, aux) still patch; they just have no /headamp node.
-const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD', user: 'UIN' };
+// Neutral groups -> X32 routing-block prefixes. The card has no preamp behind
+// it, so it still patches but has no /headamp node. User signals are left out:
+// a UIN block only means something through /config/userrout/in, which this
+// writer does not fill, so the desk would play nothing.
+const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD' };
 
 // Inputs the X32 reaches through a channel's own source rather than a routing
 // block: /ch/NN/config source = base + input (33-38 Aux, 39-40 USB, 41-48 FX
