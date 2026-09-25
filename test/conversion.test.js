@@ -117,3 +117,44 @@ test('compressor ratios snap to what the X Air and Wing offer (#19)', () => {
   assert.equal(node.dyn.ratio, 6);
   assert.equal(wing.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 1);
 });
+
+// Send taps: X32 and X Air have the same six, spelled differently.
+const TAPS_X32 = ['IN/LC', '<-EQ', 'EQ->', 'PRE', 'POST', 'GRP'];
+const TAPS_XAIR = ['IN', 'PREEQ', 'POSTEQ', 'PRE', 'POST', 'GRP'];
+
+test('send taps carry between the X32 and X Air (#20)', () => {
+  TAPS_X32.forEach((tap, i) => {
+    const scene = readScene('x32', x32Text + `/ch/03/mix/03 ON -10.0 +0 ${tap} 0\n`);
+    const xair = writeScene(scene, 'xair').file.text;
+    const sent = xair.match(/^\/ch\/03\/mix\/03 \S+ \S+ (\S+)/m)[1];
+    assert.equal(sent, TAPS_XAIR[i], `X32 ${tap}`);
+
+    const back = writeScene(readScene('xair', xair, 'x.scn'), 'x32').file.text;
+    assert.match(back, new RegExp(`^/ch/03/mix/03 \\S+ \\S+ \\S+ ${tap.replace(/[-/<>]/g, '\\$&')} `, 'm'), `X Air ${TAPS_XAIR[i]}`);
+  });
+});
+
+test('the Wing keeps group sends and reports taps it lacks (#20)', () => {
+  const real = readFileSync(new URL('./fixtures/real/gdq/pre-sgdq2025.snap', import.meta.url), 'utf8');
+  const x32 = writeScene(readScene('wing', real), 'x32').file.text;
+  assert.match(x32, /^\/ch\/\d\d\/mix\/\d[13579] \S+ \S+ \S+ GRP /m);          // Wing GRP -> X32 GRP
+
+  const scene = readScene('x32', x32Text + '/ch/03/mix/03 ON -10.0 +0 EQ-> 0\n');
+  const wing = writeScene(scene, 'wing');
+  const vox = Object.values(JSON.parse(wing.file.text).ae_data.ch).find(c => c.name === 'Vox');
+  assert.equal(vox.send['3'].mode, 'PRE');
+  const lost = wing.losses.filter(l => l.code === 'send.tap-approximated');
+  assert.deepEqual(lost.map(l => l.detail.buses), [[3]]);
+});
+
+test('X32 even buses carry on and level only, as the desk writes them (#20)', () => {
+  const text = writeScene(readScene('x32', x32Text + '/ch/03/mix/02 ON -12.0\n'), 'x32').file.text;
+  assert.match(text, /^\/ch\/03\/mix\/02 ON -12\.0$/m);
+});
+
+test('group and post-fader sends reach the Wing as GRP and POST (#20)', () => {
+  const scene = readScene('x32', x32Text + '/ch/03/mix/05 ON -10.0 +0 GRP 0\n/ch/03/mix/07 ON -10.0 +0 POST 0\n');
+  const vox = Object.values(JSON.parse(writeScene(scene, 'wing').file.text).ae_data.ch).find(c => c.name === 'Vox');
+  assert.equal(vox.send['5'].mode, 'GRP');
+  assert.equal(vox.send['7'].mode, 'POST');
+});

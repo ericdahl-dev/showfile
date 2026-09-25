@@ -20,7 +20,7 @@
 //   * 16 channels, 6 buses, 4 FX sends, no matrices, 4 DCAs, 4 mute groups.
 //   * Headamps are 1-based and indexed by INPUT number, with no AES50 offsets.
 
-import { colorFrom } from './console-map.js';
+import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { INF, num, bool, bits, parseNodes } from './scene-text.js';
 import { loss, render } from './losses.js';
@@ -119,12 +119,17 @@ export function parseXAirScene(text, fileName = '') {
         level: num(s[0], INF),
         // POSTEQ is post-EQ but PRE-fader, so it normalises to a pre-fader
         // send at the emitters, not a post-fader one.
-        tap: String(s[2] || 'POSTEQ').toUpperCase() === 'POST' ? 'POST' : 'PRE',
+        tap: tapFrom('xair', s[2]),
         pan: s.length > 3 ? num(s[3]) : 0,
       });
     }
 
-    const patch = parseSource(cfg[2]);
+    // config: name color insrc rtnsrc. preamp: rtntrim rtnsw invert hpon hpf.
+    // With the return switch on, the channel plays its USB return (U01...)
+    // instead of its input, and the trim is that return's. The X Air has no
+    // digital trim on the input path: mic gain is the headamp's.
+    const onReturn = bool(pre[1]);
+    const patch = parseSource(onReturn ? cfg[3] : cfg[2]);
 
     strips.push({
       ch: n,
@@ -133,10 +138,7 @@ export function parseXAirScene(text, fileName = '') {
       color: colorFrom('xair', num(cfg[1], 0)),
       patch,
 
-      // preamp: trim rpdgt invert hpon hpf. The two flags are adjacent and a
-      // channel with both set cannot tell them apart; confirmed against a pair
-      // of scenes that set exactly one each.
-      trim:   num(pre[0]),
+      trim:   onReturn ? num(pre[0]) : 0,
       invert: bool(pre[2]),
       hpf:    { on: bool(pre[3]), slope: HPF_SLOPE, freq: num(pre[4], 20) },
 

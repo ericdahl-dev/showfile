@@ -42,3 +42,15 @@ test('the filter block high cut is read as a high-cut band (#18)', () => {
   const off = withChannel1(ch => Object.assign(ch.flt, { hc: false, hcf: 8000 }));
   assert.equal(off.eq.bands.filter(b => b.type === 'highcut').length, 0);
 });
+
+test('a gate slot holding another model is not read as a gate (#21)', () => {
+  // The real ch 1 gate slot is a DS902 de-esser.
+  const scene = readScene('wing', realWing);
+  const c = scene.channels.find(ch => ch.ch === 1);
+  assert.equal(c.gate.on, false);
+  assert.ok(scene.warnings.some(w => /ch 1 .*DS902/.test(w)), scene.warnings.join('\n'));
+  // A plain GATE model still reads as a gate.
+  const gate = withChannel1(ch => { ch.gate = { on: true, mdl: 'GATE', thr: -30, range: 40 }; });
+  assert.equal(gate.gate.on, true);
+  assert.equal(gate.gate.thr, -30);
+});

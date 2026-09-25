@@ -224,3 +224,27 @@ export function snapRatio(value, desk) {
 
 // How an X32/X Air scene file spells a ratio: one decimal below 10, whole above.
 export const ratioToken = (r) => (r >= 10 ? String(r) : r.toFixed(1));
+
+// Send taps: where along the channel a send is taken. The X32 and X Air have
+// the same six (spelled differently); the Wing has pre-fader, post-fader and
+// group. Neutral names, in signal order.
+const TAP_NEUTRAL = ['input', 'preeq', 'posteq', 'pre', 'post', 'group'];
+const TAP_TOKENS = {
+  x32:  ['IN/LC', '<-EQ', 'EQ->', 'PRE', 'POST', 'GRP'],
+  xair: ['IN', 'PREEQ', 'POSTEQ', 'PRE', 'POST', 'GRP'],
+  wing: [null, null, null, 'PRE', 'POST', 'GRP'],
+};
+
+// A desk's token -> the neutral tap. Unknown or missing reads as pre-fader.
+export function tapFrom(desk, token) {
+  const i = TAP_TOKENS[desk].indexOf(String(token ?? '').toUpperCase());
+  return i >= 0 ? TAP_NEUTRAL[i] : 'pre';
+}
+
+// The neutral tap -> a desk's token. A tap the desk lacks (the Wing has no
+// input, pre-EQ or post-EQ send) falls back to pre-fader, which is the nearest
+// it has, and says it did.
+export function tapTo(desk, tap) {
+  const token = TAP_TOKENS[desk][TAP_NEUTRAL.indexOf(tap)];
+  return token ? { token, exact: true } : { token: TAP_TOKENS[desk][3], exact: false };
+}

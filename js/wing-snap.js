@@ -6,7 +6,7 @@
 // Key names and value encodings were derived by diffing snapshots saved from
 // WING-EDIT: an initialised baseline against files with known values set.
 
-import { mapColor, mapIcon, codeToHex, snapRatio } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
 import { loss, renderAll } from './losses.js';
 
 const NEG_INF = -144;                 // the Wing's -oo sentinel
@@ -21,6 +21,18 @@ const round = (v) => Math.round(v * 1e4) / 1e4;
 // the outer two switch between shelf and bell. So bands route by type rather
 // than by position: shelves and cuts claim the dedicated low/high bands, and
 // everything else fills the four parametric mids in order.
+// Wing parameter ranges (WING protocol document). Values from a wider desk are
+// pulled in; the ones an engineer would notice are reported.
+const RANGE = { dynGain: [-6, 12], lclGain: [-3, 45.5], eqQ: [0.44, 10] };
+const clampTo = (v, [lo, hi]) => Math.min(Math.max(Number(v) || 0, lo), hi);
+const eqQ = (q) => round(clampTo(q, RANGE.eqQ));
+
+function clamped(warnings, label, what, from, range, extra) {
+  const to = clampTo(from, range);
+  if (to !== Number(from)) warnings.push(loss('range.clamped', { label, what, from, to, desk: DESK }, extra));
+  return to;
+}
+
 function mapEq(eq, warnings, label, filterFree) {
   const out = { on: !!eq.on, mdl: 'STD' };
   const mids = [];
@@ -64,12 +76,12 @@ function mapEq(eq, warnings, label, filterFree) {
 
   out.lf = round(low ? low.f : 80);
   out.lg = round(low ? low.g : 0);
-  out.lq = round(low ? low.q : 1);
+  out.lq = eqQ(low ? low.q : 1);
   out.leq = 'SHV';
 
   out.hf = round(high ? high.f : 12000);
   out.hg = round(high ? high.g : 0);
-  out.hq = round(high ? high.q : 1);
+  out.hq = eqQ(high ? high.q : 1);
   out.heq = 'SHV';
 
   const fitMids = mids.length > 4 ? mids.filter(b => Number(b.g) !== 0).slice(0, 4) : mids;
@@ -78,7 +90,7 @@ function mapEq(eq, warnings, label, filterFree) {
     const n = i + 1;
     out[`${n}f`] = round(b ? b.f : MID_DEFAULT_F[i]);
     out[`${n}g`] = round(b ? b.g : 0);
-    out[`${n}q`] = round(b ? b.q : 1);
+    out[`${n}q`] = eqQ(b ? b.q : 1);
   }
   if (mids.filter(b => Number(b.g) !== 0).length > 4) {
     warnings.push(loss('eq.mid-band-overflow', { label, count: mids.length, desk: DESK }));
@@ -170,23 +182,31 @@ export function emitWingSnapshot(ir, opts = {}) {
         warnings.push(loss('dyn.ratio-snapped', { label, from: c.dyn.ratio, to: ratio.value, desk: DESK },
           { kind: 'channel', n, name: c.name }));
       }
-      node.gate = { on: !!c.gate.on, thr: round(c.gate.thr), range: round(c.gate.range),
+      node.gate = { on: !!c.gate.on, mdl: 'GATE', thr: round(c.gate.thr), range: round(c.gate.range),
                                 att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
       node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
                                 ratio: snapRatio(c.dyn.ratio, 'wing').value, knee: round(c.dyn.knee),
                                 att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
-                                gain: round(c.dyn.gain), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
+                                gain: round(clamped(warnings, label, 'compressor gain', c.dyn.gain, RANGE.dynGain, { kind: 'channel', n, name: c.name })), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
                                 env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG', mix: round(c.dyn.mix) };
     }
 
     if (include.sends && c.sends?.length) {
       const send = {};
+      const moved = [];
       for (const s of c.sends) {
+        const tap = tapTo('wing', s.tap);
+        if (!tap.exact && s.level > -Infinity) moved.push(s.bus);
         send[String(s.bus)] = { on: !!s.on, lvl: dB(s.level),
-                                mode: String(s.tap).toUpperCase() === 'POST' ? 'POST' : 'PRE',
+                                mode: tap.token,
                                 pan: round(s.pan || 0) };
       }
       node.send = send;
+      // The Wing has no input, pre-EQ or post-EQ send; those become pre-fader.
+      if (moved.length) {
+        warnings.push(loss('send.tap-approximated', { label, buses: moved, desk: DESK },
+          { kind: 'channel', n, name: c.name }));
+      }
     }
 
     if (include.groups) {
@@ -198,11 +218,6 @@ export function emitWingSnapshot(ir, opts = {}) {
     // mirror that so an imported channel doesn't drag its neighbour around.
     node.clink = false;
 
-    // Stereo is recorded on the strip as well as on the input. The io entry is
-    // only written when the source had a headamp, so a stereo channel patched
-    // to an input with no preamp would otherwise read back as mono.
-    if (c.stereo) node.mode = 'ST';
-
     ch[String(n)] = node;
     preview.push({
       n, name: c.name, colorHex: c.color?.hex || null,
@@ -212,13 +227,20 @@ export function emitWingSnapshot(ir, opts = {}) {
       groups: node.tags || '—',
     });
 
-    // Preamp gain and phantom live on the physical input, not the strip.
-    if (include.preamp && c.headamp && node.in?.conn && node.in.conn.grp !== 'OFF') {
-      const grpStore = (lcl[node.in.conn.grp] ||= {});
-      grpStore[String(node.in.conn.in)] = {
-        g: round(c.headamp.gain), vph: !!c.headamp.phantom,
-        ...(c.stereo ? { mode: 'ST' } : {}),
-      };
+    // Preamp gain, phantom and stereo live on the physical input, not the
+    // strip (a Wing snapshot has no stereo flag on a channel). Stereo is
+    // written whether or not the input has a preamp, or a card-fed stereo
+    // channel would read back as mono.
+    const conn = node.in?.conn;
+    if (conn && conn.grp !== 'OFF' && (c.stereo || (include.preamp && c.headamp))) {
+      const entry = ((lcl[conn.grp] ||= {})[String(conn.in)] = {});
+      if (include.preamp && c.headamp) {
+        const g = conn.grp === 'LCL'
+          ? clamped(warnings, label, 'preamp gain', c.headamp.gain, RANGE.lclGain, { kind: 'channel', n, name: c.name })
+          : c.headamp.gain;
+        Object.assign(entry, { g: round(g), vph: !!c.headamp.phantom });
+      }
+      if (c.stereo) entry.mode = 'ST';
     }
   });
 

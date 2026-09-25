@@ -26,3 +26,36 @@ test('bus, USB and AES50-C sources carry over to the Wing (#16, #22)', () => {
   assert.equal(out.losses.filter(l => l.code === 'patch.group-unsupported').length, 0);
   assert.deepEqual(wingChannel(out.file.text, 'Vox').in.conn, { grp: 'BUS', in: 11 });
 });
+
+test('the gate is written as the Wing GATE model (#21)', () => {
+  const vox = wingChannel(writeScene(readScene('x32', synthetic), 'wing').file.text, 'Vox');
+  assert.equal(vox.gate.mdl, 'GATE');
+});
+
+test('stereo is recorded on the input, not as a strip mode, headamp or not (#21)', () => {
+  const scene = readScene('x32', synthetic);
+  const keys = scene.channels.find(c => c.name === 'Keys L');
+  keys.headamp = null;                                    // e.g. a card input, no preamp
+  keys.patch = { group: 'card', input: 3 };
+  const snap = JSON.parse(writeScene(scene, 'wing').file.text);
+  const node = Object.values(snap.ae_data.ch).find(c => c.name === 'Keys L');
+  assert.equal(node.mode, undefined);
+  assert.equal(snap.ae_data.io.in.CRD['3'].mode, 'ST');
+});
+
+test('values outside the Wing ranges are clamped and reported (#21)', () => {
+  const scene = readScene('x32', synthetic);
+  const vox = scene.channels.find(c => c.name === 'Vox');
+  vox.dyn = { ...vox.dyn, gain: 20 };                       // X32 allows 0..24, Wing -6..12
+  vox.headamp = { gain: 55, phantom: false };                // X32 -12..60, Wing local -3..45.5
+  vox.patch = { group: 'local', input: 3 };
+  vox.eq = { on: true, bands: [{ type: 'bell', f: 1000, g: 3, q: 0.3 }] };   // Wing Q >= 0.44
+  const out = writeScene(scene, 'wing');
+  const snap = JSON.parse(out.file.text);
+  const node = Object.values(snap.ae_data.ch).find(c => c.name === 'Vox');
+  assert.equal(node.dyn.gain, 12);
+  assert.equal(snap.ae_data.io.in.LCL['3'].g, 45.5);
+  assert.equal(node.eq['1q'], 0.44);
+  const clamped = out.losses.filter(l => l.code === 'range.clamped').map(l => l.detail.what).sort();
+  assert.deepEqual(clamped, ['compressor gain', 'preamp gain']);
+});
