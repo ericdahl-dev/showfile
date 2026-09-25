@@ -1,8 +1,64 @@
-/* brand.css — the Showfile logo lockup. One definition, every page.
+/* brand.css — Showfile's tokens, stage wash and logo lockup. One definition, every page.
  *
- * The mark is favicon.svg: a page with a folded corner and a single pulse cut
- * through it, filled with the violet brand ramp (#7e7aff → #b265fe → #d77aba).
- * Using the favicon file itself keeps the tab icon and the lockup identical.
+ * Direction: "Stage Wash". A navy stage with colour-gel light (amber, magenta,
+ * cyan) washing in from the edges, a high-contrast serif for display type and
+ * Inter for everything you read. Amber is the one action colour: buttons,
+ * focus, current state. Magenta and cyan are atmosphere only; putting them on
+ * controls as well would give every page three competing accents.
+ *
+ * Pages keep their own layout CSS but take every colour and font from here, so
+ * the palette is defined once.
+ */
+
+:root {
+  --bg:        #0B1026;
+  --bg-deep:   #070A1A;
+  --surface:   rgba(255,255,255,0.045);
+  --border:    rgba(255,255,255,0.09);
+  --text:      #F5EFE0;               /* warm stage-light white */
+  --muted:     #A3AAC6;               /* 8.2:1 on --bg */
+
+  --amber:     #FFB347;
+  --magenta:   #E0409A;
+  --cyan:      #35C6E8;
+  --accent:    var(--amber);
+  --on-accent: #1A1206;               /* text on an amber fill */
+
+  --danger:    #F26D6D;
+  --warn:      #F5B83D;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-head:    'Inter', system-ui, -apple-system, sans-serif;   /* small UI headings and labels */
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ── stage wash ───────────────────────────────────────────────────────────
+   Three gels hitting haze, fixed behind the page so content scrolls over the
+   light rather than the light scrolling away. Sized in vw so a phone gets a
+   hint of each colour instead of one wash filling the screen. Kept faint:
+   the converter carries a long FAQ, and it has to stay easy to read. */
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38vw 30vw at 6% 18%,  rgba(255,179,71,0.16), transparent 70%),
+    radial-gradient(34vw 28vw at 82% 4%,  rgba(224,64,154,0.15), transparent 70%),
+    radial-gradient(40vw 32vw at 96% 78%, rgba(53,198,232,0.12), transparent 70%),
+    radial-gradient(60vw 40vw at 50% 0%,  rgba(245,239,224,0.05), transparent 70%);
+}
+
+/* ── logo lockup ──────────────────────────────────────────────────────────
+ * The mark is favicon.svg: a fresnel seen head-on (a cut outer lens ring, an
+ * inner ring and the lamp) in the amber-to-magenta gel. Using the favicon file
+ * itself keeps the tab icon and the lockup identical.
  *
  * Markup:
  *   <a class="sf-logo" href="/">
@@ -14,9 +70,9 @@
  */
 
 .sf-logo {
-  --sf-size: 18px;
-  --sf-word-size: 15px;
-  --sf-gap: 7px;
+  --sf-size: 20px;
+  --sf-word-size: 19px;
+  --sf-gap: 8px;
 
   display: inline-flex;
   align-items: center;
@@ -34,9 +90,10 @@
 }
 
 .sf-word {
-  font-family: 'Inter Tight', Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-display);
   font-size: var(--sf-word-size);
   font-weight: 600;
+  font-variation-settings: 'opsz' 36;
   letter-spacing: -0.01em;
   line-height: 1;
   color: var(--sf-word-color, currentColor);
@@ -44,4 +101,12 @@
   -webkit-text-fill-color: currentColor;
   background: none;
   text-transform: none;
+}
+
+/* Display type: the serif at large optical size, where its contrast shows. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144;
+  letter-spacing: -0.02em;
 }

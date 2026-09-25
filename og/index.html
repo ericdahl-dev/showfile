@@ -16,17 +16,12 @@
   <link rel="stylesheet" href="/css/brand.css" />
   <style>
     :root {
-      --bg: #060610;
-      --panel: #0d0d18;
-      --line: rgba(255,255,255,0.08);
-      --blue: #3b82f6;
-      --purple: #8b5cf6;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --ok: #4ade80;
-      --head: 'Plus Jakarta Sans', sans-serif;
-      --body: 'Inter', sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --panel: #10152e;
+      --line: rgba(255,255,255,0.09);
+      --ok: #7BE0A6;
+      --head: var(--font-display);
+      --body: var(--font-body);
+      --mono: var(--font-mono);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 1200px; height: 630px; overflow: hidden; }
@@ -49,9 +44,9 @@
     .bg::after {
       content: ''; position: absolute; inset: 0;
       background:
-        radial-gradient(420px 320px at 170px 90px, rgba(37,99,235,0.28), transparent 70%),
-        radial-gradient(460px 260px at 520px 640px, rgba(139,92,246,0.22), transparent 70%),
-        radial-gradient(360px 260px at 1130px 30px, rgba(245,158,11,0.12), transparent 70%);
+        radial-gradient(440px 320px at 120px 120px, rgba(255,179,71,0.22), transparent 70%),
+        radial-gradient(420px 300px at 1010px 20px, rgba(224,64,154,0.22), transparent 70%),
+        radial-gradient(460px 320px at 1180px 560px, rgba(53,198,232,0.18), transparent 70%);
     }
 
     .sf-logo { --sf-size: 30px; --sf-word-size: 25px; --sf-gap: 12px; }
@@ -60,15 +55,15 @@
     .eyebrow {
       margin-top: 62px;
       font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-      color: #a78bfa;
+      color: var(--amber);
     }
     h1 {
       margin-top: 14px;
-      font-family: var(--head); font-weight: 800;
+      font-family: var(--head); font-weight: 500; font-variation-settings: 'opsz' 144;
       font-size: 64px; line-height: 1.02; letter-spacing: -0.035em;
     }
     h1 .grad {
-      background: linear-gradient(90deg, var(--blue), #a855f7 60%, #d77aba);
+      background: linear-gradient(90deg, var(--amber), var(--magenta) 70%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .lede { margin-top: 26px; font-size: 17px; line-height: 1.6; color: var(--muted); }
@@ -99,15 +94,15 @@
     }
     .file {
       margin-top: 16px; padding: 14px 16px;
-      border: 1px dashed rgba(139,92,246,0.45); border-radius: 12px;
-      background: rgba(139,92,246,0.06);
+      border: 1px dashed rgba(255,179,71,0.45); border-radius: 12px;
+      background: rgba(255,179,71,0.06);
       display: flex; gap: 14px; align-items: center;
     }
     .file small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
     .actions { margin-top: 16px; display: flex; gap: 16px; align-items: center; }
     .btn {
       padding: 10px 18px; border-radius: 9px;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
+      background: var(--amber); color: var(--on-accent);
       font-size: 14px; font-weight: 600;
     }
     .ok { color: var(--ok); font-size: 14px; }
@@ -117,7 +112,7 @@
     td { padding: 6px 6px; border-bottom: 1px solid rgba(255,255,255,0.04); }
     td.m { font-family: var(--mono); font-size: 12.5px; color: #cbd5e1; }
     .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 10px; vertical-align: -1px; }
-    .tag { font-family: var(--mono); font-size: 10.5px; padding: 1px 7px; border-radius: 99px; background: rgba(139,92,246,0.18); color: #c4b5fd; margin-left: 6px; }
+    .tag { font-family: var(--mono); font-size: 10.5px; padding: 1px 7px; border-radius: 99px; background: rgba(255,179,71,0.18); color: #FFD59E; margin-left: 6px; }
     .fade td { opacity: 0.35; }
     .cardhead { display: flex; justify-content: space-between; align-items: baseline; }
     .cardhead .mono { font-size: 12px; color: var(--muted); }
@@ -126,8 +121,8 @@
     .tc { font-family: var(--mono); font-size: 44px; font-weight: 500; letter-spacing: 0.02em; margin-top: 6px; }
 
     .tool { display: flex; gap: 18px; align-items: flex-start; }
-    .tool .ico { width: 46px; height: 46px; flex: none; border-radius: 12px; display: grid; place-items: center; background: rgba(139,92,246,0.14); color: #c4b5fd; }
-    .tool h3 { font-family: var(--head); font-size: 21px; font-weight: 700; }
+    .tool .ico { width: 46px; height: 46px; flex: none; border-radius: 12px; display: grid; place-items: center; background: rgba(255,179,71,0.14); color: #FFD59E; }
+    .tool h3 { font-family: var(--head); font-size: 23px; font-weight: 500; font-variation-settings: 'opsz' 72; }
     .tool p { color: var(--muted); font-size: 14.5px; line-height: 1.55; margin-top: 4px; }
 
     .features {
@@ -137,7 +132,12 @@
       font-size: 14.5px; color: #cbd5e1;
     }
     .features span { display: inline-flex; gap: 10px; align-items: center; }
-    .features svg { width: 17px; height: 17px; color: #a78bfa; }
+    .features svg { width: 17px; height: 17px; color: var(--amber); }
+
+    .card.gel { --gel-rgb: 255,179,71; border-color: rgba(var(--gel-rgb),0.3);
+      background: radial-gradient(130% 110% at 0% 0%, rgba(var(--gel-rgb),0.34), transparent 68%), rgba(16,21,46,0.92); }
+    .card.gel.cyan { --gel-rgb: 53,198,232; }
+    .card.gel .ico { background: rgba(var(--gel-rgb),0.16); color: rgb(var(--gel-rgb)); font-family: var(--mono); font-size: 14px; font-weight: 600; }
 
     [data-page]:not(.on) { display: none; }
   </style>
@@ -168,8 +168,8 @@
   </div>
 
   <div data-page="home">
-    <p class="eyebrow">Free tools</p>
-    <h1>Built for<br><span class="grad">show day.</span></h1>
+    <p class="eyebrow">Free show-day tools</p>
+    <h1>Everything&rsquo;s ready<br><span class="grad">before doors.</span></h1>
     <p class="lede">Free browser tools for live production. Convert console scenes between desks and generate SMPTE timecode. No upload, no account.</p>
   </div>
 </div>
@@ -183,7 +183,7 @@
         <div class="field"><span class="label">To console</span><div class="select">Behringer Wing</div></div>
       </div>
       <div class="file">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB347" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
         <div><span class="mono">FallTour_FOH.scn</span><small>Converted locally · never uploaded</small></div>
       </div>
       <div class="actions"><span class="btn">Download</span><span class="ok">Ready: 16 channels to Behringer Wing.</span></div>
@@ -210,7 +210,7 @@
       <div class="tc">01:00:00;00</div>
       <div class="wave">
         <svg width="560" height="96" viewBox="0 0 560 96" preserveAspectRatio="none">
-          <defs><linearGradient id="wg" x1="0" x2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          <defs><linearGradient id="wg" x1="0" x2="1"><stop offset="0" stop-color="#FFB347"/><stop offset="1" stop-color="#E0409A"/></linearGradient></defs>
           <path id="ltc" fill="none" stroke="url(#wg)" stroke-width="2"/>
         </svg>
       </div>
@@ -219,15 +219,15 @@
   </div>
 
   <div data-page="home">
-    <div class="card" style="margin-top:104px">
+    <div class="card gel" style="margin-top:104px">
       <div class="tool">
-        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg></div>
+        <div class="ico">Q1</div>
         <div><h3>Console Scene Converter</h3><p>Move a show between the X32, M32, X Air and Wing, in any direction, with a report of everything that didn't carry.</p></div>
       </div>
     </div>
-    <div class="card">
+    <div class="card gel cyan">
       <div class="tool">
-        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2-6 3 12 3-9 2 6 3-3h4"/></svg></div>
+        <div class="ico">Q2</div>
         <div><h3>LTC Timecode Generator</h3><p>SMPTE timecode WAV files at any frame rate and start time, one at a time or as a batch.</p></div>
       </div>
     </div>
