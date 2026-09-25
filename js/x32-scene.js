@@ -7,6 +7,7 @@
 
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
+import { loss } from './losses.js';
 import { INF, num, bool, bits, parseNodes, eqType, collapsePairs } from './scene-text.js';
 
 // X32 input classes -> the IR's neutral groups. The neutral names describe the
@@ -46,7 +47,24 @@ export function parseX32Scene(text) {
     if (!tok) return null;
     const m = BLOCK_RE.exec(tok);
     if (!m) return null;
-    return { group: IN_GROUP[m[1]] || null, input: parseInt(m[2], 10) + offset };
+    const input = parseInt(m[2], 10) + offset;
+    if (m[1] === 'UIN') return userPatch(input);
+    return { group: IN_GROUP[m[1]] || null, input };
+  }
+
+  // A UIN block is not an input: it points into the user routing table, whose
+  // 32 slots each name a real one (0 OFF, 1-32 local, 33-80 AES50-A,
+  // 81-128 AES50-B, 129-160 card, 161-166 aux, 167-168 talkback).
+  const userTable = get('/config/userrout/in').map(v => parseInt(v, 10) || 0);
+  function userPatch(slot) {
+    const v = userTable[slot - 1] || 0;
+    if (v >= 1 && v <= 32) return { group: 'local', input: v };
+    if (v >= 33 && v <= 80) return { group: 'aes50a', input: v - 32 };
+    if (v >= 81 && v <= 128) return { group: 'aes50b', input: v - 80 };
+    if (v >= 129 && v <= 160) return { group: 'card', input: v - 128 };
+    if (v >= 161 && v <= 166) return { group: 'aux', input: v - 160 };
+    if (v === 167 || v === 168) return { group: 'talkback', input: v - 166 };
+    return null;
   }
 
   // A channel plays whatever its /ch/NN/config source names, which is not
@@ -120,6 +138,14 @@ export function parseX32Scene(text) {
     // An even bus carries only on and level; its tap is its odd partner's.
     for (const s of sends) if (s.tap === null) s.tap = sends.find(o => o.bus === s.bus - 1)?.tap || 'pre';
 
+    // Talkback can be routed to a channel but is no input another desk can
+    // be patched to, so the channel is left unpatched and says why.
+    let patch = sourcePatch(num(cfg[3]));
+    if (patch?.group === 'talkback') {
+      warnings.push(loss('patch.group-unknown', { label: `ch ${n} "${cfg[0] || ''}"`, group: 'talkback' }));
+      patch = null;
+    }
+
     // /ch/NN/grp  %00000000 %000000  — 8 DCA bits then 6 mute-group bits.
     // bits() reads them least-significant-bit first; see scene-text.js.
     strips.push({
@@ -127,7 +153,7 @@ export function parseX32Scene(text) {
       name:  cfg[0] || '',
       icon:  num(cfg[1]),
       color: colorFrom('x32', cfg[2] || 'OFF'),
-      patch: sourcePatch(num(cfg[3])),
+      patch,
 
       trim:   num(pre[0]),
       invert: bool(pre[1]),

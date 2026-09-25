@@ -53,6 +53,16 @@ test('inputs the X32 has no route for are reported, not patched to local (#22)',
   assert.equal(row.patch, '—');
 });
 
+test('a Wing user signal is reported, not written as a UIN block with an empty table (#17)', () => {
+  // UIN only means something through /config/userrout/in, which the writer
+  // does not fill, so the desk would play nothing.
+  const scene = readScene('x32', synthetic);
+  scene.channels[1].patch = { group: 'user', input: 2 };
+  const out = writeScene(scene, 'x32');
+  assert.ok(!routingIn(out.file.text).some(t => t.startsWith('UIN')), routingIn(out.file.text).join(' '));
+  assert.ok(out.losses.some(l => l.code === 'patch.group-unsupported' && l.detail.group === 'user'));
+});
+
 test('a cut survives when the X32 runs short of EQ bands (#18)', () => {
   // Five active bands plus a Wing high cut: something has to go, but not the cut.
   const snap = JSON.parse(realWing);
