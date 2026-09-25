@@ -7,7 +7,7 @@
     "ch": {
       "1": {
         "name": "Interview 1",
-        "icon": 0,
+        "icon": 113,
         "col": 9,
         "fdr": 0,
         "mute": true,
@@ -185,7 +185,7 @@
       },
       "2": {
         "name": "Interview 2",
-        "icon": 0,
+        "icon": 113,
         "col": 18,
         "fdr": 0,
         "mute": true,
@@ -363,7 +363,7 @@
       },
       "3": {
         "name": "Interview 3",
-        "icon": 0,
+        "icon": 113,
         "col": 7,
         "fdr": 0,
         "mute": true,
@@ -541,7 +541,7 @@
       },
       "4": {
         "name": "Interview 4",
-        "icon": 0,
+        "icon": 113,
         "col": 2,
         "fdr": 0,
         "mute": true,
@@ -719,7 +719,7 @@
       },
       "5": {
         "name": "Interview 5",
-        "icon": 0,
+        "icon": 113,
         "col": 11,
         "fdr": 0,
         "mute": true,
@@ -897,7 +897,7 @@
       },
       "6": {
         "name": "",
-        "icon": 0,
+        "icon": 113,
         "col": 17,
         "fdr": -144,
         "mute": true,
@@ -1075,7 +1075,7 @@
       },
       "7": {
         "name": "",
-        "icon": 0,
+        "icon": 113,
         "col": 17,
         "fdr": -144,
         "mute": true,
@@ -1609,7 +1609,7 @@
       },
       "10": {
         "name": "Stream L",
-        "icon": 0,
+        "icon": 11,
         "col": 9,
         "fdr": -7.2,
         "mute": true,
@@ -1787,7 +1787,7 @@
       },
       "11": {
         "name": "RemoteHost A",
-        "icon": 0,
+        "icon": 603,
         "col": 7,
         "fdr": -144,
         "mute": true,
@@ -1965,7 +1965,7 @@
       },
       "12": {
         "name": "RemoteHost B",
-        "icon": 0,
+        "icon": 604,
         "col": 7,
         "fdr": -144,
         "mute": true,
@@ -2143,7 +2143,7 @@
       },
       "13": {
         "name": "Host",
-        "icon": 0,
+        "icon": 112,
         "col": 11,
         "fdr": -10.7,
         "mute": true,
@@ -2321,7 +2321,7 @@
       },
       "14": {
         "name": "Talkback",
-        "icon": 0,
+        "icon": 103,
         "col": 4,
         "fdr": -8.4,
         "mute": true,
@@ -2499,7 +2499,7 @@
       },
       "15": {
         "name": "God Mix",
-        "icon": 0,
+        "icon": 100,
         "col": 9,
         "fdr": -0.5,
         "mute": true,
@@ -2680,7 +2680,7 @@
       },
       "16": {
         "name": " Hyperdeck L",
-        "icon": 0,
+        "icon": 614,
         "col": 7,
         "fdr": -144,
         "mute": true,
@@ -4632,7 +4632,7 @@
       },
       "27": {
         "name": "Reference",
-        "icon": 0,
+        "icon": 13,
         "col": 18,
         "fdr": -144,
         "mute": false,
@@ -4890,56 +4890,56 @@
     "dca": {
       "1": {
         "name": "Interview",
-        "icon": 0,
+        "icon": 5,
         "col": 11,
         "fdr": 0,
         "mute": false
       },
       "2": {
         "name": " Hyperdeck",
-        "icon": 0,
+        "icon": 5,
         "col": 7,
         "fdr": 0,
         "mute": false
       },
       "3": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 17,
         "fdr": -144,
         "mute": false
       },
       "4": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 17,
         "fdr": -144,
         "mute": false
       },
       "5": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 17,
         "fdr": -144,
         "mute": false
       },
       "6": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 17,
         "fdr": -144,
         "mute": false
       },
       "7": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 17,
         "fdr": -144,
         "mute": false
       },
       "8": {
         "name": "",
-        "icon": 0,
+        "icon": 5,
         "col": 18,
         "fdr": -144,
         "mute": false
@@ -4948,91 +4948,91 @@
     "bus": {
       "1": {
         "name": "Headset Mix",
-        "icon": 0,
+        "icon": 11,
         "col": 2,
         "fdr": 0,
         "mute": false
       },
       "2": {
         "name": "Headset Mix",
-        "icon": 0,
+        "icon": 11,
         "col": 2,
         "fdr": 0,
         "mute": false
       },
       "3": {
         "name": "Discord",
-        "icon": 0,
+        "icon": 11,
         "col": 11,
         "fdr": 0,
         "mute": false
       },
       "4": {
         "name": "Discord",
-        "icon": 0,
+        "icon": 11,
         "col": 11,
         "fdr": 0,
         "mute": false
       },
       "5": {
         "name": "Director Mix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": 0,
         "mute": false
       },
       "6": {
         "name": "Director Mix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": 0,
         "mute": false
       },
       "7": {
         "name": "CameraOps",
-        "icon": 0,
+        "icon": 11,
         "col": 9,
         "fdr": 0,
         "mute": false
       },
       "8": {
         "name": "CameraOps",
-        "icon": 0,
+        "icon": 11,
         "col": 9,
         "fdr": 0,
         "mute": false
       },
       "9": {
         "name": "Vocal Bus",
-        "icon": 0,
+        "icon": 11,
         "col": 11,
         "fdr": -0.4,
         "mute": false
       },
       "10": {
         "name": "Vocal Bus",
-        "icon": 0,
+        "icon": 11,
         "col": 11,
         "fdr": -0.4,
         "mute": false
       },
       "13": {
         "name": "Prod Mix",
-        "icon": 0,
+        "icon": 11,
         "col": 17,
         "fdr": -144,
         "mute": true
       },
       "15": {
         "name": "StreamMix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": 0.2,
         "mute": false
       },
       "16": {
         "name": "StreamMix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": 0.2,
         "mute": false
@@ -5041,42 +5041,42 @@
     "mtx": {
       "1": {
         "name": "InterviewMix",
-        "icon": 0,
+        "icon": 11,
         "col": 7,
         "fdr": 0,
         "mute": false
       },
       "2": {
         "name": "InterviewMix",
-        "icon": 0,
+        "icon": 11,
         "col": 7,
         "fdr": 0,
         "mute": false
       },
       "3": {
         "name": "StreamMix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": -144,
         "mute": true
       },
       "4": {
         "name": "StreamMix",
-        "icon": 0,
+        "icon": 11,
         "col": 5,
         "fdr": -144,
         "mute": true
       },
       "5": {
         "name": "To OBS",
-        "icon": 0,
+        "icon": 11,
         "col": 9,
         "fdr": -144,
         "mute": true
       },
       "6": {
         "name": "To OBS",
-        "icon": 0,
+        "icon": 11,
         "col": 9,
         "fdr": -144,
         "mute": true

@@ -863,23 +863,23 @@
 /bus/05/mix ON +0.0 ON +0 OFF -oo
 /bus/06/config "Headset 6 MI" 1 CY
 /bus/06/mix ON +0.0 ON +0 OFF -oo
-/bus/09/config "AdTch To Tal" 1 MG
+/bus/09/config "AdTch To Tal" 72 MG
 /bus/09/mix ON +0.0 ON +0 OFF -oo
 /bus/10/config "Talent Comms" 1 GN
 /bus/10/mix ON -5.0 ON +0 OFF -oo
-/bus/12/config "Verb" 1 MG
+/bus/12/config "Verb" 61 MG
 /bus/12/mix OFF -oo ON +0 OFF -oo
-/bus/13/config "Vocal Bus" 1 BL
+/bus/13/config "Vocal Bus" 70 BL
 /bus/13/mix ON +0.0 ON +0 OFF -oo
-/bus/14/config "Game Bus L/R" 1 MG
+/bus/14/config "Game Bus L/R" 70 MG
 /bus/14/mix ON +0.0 ON +0 OFF -oo
-/bus/15/config "Int Aux" 1 GN
+/bus/15/config "Int Aux" 70 GN
 /bus/15/mix ON -0.0 ON +0 OFF -oo
-/bus/16/config "Overflow Bus" 1 RD
+/bus/16/config "Overflow Bus" 72 RD
 /bus/16/mix ON +0.0 ON +0 OFF -oo
 /mtx/01/config "Audio Tech" 1 BL
 /mtx/01/mix ON -0.0
-/mtx/02/config "Production" 1 BL
+/mtx/02/config "Production" 63 BL
 /mtx/02/mix ON -0.0
 /mtx/03/config "Cam Ops" 1 BL
 /mtx/03/mix ON -0.0

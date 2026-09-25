@@ -7,7 +7,7 @@
     "ch": {
       "1": {
         "name": "Keys L",
-        "icon": 0,
+        "icon": 600,
         "col": 5,
         "fdr": -5,
         "mute": false,
@@ -95,7 +95,7 @@
       },
       "2": {
         "name": "Vox",
-        "icon": 0,
+        "icon": 310,
         "col": 9,
         "fdr": 0,
         "mute": true,
