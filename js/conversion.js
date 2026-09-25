@@ -17,17 +17,13 @@ import { emitX32Scene } from './x32-emit.js';
 import { emitXAirScene } from './xair-emit.js';
 import { emitWingSnapshot } from './wing-snap.js';
 import { SEVERITY, render } from './losses.js';
+import { x32Desk } from './x32-codec.js';
+import { xairDesk } from './xair-codec.js';
+import { wingDesk } from './wing-codec.js';
 
-// dcas is the desk's DCA count: what a scene written for it can actually hold.
-// reads lists the file types the desk's reader takes, where it takes more
-// than the one it writes: the X32 reader also takes channel presets and
-// snippets, read as partial scenes.
-export const DESKS = {
-  x32:  { label: 'Behringer X32 / Midas M32', ext: 'scn',  what: 'scene file', mime: 'text/plain',       dcas: 8,
-          reads: ['scn', 'chn', 'snp'] },
-  xair: { label: 'Behringer X Air / Midas MR', ext: 'scn',  what: 'scene file', mime: 'text/plain',       dcas: 4 },
-  wing: { label: 'Behringer Wing',            ext: 'snap', what: 'snapshot',   mime: 'application/json', dcas: 16 },
-};
+// Each desk describes itself in its codec module; everything that has to
+// know a desk's limits, files or wording reads them from there.
+export const DESKS = { x32: x32Desk, xair: xairDesk, wing: wingDesk };
 
 const READERS = {
   x32:  (text) => (isChannelPreset(text) ? readChannelPreset(text)
@@ -37,16 +33,11 @@ const READERS = {
   wing: (text) => parseWingSnapshot(text),
 };
 
-// Each writer returns { text, warnings, losses, preview, stats }. The Wing
-// writer hands back the snapshot object instead of text; whatever saves it
-// wants JSON, so it is serialised here, once.
+// Each writer returns { text, warnings, losses, preview, stats }.
 const WRITERS = {
   x32:  (scene, include) => emitX32Scene(scene, { include }),
   xair: (scene, include) => emitXAirScene(scene, { include }),
-  wing: (scene, include) => {
-    const r = emitWingSnapshot(scene, { include });
-    return { ...r, text: JSON.stringify(r.snapshot, null, 2) };
-  },
+  wing: (scene, include) => emitWingSnapshot(scene, { include }),
 };
 
 export function canRead(from) {
@@ -57,7 +48,31 @@ export function canRead(from) {
 export function accepts(from, fileName) {
   const desk = DESKS[from];
   const ext = (String(fileName).split('.').pop() || '').toLowerCase();
-  return Boolean(desk) && (desk.reads || [desk.ext]).includes(ext);
+  return Boolean(desk) && desk.reads.includes(ext);
+}
+
+// The page's wording for a desk and for a conversion, built from the desks'
+// own facts so it cannot disagree with what the writers do.
+const list = (words) => words.join(', ').replace(/, ([^,]+)$/, ' and $1');
+export function sourceHint(id) {
+  const d = DESKS[id];
+  const partial = d.reads.filter(e => d.partials[e]).map(e => `.${e} ${d.partials[e]}s`);
+  return `Expects a .${d.ext} ${d.what}` + (partial.length ? `; ${list(partial)} work too.` : '.');
+}
+
+export function routeCopy(fromId, toId) {
+  const from = DESKS[fromId], to = DESKS[toId];
+  if (to.stereo === 'native') {
+    return { pairLabel: 'stereo pairs merged',
+      hint: `Snapshot covering all ${to.channels} channels. Ones your show does not use are cleared.` };
+  }
+  const sizes = Object.values(DESKS).map(d => d.channels);
+  const size = to.channels > from.channels
+    ? `The ${to.short} is the bigger desk, so they all fit — the patch is what to check.`
+    : to.channels === Math.min(...sizes) && from.channels === Math.max(...sizes)
+      ? `The ${to.short} is the smallest desk here, so expect the most to check.`
+      : `The ${to.short} is the smaller desk, so expect to check the notes below.`;
+  return { pairLabel: 'stereo split to pairs', hint: `Full scene file, all ${to.channels} channels. ${size}` };
 }
 
 export function canConvert(from, to) {

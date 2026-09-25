@@ -6,35 +6,13 @@
 // tested directly. This page owns only what a person sees: the desk pickers,
 // the wording for each pairing, the report and the download.
 
-import { DESKS, accepts, canRead, canConvert, readScene, writeScene, reportRows } from './conversion.js';
+import { DESKS, accepts, canRead, canConvert, readScene, writeScene, reportRows, routeCopy, sourceHint } from './conversion.js';
 
 const $ = (id) => document.getElementById(id);
 
 const CONSOLES = DESKS;
 
-// The partial files a reader takes besides the desk's own, by extension.
-const PARTIAL = { chn: 'channel preset', snp: 'snippet' };
-const readsOf = (desk) => desk.reads || [desk.ext];
 const extList = (exts) => exts.map(e => `.${e}`).join(exts.length > 2 ? ', ' : ' or ').replace(/, ([^,]+)$/, ' or $1');
-
-// What the page says about each pairing. Which pairings exist is conversion.js's
-// call (canConvert); this is only the wording.
-const TO_WING = {
-  pairLabel: 'stereo pairs merged',
-  hint: 'Snapshot covering all 40 channels. Ones your show does not use are cleared.',
-};
-const COPY = {
-  'x32>wing':  TO_WING,
-  'xair>wing': TO_WING,
-  'xair>x32': { pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 32 channels. The X32 is the bigger desk, so they all fit — the patch is what to check.' },
-  'x32>xair': { pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 16 channels. The X Air is the smaller desk, so expect to check the notes below.' },
-  'wing>xair': { pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 16 channels. The X Air is the smallest desk here, so expect the most to check.' },
-  'wing>x32': { pairLabel: 'stereo split to pairs',
-    hint: 'Full scene file, all 32 channels. The X32 is the smaller desk, so expect to check the notes below.' },
-};
 
 const SECTIONS = [
   ['names', 'Names & icons'], ['colors', 'Strip colors'], ['patch', 'Input patch'],
@@ -47,8 +25,7 @@ let state = { ir: null, out: null, baseName: 'scene', inExt: '', shown: false };
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-const routeKey = () => `${$('from').value}>${$('to').value}`;
-const route    = () => canConvert($('from').value, $('to').value) ? COPY[routeKey()] : null;
+const route    = () => canConvert($('from').value, $('to').value) ? routeCopy($('from').value, $('to').value) : null;
 
 function setStatus(msg, isError = false) {
   const el = $('status');
@@ -166,12 +143,10 @@ function syncTargets() {
 function syncHints() {
   const src = CONSOLES[$('from').value];
   const r = route();
-  const partial = readsOf(src).filter(e => PARTIAL[e]);
-  $('fromHint').textContent = `Expects a .${src.ext} ${src.what}` +
-    (partial.length ? `; ${partial.map(e => `.${e} ${PARTIAL[e]}s`).join(' and ')} work too.` : '.');
+  $('fromHint').textContent = sourceHint($('from').value);
   $('toHint').textContent = r ? r.hint : 'No converter for this pairing yet.';
-  $('file').setAttribute('accept', readsOf(src).map(e => '.' + e).join(','));
-  $('dropTitle').innerHTML = `Drop a ${readsOf(src).map(e => `<code>.${esc(e)}</code>`).join(', ').replace(/, ([^,]+)$/, ' or $1')} file here`;
+  $('file').setAttribute('accept', src.reads.map(e => '.' + e).join(','));
+  $('dropTitle').innerHTML = `Drop a ${src.reads.map(e => `<code>.${esc(e)}</code>`).join(', ').replace(/, ([^,]+)$/, ' or $1')} file here`;
   $('optcard').hidden = !r;
   if (state.ir) { state.shown = false; cancelCurtain(); render(); } else reset(false);
 }
@@ -253,7 +228,7 @@ function handleFile(file) {
   const ext = (file.name.split('.').pop() || '').toLowerCase();
   if (!accepts($('from').value, file.name)) {
     reset(false);
-    setStatus(`That's a .${ext} file — ${src.label} uses ${extList(readsOf(src))}. Pick the right "From console", or choose a different file.`, true);
+    setStatus(`That's a .${ext} file — ${src.label} uses ${extList(src.reads)}. Pick the right "From console", or choose a different file.`, true);
     return;
   }
   if (file.size > 8 * 1024 * 1024) {
