@@ -41,3 +41,12 @@ test('codeToHex resolves each desk format', () => {
   assert.equal(codeToHex('wing', 18), '#ebebeb');
   assert.equal(codeToHex('nope', 1), null);
 });
+
+test('all 16 X32 colours, inverted ones included, survive X32 -> X Air -> X32 (#25)', () => {
+  // The real GDQ show uses RDi, GNi, MGi, OFFi...; real X Air scenes write 8-15.
+  const codes = ['OFF', 'RD', 'GN', 'YE', 'BL', 'MG', 'CY', 'WH',
+                 'OFFi', 'RDi', 'GNi', 'YEi', 'BLi', 'MGi', 'CYi', 'WHi'];
+  const viaXair = codes.map(code => mapColor(colorFrom('xair', mapColor(colorFrom('x32', code), 'xair')), 'x32'));
+  assert.deepEqual(viaXair, codes);
+  assert.deepEqual(codes.map(code => mapColor(colorFrom('x32', code), 'xair')), [...Array(16).keys()]);
+});

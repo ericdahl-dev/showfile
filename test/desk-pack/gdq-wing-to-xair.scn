@@ -207,7 +207,7 @@
 /ch/08/automix OFF  +0.0
 /ch/09/config " L" 4 In09 U09
 /ch/09/preamp +0.0 OFF OFF OFF  100
-/ch/09/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/09/gate ON DUCK -20.0 20.0 100 100.0 496 SELF
 /ch/09/gate/filter OFF 3.0 990.9
 /ch/09/dyn ON COMP RMS LOG -34.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/09/dyn/filter OFF 3.0 990.9
@@ -232,7 +232,7 @@
 /ch/09/automix OFF  +0.0
 /ch/10/config " R" 4 In10 U10
 /ch/10/preamp +0.0 OFF OFF OFF  100
-/ch/10/gate OFF GATE -80.0 60.0 1 50.0 200 SELF
+/ch/10/gate ON DUCK -20.0 20.0 100 100.0 496 SELF
 /ch/10/gate/filter OFF 3.0 990.9
 /ch/10/dyn ON COMP RMS LOG -34.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/10/dyn/filter OFF 3.0 990.9
@@ -257,7 +257,7 @@
 /ch/10/automix OFF  +0.0
 /ch/11/config "" 4 In11 U11
 /ch/11/preamp +0.0 OFF OFF OFF  100
-/ch/11/gate OFF GATE -40.0 40.0 10 10.0 199 SELF
+/ch/11/gate OFF EXP3 -40.0 40.0 10 10.0 199 SELF
 /ch/11/gate/filter OFF 3.0 990.9
 /ch/11/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/11/dyn/filter OFF 3.0 990.9
@@ -282,7 +282,7 @@
 /ch/11/automix OFF  +0.0
 /ch/12/config "" 4 In12 U12
 /ch/12/preamp +0.0 OFF OFF OFF  100
-/ch/12/gate OFF GATE -40.0 40.0 10 10.0 199 SELF
+/ch/12/gate OFF EXP3 -40.0 40.0 10 10.0 199 SELF
 /ch/12/gate/filter OFF 3.0 990.9
 /ch/12/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/12/dyn/filter OFF 3.0 990.9
@@ -307,7 +307,7 @@
 /ch/12/automix OFF  +0.0
 /ch/13/config "" 4 In13 U13
 /ch/13/preamp +0.0 OFF OFF OFF  100
-/ch/13/gate OFF GATE -40.0 40.0 10 10.0 199 SELF
+/ch/13/gate OFF EXP3 -40.0 40.0 10 10.0 199 SELF
 /ch/13/gate/filter OFF 3.0 990.9
 /ch/13/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/13/dyn/filter OFF 3.0 990.9
@@ -357,7 +357,7 @@
 /ch/14/automix OFF  +0.0
 /ch/15/config " L" 4 In09 U15
 /ch/15/preamp +0.0 OFF OFF OFF  100
-/ch/15/gate OFF GATE -40.0 40.0 10 10.0 199 SELF
+/ch/15/gate OFF EXP3 -40.0 40.0 10 10.0 199 SELF
 /ch/15/gate/filter OFF 3.0 990.9
 /ch/15/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/15/dyn/filter OFF 3.0 990.9
@@ -382,7 +382,7 @@
 /ch/15/automix OFF  +0.0
 /ch/16/config " R" 4 In10 U16
 /ch/16/preamp +0.0 OFF OFF OFF  100
-/ch/16/gate OFF GATE -40.0 40.0 10 10.0 199 SELF
+/ch/16/gate OFF EXP3 -40.0 40.0 10 10.0 199 SELF
 /ch/16/gate/filter OFF 3.0 990.9
 /ch/16/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.0 153 100 SELF OFF
 /ch/16/dyn/filter OFF 3.0 990.9

@@ -112,6 +112,13 @@ function named(store, count) {
   return out;
 }
 
+// GATE's ratio says whether it gates ("gate") or expands ("1:3").
+function gateMode(g) {
+  if (String(g.mdl).toUpperCase() === 'DUCK') return { mode: 'duck', ratio: null };
+  const exp = /^1:([\d.]+)$/.exec(String(g.ratio || ''));
+  return exp ? { mode: 'exp', ratio: Number(exp[1]) } : { mode: 'gate', ratio: null };
+}
+
 export function parseWingSnapshot(text) {
   let root;
   try {
@@ -143,14 +150,22 @@ export function parseWingSnapshot(text) {
   }
 
   // The gate and compressor slots each hold one of several models (a
-  // de-esser, a ducker, a vintage compressor...). Only the plain GATE and
-  // COMP models mean what the other desks' gate and compressor mean;
-  // anything else is reported and left off rather than misread.
+  // de-esser, a vintage compressor...). Only the plain models mean what the
+  // other desks' gate and compressor mean: GATE (a gate, or an expander by its
+  // ratio) and DUCK in the gate slot, COMP and EXP in the compressor slot. Anything
+  // else is reported and left off rather than misread.
   function modelOk(block, want, what, n, name) {
     if (!isObj(block)) return false;
-    const mdl = String(block.mdl || want).toUpperCase();
-    if (mdl === want) return true;
+    const mdl = String(block.mdl || want[0]).toUpperCase();
+    if (want.includes(mdl)) return true;
     warnings.push(loss('dyn.model-unsupported', { label: `ch ${n} "${name || ''}"`, what, model: mdl }));
+    return false;
+  }
+
+  function eqModelOk(eq, n, name) {
+    const mdl = String((isObj(eq) && eq.mdl) || 'STD').toUpperCase();
+    if (mdl === 'STD') return true;
+    warnings.push(loss('eq.model-unsupported', { label: `ch ${n} "${name || ''}"`, model: mdl }));
     return false;
   }
 
@@ -212,20 +227,23 @@ export function parseWingSnapshot(text) {
       pan: numOr(c.pan, 0),
       toMain: mainOn,
 
-      gate: modelOk(c.gate, 'GATE', 'gate', n, c.name) ? {
-        on: c.gate.on !== false, thr: numOr(c.gate.thr, -40), range: numOr(c.gate.range, 20),
+      gate: modelOk(c.gate, ['GATE', 'DUCK'], 'gate', n, c.name) ? {
+        on: c.gate.on !== false, ...gateMode(c.gate), thr: numOr(c.gate.thr, -40), range: numOr(c.gate.range, 20),
         att: numOr(c.gate.att, 10), hold: numOr(c.gate.hld, 20), rel: numOr(c.gate.rel, 250),
       } : null,
 
-      dyn: modelOk(c.dyn, 'COMP', 'compressor', n, c.name) ? {
-        on: c.dyn.on !== false, det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
+      dyn: modelOk(c.dyn, ['COMP', 'EXP'], 'compressor', n, c.name) ? {
+        on: c.dyn.on !== false, mode: String(c.dyn.mdl).toUpperCase() === 'EXP' ? 'exp' : 'comp', det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
         env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG',
         thr: numOr(c.dyn.thr, -20), ratio: numOr(c.dyn.ratio, 3), knee: numOr(c.dyn.knee, 0),
         gain: numOr(c.dyn.gain, 0), att: numOr(c.dyn.att, 10), hold: numOr(c.dyn.hld, 20),
         rel: numOr(c.dyn.rel, 250), pos: 'POST', mix: numOr(c.dyn.mix, 100),
       } : null,
 
-      eq: withHighCut(readEq(c.eq), c.flt),
+      // Only STD's bands are frequencies and gains; the emulation EQs (SOUL,
+      // E88 ...) store knob positions under some of the same keys, so reading
+      // one as STD would invent bands. It is reported and left flat.
+      eq: withHighCut(eqModelOk(c.eq, n, c.name) ? readEq(c.eq) : null, c.flt),
       sends: readSends(c.send),
       dcas,
       muteGroups,

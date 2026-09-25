@@ -182,9 +182,13 @@ export function emitWingSnapshot(ir, opts = {}) {
         warnings.push(loss('dyn.ratio-snapped', { label, from: c.dyn.ratio, to: ratio.value, desk: DESK },
           { kind: 'channel', n, name: c.name }));
       }
-      node.gate = { on: !!c.gate.on, mdl: 'GATE', thr: round(c.gate.thr), range: round(c.gate.range),
-                                att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
-      node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
+      // A ducker is its own model on the Wing; a gate and an expander share
+      // the GATE model, told apart by its ratio.
+      node.gate = { on: !!c.gate.on, mdl: c.gate.mode === 'duck' ? 'DUCK' : 'GATE',
+                    thr: round(c.gate.thr), range: round(c.gate.range),
+                    att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
+      if (c.gate.mode !== 'duck') node.gate.ratio = c.gate.mode === 'exp' ? `1:${c.gate.ratio}` : 'gate';
+      node.dyn  = { on: !!c.dyn.on, mdl: c.dyn.mode === 'exp' ? 'EXP' : 'COMP', thr: round(c.dyn.thr),
                                 ratio: snapRatio(c.dyn.ratio, 'wing').value, knee: round(c.dyn.knee),
                                 att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
                                 gain: round(clamped(warnings, label, 'compressor gain', c.dyn.gain, RANGE.dynGain, { kind: 'channel', n, name: c.name })), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',

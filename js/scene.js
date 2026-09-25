@@ -19,8 +19,8 @@
 export const PAIRINGS = ['mono', 'linked', 'native'];
 
 const HPF_OFF  = { on: false, slope: 24, freq: 20 };
-const GATE_OFF = { on: false, thr: -80, range: 60, att: 0, hold: 50, rel: 200 };
-const DYN_OFF  = { on: false, det: 'PEAK', env: 'LOG', thr: 0, ratio: 3, knee: 0,
+const GATE_OFF = { on: false, mode: 'gate', ratio: null, thr: -80, range: 60, att: 0, hold: 50, rel: 200 };
+const DYN_OFF  = { on: false, mode: 'comp', det: 'PEAK', env: 'LOG', thr: 0, ratio: 3, knee: 0,
                    gain: 0, att: 10, hold: 10, rel: 151, pos: 'POST', mix: 100 };
 
 // Readers name the pairing. A caller that does not gets it inferred from the

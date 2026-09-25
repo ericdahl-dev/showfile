@@ -20,7 +20,7 @@
 import { mapColor, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import {
   q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported,
+  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
 } from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
@@ -154,6 +154,7 @@ export function emitXAirScene(ir, opts = {}) {
     if (half === 0) {
       if (include.sends) reportLostBuses(losses, c.sends, { desk: DESK, limit: BUSES }, at);
       if (include.dynamics) snapRatioReported(losses, c.dyn.ratio, { desk: DESK, target: 'xair' }, at);
+      if (include.dynamics) reportGateRatio(losses, c.gate, { desk: DESK }, at);
       reportBalanceLost(losses, c, { desk: DESK }, at);
     }
     const pan = width === 2 ? (half === 0 ? -100 : 100) : Math.round(c.pan || 0);
@@ -275,11 +276,11 @@ export function emitXAirScene(ir, opts = {}) {
   }
   function pushChannelTail(out, id, gate, dyn, eq, sends, dcas, mgs, mix) {
     out.push(gate
-      ? `/ch/${id}/gate ${onOff(gate.on)} GATE ${dec(gate.thr, 1)} ${dec(gate.range, 1)} ${Math.round(gate.att || 1)} ${dec(gate.hold, 1)} ${Math.round(gate.rel || 983)} SELF`
+      ? `/ch/${id}/gate ${onOff(gate.on)} ${gateToken(gate)} ${dec(gate.thr, 1)} ${dec(gate.range, 1)} ${Math.round(gate.att || 1)} ${dec(gate.hold, 1)} ${Math.round(gate.rel || 983)} SELF`
       : `/ch/${id}/gate OFF GATE -80.0 60.0 1  502 983 SELF`);
     out.push(`/ch/${id}/gate/filter OFF 3.0 990.9`);
     out.push(dyn
-      ? `/ch/${id}/dyn ${onOff(dyn.on)} COMP ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee || 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att || 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
+      ? `/ch/${id}/dyn ${onOff(dyn.on)} ${dyn.mode === 'exp' ? 'EXP' : 'COMP'} ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee || 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att || 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
       : `/ch/${id}/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF`);
     out.push(`/ch/${id}/dyn/filter OFF 3.0 990.9`);
     out.push(`/ch/${id}/insert OFF OFF`);

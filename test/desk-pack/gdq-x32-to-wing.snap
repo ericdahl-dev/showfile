@@ -65,7 +65,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -242,7 +243,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -419,7 +421,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -596,7 +599,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -773,7 +777,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -950,7 +955,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -1127,7 +1133,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -1304,7 +1311,8 @@
           "range": 35,
           "att": 0,
           "hld": 100,
-          "rel": 101
+          "rel": 101,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -1481,7 +1489,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1658,7 +1667,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": true,
@@ -1835,7 +1845,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -2012,7 +2023,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -2189,7 +2201,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -2366,7 +2379,8 @@
           "range": 60,
           "att": 0,
           "hld": 79.6,
-          "rel": 226
+          "rel": 226,
+          "ratio": "1:4"
         },
         "dyn": {
           "on": true,
@@ -2546,7 +2560,8 @@
           "range": 15,
           "att": 10,
           "hld": 100,
-          "rel": 151
+          "rel": 151,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": true,
@@ -2726,7 +2741,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -2903,7 +2919,8 @@
           "range": 60,
           "att": 1,
           "hld": 112,
-          "rel": 226
+          "rel": 226,
+          "ratio": "1:4"
         },
         "dyn": {
           "on": false,
@@ -3080,7 +3097,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:3"
         },
         "dyn": {
           "on": false,
@@ -3256,7 +3274,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -3432,7 +3451,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -3608,7 +3628,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -3784,7 +3805,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -3960,7 +3982,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -4136,7 +4159,8 @@
           "range": 60,
           "att": 0,
           "hld": 44.7,
-          "rel": 141
+          "rel": 141,
+          "ratio": "1:4"
         },
         "dyn": {
           "on": false,
@@ -4312,7 +4336,8 @@
           "range": 60,
           "att": 0,
           "hld": 44.7,
-          "rel": 141
+          "rel": 141,
+          "ratio": "1:4"
         },
         "dyn": {
           "on": false,
@@ -4488,7 +4513,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -4664,7 +4690,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,

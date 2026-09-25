@@ -22,7 +22,7 @@
 
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
-import { INF, num, bool, bits, parseNodes, eqType, collapsePairs } from './scene-text.js';
+import { INF, num, bool, bits, parseNodes, eqType, gateMode, collapsePairs } from './scene-text.js';
 import { loss, render } from './losses.js';
 
 const MAX_CH = 16;
@@ -142,14 +142,14 @@ export function parseXAirScene(text, fileName = '') {
       pan:   num(mix[3]),
 
       gate: gate.length ? {
-        on: bool(gate[0]), thr: num(gate[2]), range: num(gate[3]),
+        on: bool(gate[0]), ...gateMode(gate[1]), thr: num(gate[2]), range: num(gate[3]),
         att: num(gate[4]), hold: num(gate[5]), rel: num(gate[6]),
       } : null,
 
       // dyn: on mode det env thr ratio knee gain att hold rel mix keysrc auto
       // The X32 carries a pre/post position token here; the X Air does not.
       dyn: dyn.length ? {
-        on: bool(dyn[0]), det: dyn[2] || 'PEAK', env: dyn[3] || 'LOG',
+        on: bool(dyn[0]), mode: dyn[1] === 'EXP' ? 'exp' : 'comp', det: dyn[2] || 'PEAK', env: dyn[3] || 'LOG',
         thr: num(dyn[4]), ratio: num(dyn[5], 3), knee: num(dyn[6]),
         gain: num(dyn[7]), att: num(dyn[8]), hold: num(dyn[9]),
         rel: num(dyn[10]), mix: num(dyn[11], 100),

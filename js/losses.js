@@ -76,8 +76,14 @@ const CODES = {
   'range.clamped': { severity: 'approximated', render: (d) =>
     `${d.label}: ${d.what} ${d.from} dB is outside the ${d.desk}'s range; set to ${d.to} dB.` },
 
+  'eq.model-unsupported': { severity: 'unsupported', render: (d) =>
+    `${d.label}: the EQ is the ${d.model} model, whose controls are knob positions rather than frequencies and gains; left flat.` },
+
   'dyn.model-unsupported': { severity: 'unsupported', render: (d) =>
     `${d.label}: the ${d.what} slot holds a ${d.model}, which other desks don't have; left off.` },
+
+  'dyn.gate-ratio-snapped': { severity: 'approximated', render: (d) =>
+    `${d.label}: expander ratio 1:${d.from} is not on the ${d.desk}; set to 1:${d.to}.` },
 
   'dyn.ratio-snapped': { severity: 'approximated', render: (d) =>
     `${d.label}: compressor ratio ${d.from}:1 is not on the ${d.desk}; set to ${d.to}:1.` },
