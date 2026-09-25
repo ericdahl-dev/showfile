@@ -24,13 +24,17 @@ const round = (v) => Math.round(v * 1e4) / 1e4;
 function mapEq(eq, warnings, label, filterFree) {
   const out = { on: !!eq.on, mdl: 'STD' };
   const mids = [];
-  let low = null, high = null;
+  // Cuts are kept apart from shelves: a channel can carry both, and only the
+  // shelf belongs in the EQ's outer band.
+  let low = null, high = null, lowCut = null, highCut = null;
   out.cut = null;                                  // a cut to fold into node.flt
 
   for (const b of eq.bands || []) {
     const t = b.type || 'bell';
-    if (t === 'lowcut' || t === 'lowshelf') { if (!low)  low  = b; else mids.push(b); }
-    else if (t === 'highcut' || t === 'highshelf') { if (!high) high = b; else mids.push(b); }
+    if (t === 'lowcut') { if (!lowCut) lowCut = b; else mids.push(b); }
+    else if (t === 'highcut') { if (!highCut) highCut = b; else mids.push(b); }
+    else if (t === 'lowshelf') { if (!low) low = b; else mids.push(b); }
+    else if (t === 'highshelf') { if (!high) high = b; else mids.push(b); }
     else mids.push(b);
   }
 
@@ -39,14 +43,17 @@ function mapEq(eq, warnings, label, filterFree) {
   // writing one silently throws the rolloff away. The Wing does have a real
   // low cut — in the dedicated filter section — so use that when the channel
   // high-pass has not already claimed it, and say so when it has.
-  if (low && low.type === 'lowcut') {
-    if (filterFree) { out.cut = { lc: true, lcf: round(low.f), lcs: '12' }; }
+  if (lowCut) {
+    if (filterFree) { out.cut = { lc: true, lcf: round(lowCut.f), lcs: '12' }; }
     else {
       warnings.push(loss('eq.lowcut-no-slot',
-        { label, freq: Math.round(low.f), desk: DESK }));
+        { label, freq: Math.round(lowCut.f), desk: DESK }));
     }
-    low = null;
   }
+
+  // Same for a high cut. The filter block's high cut is always free, since
+  // the high-pass only ever takes the low cut.
+  if (highCut) out.cut = { ...(out.cut || {}), hc: true, hcf: round(highCut.f), hcs: '12' };
 
   // Every one of the six bands is written, including the ones the source
   // does not use. The Wing merges a snapshot key by key, so a band left out
@@ -63,7 +70,7 @@ function mapEq(eq, warnings, label, filterFree) {
   out.hf = round(high ? high.f : 12000);
   out.hg = round(high ? high.g : 0);
   out.hq = round(high ? high.q : 1);
-  out.heq = high && high.type === 'highcut' ? 'PEQ' : 'SHV';
+  out.heq = 'SHV';
 
   const fitMids = mids.length > 4 ? mids.filter(b => Number(b.g) !== 0).slice(0, 4) : mids;
   for (let i = 0; i < 4; i++) {

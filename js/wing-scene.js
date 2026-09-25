@@ -33,10 +33,19 @@ function parseTags(tags) {
   return { dcas: grab('D'), muteGroups: grab('M') };
 }
 
-// The Wing's six bands -> neutral bands. The outer two carry a type flag (SHV
-// or PEQ, where PEQ in the outer slot means a cut); the four mids are always
-// bells. A band with no gain and no frequency was never set, so it is dropped
-// rather than emitted as a flat 0 dB bell that a target desk would then write.
+// The Wing's six bands -> neutral bands. The outer two are a shelf (SHV) or a
+// bell (PEQ); the channel EQ has no cut, since a channel's cuts live in its
+// filter block (flt). The four mids are always bells. A band with no gain and
+// no frequency was never set, so it is dropped rather than emitted as a flat
+// 0 dB bell that a target desk would then write.
+// The Wing's high cut lives in the filter block, not the EQ. Every other desk
+// here keeps it as an EQ band, so it joins the bands as one.
+function withHighCut(eq, flt) {
+  if (!isObj(flt) || flt.hc !== true) return eq;
+  const band = { type: 'highcut', f: numOr(flt.hcf, 20000), g: 0, q: 1 };
+  return eq ? { ...eq, bands: [...eq.bands, band] } : { on: true, bands: [band] };
+}
+
 function readEq(eq) {
   if (!isObj(eq)) return null;
   const bands = [];
@@ -47,7 +56,7 @@ function readEq(eq) {
   const live = (f, g) => typeof f === 'number' && typeof g === 'number' && g !== 0;
 
   if (live(eq.lf, eq.lg)) {
-    bands.push({ type: eq.leq === 'SHV' ? 'lowshelf' : 'lowcut',
+    bands.push({ type: eq.leq === 'SHV' ? 'lowshelf' : 'bell',
                  f: numOr(eq.lf), g: numOr(eq.lg), q: numOr(eq.lq, 1) });
   }
   for (let i = 1; i <= 4; i++) {
@@ -56,7 +65,7 @@ function readEq(eq) {
     bands.push({ type: 'bell', f: numOr(f), g: numOr(g), q: numOr(eq[`${i}q`], 1) });
   }
   if (live(eq.hf, eq.hg)) {
-    bands.push({ type: eq.heq === 'SHV' ? 'highshelf' : 'highcut',
+    bands.push({ type: eq.heq === 'SHV' ? 'highshelf' : 'bell',
                  f: numOr(eq.hf), g: numOr(eq.hg), q: numOr(eq.hq, 1) });
   }
   if (!bands.length) return null;
@@ -204,7 +213,7 @@ export function parseWingSnapshot(text) {
         rel: numOr(c.dyn.rel, 250), pos: 'POST', mix: numOr(c.dyn.mix, 100),
       } : null,
 
-      eq: readEq(c.eq),
+      eq: withHighCut(readEq(c.eq), c.flt),
       sends: readSends(c.send),
       dcas,
       muteGroups,

@@ -20,3 +20,25 @@ test('AES50-C, USB and bus sources are read, not left unpatched (#22)', () => {
   assert.equal(byName['Music L/R'].group, 'usb');
   assert.equal(byName['VoxDuckKey'].group, 'bus');
 });
+
+// Edit one channel of the real snapshot and read it back.
+function withChannel1(edit) {
+  const snap = JSON.parse(realWing);
+  edit(snap.ae_data.ch['1']);
+  return readScene('wing', JSON.stringify(snap)).channels.find(c => c.ch === 1);
+}
+
+test('an outer EQ band set to PEQ is a bell, not a cut (#18)', () => {
+  const c = withChannel1(ch => Object.assign(ch.eq, { leq: 'PEQ', lf: 120, lg: 3, heq: 'PEQ', hf: 9000, hg: -2 }));
+  const low = c.eq.bands.find(b => b.f === 120);
+  const high = c.eq.bands.find(b => b.f === 9000);
+  assert.equal(low.type, 'bell');
+  assert.equal(high.type, 'bell');
+});
+
+test('the filter block high cut is read as a high-cut band (#18)', () => {
+  const c = withChannel1(ch => Object.assign(ch.flt, { hc: true, hcf: 8000 }));
+  assert.deepEqual(c.eq.bands.filter(b => b.type === 'highcut').map(b => b.f), [8000]);
+  const off = withChannel1(ch => Object.assign(ch.flt, { hc: false, hcf: 8000 }));
+  assert.equal(off.eq.bands.filter(b => b.type === 'highcut').length, 0);
+});

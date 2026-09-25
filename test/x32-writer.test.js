@@ -52,3 +52,12 @@ test('inputs the X32 has no route for are reported, not patched to local (#22)',
   const row = out.preview.find(p => p.name === 'Headset 1');
   assert.equal(row.patch, '—');
 });
+
+test('a cut survives when the X32 runs short of EQ bands (#18)', () => {
+  // Five active bands plus a Wing high cut: something has to go, but not the cut.
+  const snap = JSON.parse(realWing);
+  Object.assign(snap.ae_data.ch['1'].eq, { lg: 2, '1g': 1, '2g': -3, '3g': 2, '4g': -1, hg: 3 });
+  Object.assign(snap.ae_data.ch['1'].flt, { hc: true, hcf: 8000 });
+  const text = writeScene(readScene('wing', JSON.stringify(snap)), 'x32').file.text;
+  assert.match(text, /^\/ch\/01\/eq\/\d HCut 8000\.0 /m);
+});

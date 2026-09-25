@@ -94,8 +94,14 @@ function allocate(ir, losses) {
 // converted channel cannot inherit the last show's curve.
 function fitBands(bands, limit) {
   if (bands.length <= limit) return bands;
-  const active = bands.filter(b => Number(b.g) !== 0);
-  return (active.length <= limit ? active : active.slice(0, limit));
+  // A cut does its work at 0 dB, so it counts as active whatever its gain, and
+  // it is kept before any bell or shelf: losing a rolloff changes a channel
+  // more than losing a boost. Low cut goes first, high cut last, as on a desk.
+  const lowCuts = bands.filter(b => b.type === 'lowcut');
+  const highCuts = bands.filter(b => b.type === 'highcut');
+  const shaped = bands.filter(b => b.type !== 'lowcut' && b.type !== 'highcut' && Number(b.g) !== 0);
+  const room = Math.max(0, limit - lowCuts.length - highCuts.length);
+  return [...lowCuts, ...shaped.slice(0, room), ...highCuts].slice(0, limit);
 }
 
 export function emitXAirScene(ir, opts = {}) {
