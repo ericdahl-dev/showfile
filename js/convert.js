@@ -6,7 +6,7 @@
 // tested directly. This page owns only what a person sees: the desk pickers,
 // the wording for each pairing, the report and the download.
 
-import { DESKS, canConvert, readScene, writeScene, reportRows } from './conversion.js';
+import { DESKS, canRead, canConvert, readScene, writeScene, reportRows } from './conversion.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -133,7 +133,7 @@ function cancelCurtain() {
 function fillSelectors() {
   const from = $('from');
   from.innerHTML = Object.entries(CONSOLES).map(([id, c]) =>
-    `<option value="${id}"${c.read ? '' : ' disabled'}>${esc(c.label)}${c.read ? '' : ' — reading not supported yet'}</option>`
+    `<option value="${id}"${canRead(id) ? '' : ' disabled'}>${esc(c.label)}${canRead(id) ? '' : ' — reading not supported yet'}</option>`
   ).join('');
   from.value = 'x32';
   syncTargets();

@@ -41,6 +41,10 @@ const WRITERS = {
   },
 };
 
+export function canRead(from) {
+  return from in READERS;
+}
+
 export function canConvert(from, to) {
   return from !== to && from in DESKS && to in DESKS;
 }

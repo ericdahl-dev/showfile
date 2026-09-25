@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { DESKS, canConvert, readScene, writeScene } from '../js/conversion.js';
+import { DESKS, canRead, canConvert, readScene, writeScene } from '../js/conversion.js';
 
 const x32Text = readFileSync(new URL('./fixtures/synthetic-x32.scn', import.meta.url), 'utf8');
 
@@ -157,4 +157,9 @@ test('group and post-fader sends reach the Wing as GRP and POST (#20)', () => {
   const vox = Object.values(JSON.parse(writeScene(scene, 'wing').file.text).ae_data.ch).find(c => c.name === 'Vox');
   assert.equal(vox.send['5'].mode, 'GRP');
   assert.equal(vox.send['7'].mode, 'POST');
+});
+
+test('every desk can be read, so every desk is offered as a source', () => {
+  for (const id of Object.keys(DESKS)) assert.ok(canRead(id), id);
+  assert.ok(!canRead('dm7'));
 });
