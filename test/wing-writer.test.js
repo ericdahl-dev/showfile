@@ -72,3 +72,11 @@ test('channels the show does not reach are cleared of icon, color and patch too'
   // Read back, the cleared channels are still not channels.
   assert.equal(readScene('wing', out.file.text).channels.length, readScene('x32', synthetic).channels.length);
 });
+
+test('DCA and mute-group tags are comma-separated, as WING-EDIT writes them (#24)', () => {
+  // Real WING-EDIT 3.1 snapshot: "#D1,#M1". Written run together ("#D3#M1"),
+  // WING-EDIT 3.3.3 honoured neither tag.
+  const snap = JSON.parse(writeScene(readScene('x32', synthetic), 'wing').file.text);
+  const vox = Object.values(snap.ae_data.ch).find(c => c.name === 'Vox');
+  assert.equal(vox.tags, '#D3,#M1');
+});

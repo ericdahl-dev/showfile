@@ -98,11 +98,11 @@ function mapEq(eq, warnings, label, filterFree) {
   return out;
 }
 
-// DCA and mute-group membership is a tag string ("#D5#M1"), not the bitmask the
-// X32 uses.
+// DCA and mute-group membership is a comma-separated tag string ("#D5,#M1"),
+// not the bitmask the X32 uses. The comma matters: WING-EDIT writes it, and
+// given "#D5#M1" it honours neither tag.
 function tagsFor(c) {
-  return c.dcas.map(n => `#D${n}`).join('') +
-         c.muteGroups.map(n => `#M${n}`).join('');
+  return [...c.dcas.map(n => `#D${n}`), ...c.muteGroups.map(n => `#M${n}`)].join(',');
 }
 
 // X32 input classes map onto the Wing's own source groups. The Wing exposes
