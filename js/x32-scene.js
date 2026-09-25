@@ -7,19 +7,11 @@
 
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
-import { INF, num, bool, bits, parseNodes } from './scene-text.js';
+import { INF, num, bool, bits, parseNodes, eqType, collapsePairs } from './scene-text.js';
 
 // X32 input classes -> the IR's neutral groups. The neutral names describe the
 // physical thing (a local XLR, an AES50 port) rather than any desk's spelling.
 const IN_GROUP = { AN: 'local', A: 'aes50a', B: 'aes50b', CARD: 'card', UIN: 'user', AUX: 'aux' };
-
-// X32 EQ band tokens -> neutral band types.
-const EQ_TYPE = {
-  LCUT: 'lowcut', LSHV: 'lowshelf', PEQ: 'bell', VEQ: 'bell',
-  HSHV: 'highshelf', HCUT: 'highcut',
-};
-const eqType = (t) => EQ_TYPE[String(t || 'PEQ').toUpperCase()] || 'bell';
-
 
 export function parseX32Scene(text) {
   const { nodes, header: sceneName } = parseNodes(text);
@@ -165,22 +157,8 @@ export function parseX32Scene(text) {
     });
   }
 
-  // Collapse X32 mono pairs into single Wing stereo channels. Every linked pair
-  // swallows one channel index, which is why numbering drifts down the file.
-  const channels = [];
-  for (let i = 0; i < strips.length; ) {
-    const s = strips[i];
-    const pairIdx = Math.ceil(s.ch / 2) - 1;
-    const linked = s.ch % 2 === 1 && chlink[pairIdx] === true && strips[i + 1]?.ch === s.ch + 1;
-    channels.push(makeChannel({
-      ...s,
-      index: channels.length + 1,
-      pairing: linked ? 'linked' : 'mono',
-      srcChannels: linked ? [s.ch, s.ch + 1] : [s.ch],
-      headamp: headampFor(s.patch),
-    }));
-    i += linked ? 2 : 1;
-  }
+  const channels = collapsePairs(strips, chlink, (s, pair) =>
+    makeChannel({ ...s, ...pair, headamp: headampFor(s.patch) }));
 
   const named = (prefix, count, pad = 2) => {
     const out = [];

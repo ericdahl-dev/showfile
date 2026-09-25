@@ -18,6 +18,10 @@
 // Everything that does not fit is reported. Nothing is dropped silently.
 
 import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
+import {
+  q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
+  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported,
+} from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -25,12 +29,6 @@ const MAX_CH = 32;
 const MAX_EQ_BANDS = 4;
 const MAX_MATRIX = 6;
 const BLOCK = 8;
-
-// Neutral band types -> the X32's own tokens.
-const EQ_TOKEN = {
-  lowcut: 'LCut', lowshelf: 'LShv', bell: 'PEQ',
-  highshelf: 'HShv', highcut: 'HCut',
-};
 
 // The X32's own flat channel EQ, used for any band the source did not carry.
 const FLAT_BANDS = [
@@ -59,59 +57,10 @@ const bySource = (patch) => {
 };
 const HEADAMP_BASE = { local: 0, aes50a: 32, aes50b: 80 };
 
-const q = (s) => String(s ?? '').replace(/"/g, '');
-const pad2 = (n) => String(n).padStart(2, '0');
-
 // The X32 writes signed one-decimal values and uses "-oo" for silence.
 function lvl(v) {
   if (v === -Infinity || v === null || v === undefined) return '-oo';
   return (v >= 0 ? '+' : '') + Number(v).toFixed(1);
-}
-const dec = (v, p = 1) => (Number(v) || 0).toFixed(p);
-const sign = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(2);
-// Trim and headamp gain are written with one decimal; EQ and comp gain with two.
-const sign1 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(1);
-const onOff = (b) => (b ? 'ON' : 'OFF');
-
-// Least-significant-bit-first membership mask: group 1 is the RIGHTMOST char.
-function mask(members, width) {
-  const bits = Array(width).fill('0');
-  for (const n of members || []) if (n >= 1 && n <= width) bits[n - 1] = '1';
-  return '%' + bits.reverse().join('');
-}
-
-// Lay the IR's channels out on the X32's 32 mono slots. Stereo takes an
-// odd-aligned pair; a stereo channel that would land on an even slot leaves the
-// slot empty rather than reordering the show.
-function allocate(ir, warnings) {
-  const placed = [];
-  const gaps = [];
-  let slot = 1;
-
-  for (const c of ir.channels) {
-    if (c.stereo && slot % 2 === 0) {
-      gaps.push(slot);
-      slot += 1;                                   // step to the next odd slot
-    }
-    const width = c.stereo ? 2 : 1;
-    if (slot + width - 1 > MAX_CH) {
-      warnings.push(loss('channel.overflow-from',
-        { name: c.name || 'ch ' + c.index, desk: DESK, limit: MAX_CH },
-        { kind: 'channel', n: c.index, name: c.name }));
-      break;
-    }
-    placed.push({ c, ch: slot, width });
-    slot += width;
-  }
-
-  if (gaps.length) {
-    warnings.push(loss('stereo.pair-alignment', { desk: DESK, gaps }));
-  }
-  const dropped = ir.channels.length - placed.length;
-  if (dropped > 0 && !warnings.some(w => w.code === 'channel.overflow-from')) {
-    warnings.push(loss('channel.overflow-count', { count: dropped, desk: DESK, limit: MAX_CH }));
-  }
-  return placed;
 }
 
 // One routing token per block of eight. The block's start input is inferred
@@ -174,23 +123,6 @@ function routingBlocks(placed, warnings) {
   return tokens;
 }
 
-// When a source has more EQ bands than the target has slots, the ones doing
-// nothing go first. A 0 dB band is audibly absent, so keeping it while
-// discarding a real cut would throw away the only part that mattered — and
-// flat bands are common now that the Wing writer fills all six slots so a
-// converted channel cannot inherit the last show's curve.
-function fitBands(bands, limit) {
-  if (bands.length <= limit) return bands;
-  // A cut does its work at 0 dB, so it counts as active whatever its gain, and
-  // it is kept before any bell or shelf: losing a rolloff changes a channel
-  // more than losing a boost. Low cut goes first, high cut last, as on a desk.
-  const lowCuts = bands.filter(b => b.type === 'lowcut');
-  const highCuts = bands.filter(b => b.type === 'highcut');
-  const shaped = bands.filter(b => b.type !== 'lowcut' && b.type !== 'highcut' && Number(b.g) !== 0);
-  const room = Math.max(0, limit - lowCuts.length - highCuts.length);
-  return [...lowCuts, ...shaped.slice(0, room), ...highCuts].slice(0, limit);
-}
-
 export function emitX32Scene(ir, opts = {}) {
   const warnings = [...(ir.losses || [])];
   const include = Object.assign(
@@ -202,7 +134,7 @@ export function emitX32Scene(ir, opts = {}) {
   // A source the X32 has no routing block for (a Wing's third AES50 port, its
   // USB audio, an internal bus) cannot be patched. Say so and leave the channel
   // unpatched, rather than letting it fall into a block of local inputs.
-  const placed = allocate(ir, warnings).map(p => {
+  const placed = allocate(ir, warnings, { desk: DESK, slots: MAX_CH }).map(p => {
     if (!p.c.patch || BLOCK_PREFIX[p.c.patch.group] || bySource(p.c.patch)) return p;
     if (include.patch) {
       warnings.push(loss('patch.group-unsupported',
@@ -217,19 +149,7 @@ export function emitX32Scene(ir, opts = {}) {
   const sceneName = q(ir.name || 'Converted').slice(0, 12) || 'Converted';
   lines.push(`#4.0# "${sceneName}" "" %000000000 1`);
 
-  // Colour loss is real on the way down: 18 Wing colours collapse onto 8.
-  if (include.colors) {
-    const seen = new Map();
-    for (const { c } of placed) {
-      const to = mapColor(c.color, 'x32');
-      const from = c.color?.code;
-      if (from === null || from === undefined) continue;
-      if (!seen.has(to)) seen.set(to, new Set());
-      seen.get(to).add(String(from));
-    }
-    const collapsed = [...seen.values()].filter(s => s.size > 1).length;
-    if (collapsed) warnings.push(loss('color.palette-collapse', { desk: DESK, to: 8, from: 18, count: collapsed }));
-  }
+  if (include.colors) reportColourCollapse(warnings, placed, { desk: DESK, target: 'x32' });
 
   const chlink = Array(MAX_CH / 2).fill(false);
   const headamps = new Map();
@@ -256,24 +176,10 @@ export function emitX32Scene(ir, opts = {}) {
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
-    // A send to a bus the X32 lacks cannot be written. One at -oo carries
-    // nothing, and a real scene holds sixteen of those per channel, so only
-    // sends with a level are worth a line in the report.
-    const lostBuses = include.sends
-      ? c.sends.filter(s => (s.bus < 1 || s.bus > 16) && s.level > -Infinity).map(s => s.bus)
-      : [];
-    if (lostBuses.length) {
-      warnings.push(loss('send.bus-overflow',
-        { label: `ch ${ch} "${c.name}"`, buses: lostBuses, desk: DESK, limit: 16 },
-        { kind: 'channel', n: ch, name: c.name }));
-    }
+    const whole = { label: `ch ${ch} "${c.name}"`, n: ch, name: c.name };
+    if (include.sends) reportLostBuses(warnings, c.sends, { desk: DESK, limit: 16 }, whole);
 
-    if (c.pairing === 'native' && Math.round(c.pan) !== 0) {
-      warnings.push(loss('stereo.balance-lost',
-        { label: `ch ${ch} "${c.name || ""}"`, balance: Math.round(c.pan), desk: DESK },
-        { kind: 'channel', n: ch, name: c.name }));
-    }
-
+    reportBalanceLost(warnings, c, { desk: DESK }, { ...whole, label: `ch ${ch} "${c.name || ''}"` });
 
     for (let k = 0; k < width; k++) {
       const n = ch + k;
@@ -283,9 +189,8 @@ export function emitX32Scene(ir, opts = {}) {
       // A name that already carries a side marker ("OH L", from a source that
       // was itself an X32 pair) loses it first, or the result reads "OH L L".
       // The marker has to be its own word — VOCAL must not become VOCA L.
-      const base = include.names ? q(c.name).trim().slice(0, 12).trim() : '';
-      const stem = base.replace(/\s+[LR]$/i, '').trim();
-      const name = width === 2 ? stem.slice(0, 10).trim() + (k === 0 ? ' L' : ' R') : base;
+      const name = stripName(c.name, { width, half: k, max: 12, names: include.names });
+      const at = { label: `ch ${n} "${name}"`, n, name };
       const icon = include.names ? mapIcon(c.icon, 'x32') : 1;
       const color = include.colors ? mapColor(c.color, 'x32') : 'OFF';
       const via = bySource(c.patch);
@@ -308,28 +213,22 @@ export function emitX32Scene(ir, opts = {}) {
       }
       if (include.dynamics) {
         const d = c.dyn;
-        const ratio = snapRatio(d.ratio, 'x32');
-        if (!ratio.exact && k === 0) {
-          warnings.push(loss('dyn.ratio-snapped',
-            { label: `ch ${n} "${name}"`, from: d.ratio, to: ratio.value, desk: DESK },
-            { kind: 'channel', n, name }));
-        }
+        const ratio = k === 0
+          ? snapRatioReported(warnings, d.ratio, { desk: DESK, target: 'x32' }, at)
+          : snapRatio(d.ratio, 'x32');
         lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
       if (include.eq) {
         lines.push(`/ch/${id}/eq ${onOff(c.eq.on !== false)}`);
-        const bands = fitBands(c.eq.bands, MAX_EQ_BANDS);
-        if (bands.length < c.eq.bands.length && k === 0) {
-          warnings.push(loss('eq.band-overflow',
-            { label: `ch ${n} "${name}"`, count: c.eq.bands.length, desk: DESK, limit: MAX_EQ_BANDS },
-            { kind: 'channel', n, name }));
-        }
+        const bands = k === 0
+          ? fitBandsReported(warnings, c.eq.bands, { desk: DESK, limit: MAX_EQ_BANDS }, at)
+          : fitBands(c.eq.bands, MAX_EQ_BANDS);
         // Every band is written. One left out keeps whatever that band held on
         // the desk before, so a source with fewer bands pads out flat.
         for (let i = 0; i < MAX_EQ_BANDS; i++) {
           const b = bands[i] || FLAT_BANDS[i];
-          lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign(b.g)} ${dec(b.q, 1)}`);
+          lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign2(b.g)} ${dec(b.q, 1)}`);
         }
       }
 
