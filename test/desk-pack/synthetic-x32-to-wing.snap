@@ -65,7 +65,8 @@
           "range": 60,
           "att": 0,
           "hld": 50,
-          "rel": 200
+          "rel": 200,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -152,7 +153,8 @@
           "range": 60,
           "att": 0,
           "hld": 50,
-          "rel": 200
+          "rel": 200,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,

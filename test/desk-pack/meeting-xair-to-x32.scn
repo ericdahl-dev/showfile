@@ -50,7 +50,7 @@
 /ch/01/config "CL PC L" 1 BLi 1
 /ch/01/preamp +3.0 OFF OFF 12 20.0
 /ch/01/mix OFF -oo OFF -100 OFF -oo
-/ch/01/gate OFF GATE -38.0 60.0 1 502.00 983 0
+/ch/01/gate OFF EXP4 -38.0 60.0 1 502.00 983 0
 /ch/01/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.00 151 POST 0 100 OFF
 /ch/01/eq OFF
 /ch/01/eq/1 PEQ 164.4 +11.00 2.0
@@ -67,7 +67,7 @@
 /ch/02/config "CL PC R" 1 BLi 2
 /ch/02/preamp +3.0 OFF OFF 12 20.0
 /ch/02/mix OFF -oo OFF +100 OFF -oo
-/ch/02/gate OFF GATE -38.0 60.0 1 502.00 983 0
+/ch/02/gate OFF EXP4 -38.0 60.0 1 502.00 983 0
 /ch/02/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.00 151 POST 0 100 OFF
 /ch/02/eq OFF
 /ch/02/eq/1 PEQ 164.4 +11.00 2.0
@@ -84,7 +84,7 @@
 /ch/03/config "CLWMIC" 1 BL 3
 /ch/03/preamp +0.0 OFF ON 12 101.0
 /ch/03/mix ON +0.0 OFF +0 OFF -oo
-/ch/03/gate ON GATE -44.0 60.0 16 126.00 983 0
+/ch/03/gate ON EXP2 -44.0 60.0 16 126.00 983 0
 /ch/03/dyn OFF COMP PEAK LOG -25.5 3.0 2 6.00 10 10.00 151 POST 0 100 OFF
 /ch/03/eq ON
 /ch/03/eq/1 PEQ 295.8 +0.00 2.0
@@ -101,7 +101,7 @@
 /ch/04/config "CLMIC" 1 BLi 4
 /ch/04/preamp +0.0 OFF ON 12 101.0
 /ch/04/mix ON +0.0 OFF +0 OFF -oo
-/ch/04/gate ON GATE -44.0 60.0 16 126.00 983 0
+/ch/04/gate ON EXP2 -44.0 60.0 16 126.00 983 0
 /ch/04/dyn OFF COMP PEAK LOG -25.5 3.0 2 6.00 10 10.00 151 POST 0 100 OFF
 /ch/04/eq ON
 /ch/04/eq/1 PEQ 295.8 +0.00 2.0
@@ -118,7 +118,7 @@
 /ch/05/config "LWMIC" 1 RD 5
 /ch/05/preamp +0.0 OFF ON 12 101.0
 /ch/05/mix ON +0.0 OFF +0 OFF -oo
-/ch/05/gate ON GATE -44.0 60.0 16 126.00 983 0
+/ch/05/gate ON EXP2 -44.0 60.0 16 126.00 983 0
 /ch/05/dyn OFF COMP PEAK LOG -25.5 3.0 2 6.00 10 10.00 151 POST 0 100 OFF
 /ch/05/eq ON
 /ch/05/eq/1 PEQ 295.8 +0.00 2.0
@@ -135,7 +135,7 @@
 /ch/06/config "LMIC" 1 RDi 6
 /ch/06/preamp +0.0 OFF ON 12 101.0
 /ch/06/mix ON +0.0 OFF +0 OFF -oo
-/ch/06/gate ON GATE -44.0 60.0 16 126.00 983 0
+/ch/06/gate ON EXP2 -44.0 60.0 16 126.00 983 0
 /ch/06/dyn OFF COMP PEAK LOG -38.5 3.0 2 6.00 10 10.00 151 POST 0 100 OFF
 /ch/06/eq ON
 /ch/06/eq/1 PEQ 306.2 +0.00 2.0

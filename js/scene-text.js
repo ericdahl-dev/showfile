@@ -81,6 +81,15 @@ const EQ_TYPE = {
 };
 export const eqType = (t) => EQ_TYPE[String(t || 'PEQ').toUpperCase()] || 'bell';
 
+// Gate mode tokens (the same on both desks) -> the neutral mode: a hard gate,
+// an expander at a ratio, or a ducker.
+export function gateMode(t) {
+  const tok = String(t || 'GATE').toUpperCase();
+  const exp = /^EXP(\d)$/.exec(tok);
+  if (exp) return { mode: 'exp', ratio: Number(exp[1]) };
+  return { mode: tok === 'DUCK' ? 'duck' : 'gate', ratio: null };
+}
+
 // Collapse linked mono pairs into single stereo channels. The link bit for a
 // pair covers channels 2n-1 and 2n; every linked pair swallows one channel
 // index, which is why numbering drifts down the file. `build` turns a strip

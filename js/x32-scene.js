@@ -8,7 +8,7 @@
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { loss } from './losses.js';
-import { INF, num, bool, bits, parseNodes, eqType, collapsePairs } from './scene-text.js';
+import { INF, num, bool, bits, parseNodes, eqType, gateMode, collapsePairs } from './scene-text.js';
 
 // X32 input classes -> the IR's neutral groups. The neutral names describe the
 // physical thing (a local XLR, an AES50 port) rather than any desk's spelling.
@@ -165,12 +165,12 @@ export function parseX32Scene(text) {
       toMain: mix.length > 2 ? bool(mix[2]) : true,
 
       gate: gate.length ? {
-        on: bool(gate[0]), thr: num(gate[2]), range: num(gate[3]),
+        on: bool(gate[0]), ...gateMode(gate[1]), thr: num(gate[2]), range: num(gate[3]),
         att: num(gate[4]), hold: num(gate[5]), rel: num(gate[6]),
       } : null,
 
       dyn: dyn.length ? {
-        on: bool(dyn[0]), det: dyn[2] || 'PEAK', env: dyn[3] || 'LOG',
+        on: bool(dyn[0]), mode: dyn[1] === 'EXP' ? 'exp' : 'comp', det: dyn[2] || 'PEAK', env: dyn[3] || 'LOG',
         thr: num(dyn[4]), ratio: num(dyn[5], 3), knee: num(dyn[6]),
         gain: num(dyn[7]), att: num(dyn[8]), hold: num(dyn[9]),
         rel: num(dyn[10]), pos: dyn[11] || 'POST', mix: num(dyn[13], 100),

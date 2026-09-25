@@ -72,14 +72,13 @@ Load with: X32-Edit, offline: open the scene file.
 - **Stereo:** Music L/R
 - **DCAs written:** 3
 
-The converter's report (11 lines), each worth checking on the desk:
+The converter's report (10 lines), each worth checking on the desk:
 
 - `dropped` "ch 26" and everything after it is past the X32's 32 channels and was dropped.
 - `dropped` The source has 16 DCAs; the X32 has 8, so the rest were dropped.
 - `degraded` The X32 has 8 strip colours to the source's 18, so 2 colour groups collapsed — channels that looked different now share a colour.
 - `relocated` The X32 only links channel pairs 1-2, 3-4 and so on, so a stereo channel left channel 14 empty. Channel order matches the source; the empty slots are free to reuse.
 - `unsupported` 8 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6, Headset 7, Headset 8): the gate slot holds a DS902, which other desks don't have; left off.
-- `unsupported` ch 9 "": the gate slot holds a DUCK, which other desks don't have; left off.
 - `unsupported` 7 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6, ch 9): input type "aes50c" has no X32 equivalent; left unpatched.
 - `unsupported` 2 channels (Music L/R, ch 21): input type "usb" has no X32 equivalent; left unpatched.
 - `check` Channels 9-16 are routed as one block of eight (AN9-16), which is the only way the X32 patches. 1 channel cannot be addressed inside it and need repatching on the desk: ch 15 → local 9.
@@ -96,7 +95,7 @@ Load with: X-AIR-Edit connected to the XR18: File → Load Scene (the desk itsel
 - **Stereo:**  L,  L
 - **DCAs written:** 3
 
-The converter's report (16 lines), each worth checking on the desk:
+The converter's report (15 lines), each worth checking on the desk:
 
 - `dropped` "ch 14" and everything after it is past the X Air's 16 channels and was dropped.
 - `dropped` The source has 6 matrices; the X Air has 0, so the rest were dropped.
@@ -112,7 +111,6 @@ The converter's report (16 lines), each worth checking on the desk:
 - `degraded` The X Air has 8 strip colours to the source's 18, so 2 colour groups collapsed — channels that looked different now share a colour.
 - `relocated` The X Air only links channel pairs 1-2, 3-4 and so on, so a stereo channel left channel 14 empty. Channel order matches the source; the empty slots are free to reuse.
 - `unsupported` 8 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6, Headset 7, Headset 8): the gate slot holds a DS902, which other desks don't have; left off.
-- `unsupported` ch 9 "": the gate slot holds a DUCK, which other desks don't have; left off.
 - `unsupported` 8 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6,  L,  R): input type "aes50c" has no X Air equivalent; left unpatched.
 
 ### meeting-xair-to-x32.scn

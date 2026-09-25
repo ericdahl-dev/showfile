@@ -35,9 +35,10 @@ test('lines that differ only in the channel become one line (#33)', async () => 
   const rows = reportRows(losses);
   const ds902 = rows.filter(r => /DS902/.test(r.text));
   assert.equal(ds902.length, 1);
-  // Headsets 1-8 carry a DS902; ch 9's slot is a DUCK, so it keeps its own line.
+  // Headsets 1-8 carry a DS902. Ch 9's DUCK is carried as a ducker, so it
+  // neither joins the line nor gets one of its own.
   assert.ok(ds902[0].text.startsWith('8 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6, Headset 7, Headset 8): '), ds902[0].text);
-  assert.ok(rows.some(r => /^ch 9 "": the gate slot holds a DUCK/.test(r.text)));
+  assert.ok(!rows.some(r => /DUCK/.test(r.text)));
   assert.match(ds902[0].text, /the gate slot holds a DS902/);
   // Different messages stay apart.
   assert.ok(rows.some(r => /past the X32's 32 channels/.test(r.text)));

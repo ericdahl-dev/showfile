@@ -20,7 +20,7 @@
 import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import {
   q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
-  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported,
+  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported, gateToken, reportGateRatio,
 } from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
@@ -211,14 +211,15 @@ export function emitX32Scene(ir, opts = {}) {
 
       if (include.dynamics) {
         const g = c.gate;
-        lines.push(`/ch/${id}/gate ${onOff(g.on)} GATE ${dec(g.thr, 1)} ${dec(g.range, 1)} ${dec(g.att, 0)} ${dec(g.hold, 2)} ${dec(g.rel, 0)} 0`);
+        if (k === 0) reportGateRatio(warnings, g, { desk: DESK }, at);
+        lines.push(`/ch/${id}/gate ${onOff(g.on)} ${gateToken(g)} ${dec(g.thr, 1)} ${dec(g.range, 1)} ${dec(g.att, 0)} ${dec(g.hold, 2)} ${dec(g.rel, 0)} 0`);
       }
       if (include.dynamics) {
         const d = c.dyn;
         const ratio = k === 0
           ? snapRatioReported(warnings, d.ratio, { desk: DESK, target: 'x32' }, at)
           : snapRatio(d.ratio, 'x32');
-        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
+        lines.push(`/ch/${id}/dyn ${onOff(d.on)} ${d.mode === 'exp' ? 'EXP' : 'COMP'} ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
       if (include.eq) {

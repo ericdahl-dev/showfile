@@ -221,7 +221,7 @@
 /ch/09/config " L" 1 BL 9
 /ch/09/preamp -5.6 OFF OFF 24 100.2
 /ch/09/mix OFF +0.0 OFF -100 OFF -oo
-/ch/09/gate OFF GATE -80.0 60.0 0 50.00 200 0
+/ch/09/gate ON DUCK -20.0 20.0 100 100.00 496 0
 /ch/09/dyn ON COMP RMS LOG -34.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/09/eq OFF
 /ch/09/eq/1 PEQ 124.7 +0.00 2.0
@@ -248,7 +248,7 @@
 /ch/10/config " R" 1 BL 10
 /ch/10/preamp -5.6 OFF OFF 24 100.2
 /ch/10/mix OFF +0.0 OFF +100 OFF -oo
-/ch/10/gate OFF GATE -80.0 60.0 0 50.00 200 0
+/ch/10/gate ON DUCK -20.0 20.0 100 100.00 496 0
 /ch/10/dyn ON COMP RMS LOG -34.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/10/eq OFF
 /ch/10/eq/1 PEQ 124.7 +0.00 2.0
@@ -275,7 +275,7 @@
 /ch/11/config "" 1 BL 11
 /ch/11/preamp +0.0 OFF OFF 24 100.2
 /ch/11/mix OFF -oo OFF +0 OFF -oo
-/ch/11/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/11/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/11/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/11/eq OFF
 /ch/11/eq/1 PEQ 124.7 +0.00 2.0
@@ -302,7 +302,7 @@
 /ch/12/config "" 1 BL 12
 /ch/12/preamp +0.0 OFF OFF 24 100.2
 /ch/12/mix OFF -oo OFF +0 OFF -oo
-/ch/12/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/12/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/12/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/12/eq OFF
 /ch/12/eq/1 PEQ 124.7 +0.00 2.0
@@ -329,7 +329,7 @@
 /ch/13/config "" 1 BL 13
 /ch/13/preamp +0.0 OFF OFF 24 100.2
 /ch/13/mix OFF -oo OFF +0 OFF -oo
-/ch/13/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/13/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/13/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/13/eq OFF
 /ch/13/eq/1 PEQ 124.7 +0.00 2.0
@@ -356,7 +356,7 @@
 /ch/15/config " L" 1 BL 15
 /ch/15/preamp -5.4 OFF OFF 24 100.2
 /ch/15/mix OFF -12.5 OFF -100 OFF -oo
-/ch/15/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/15/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/15/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/15/eq OFF
 /ch/15/eq/1 PEQ 124.7 +0.00 2.0
@@ -383,7 +383,7 @@
 /ch/16/config " R" 1 BL 16
 /ch/16/preamp -5.4 OFF OFF 24 100.2
 /ch/16/mix OFF -12.5 OFF +100 OFF -oo
-/ch/16/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/16/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/16/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/16/eq OFF
 /ch/16/eq/1 PEQ 124.7 +0.00 2.0
@@ -410,7 +410,7 @@
 /ch/17/config " L" 1 BL 17
 /ch/17/preamp +0.0 OFF OFF 24 100.2
 /ch/17/mix OFF +0.0 OFF -100 OFF -oo
-/ch/17/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/17/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/17/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/17/eq OFF
 /ch/17/eq/1 PEQ 124.7 +0.00 2.0
@@ -437,7 +437,7 @@
 /ch/18/config " R" 1 BL 18
 /ch/18/preamp +0.0 OFF OFF 24 100.2
 /ch/18/mix OFF +0.0 OFF +100 OFF -oo
-/ch/18/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/18/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/18/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/18/eq OFF
 /ch/18/eq/1 PEQ 124.7 +0.00 2.0
@@ -464,7 +464,7 @@
 /ch/19/config "Music L/R L" 62 MG 19
 /ch/19/preamp +0.0 OFF OFF 24 100.2
 /ch/19/mix OFF +0.0 OFF -100 OFF -oo
-/ch/19/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/19/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/19/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/19/eq OFF
 /ch/19/eq/1 PEQ 124.7 +0.00 2.0
@@ -491,7 +491,7 @@
 /ch/20/config "Music L/R R" 62 MG 20
 /ch/20/preamp +0.0 OFF OFF 24 100.2
 /ch/20/mix OFF +0.0 OFF +100 OFF -oo
-/ch/20/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/20/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/20/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/20/eq OFF
 /ch/20/eq/1 PEQ 124.7 +0.00 2.0
@@ -518,7 +518,7 @@
 /ch/21/config " L" 1 BL 21
 /ch/21/preamp +0.0 OFF OFF 24 100.2
 /ch/21/mix OFF +0.0 OFF -100 OFF -oo
-/ch/21/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/21/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/21/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/21/eq OFF
 /ch/21/eq/1 PEQ 124.7 +0.00 2.0
@@ -545,7 +545,7 @@
 /ch/22/config " R" 1 BL 22
 /ch/22/preamp +0.0 OFF OFF 24 100.2
 /ch/22/mix OFF +0.0 OFF +100 OFF -oo
-/ch/22/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/22/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/22/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/22/eq OFF
 /ch/22/eq/1 PEQ 124.7 +0.00 2.0
@@ -572,7 +572,7 @@
 /ch/23/config "" 1 BL 23
 /ch/23/preamp +0.0 OFF OFF 24 100.2
 /ch/23/mix OFF -oo OFF +0 OFF -oo
-/ch/23/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/23/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/23/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/23/eq OFF
 /ch/23/eq/1 PEQ 124.7 +0.00 2.0
@@ -599,7 +599,7 @@
 /ch/24/config "" 1 BL 24
 /ch/24/preamp +0.0 OFF OFF 24 100.2
 /ch/24/mix OFF -oo OFF +0 OFF -oo
-/ch/24/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/24/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/24/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/24/eq OFF
 /ch/24/eq/1 PEQ 124.7 +0.00 2.0
@@ -626,7 +626,7 @@
 /ch/25/config "" 1 BL 25
 /ch/25/preamp +0.0 OFF OFF 24 100.2
 /ch/25/mix OFF -oo OFF +0 OFF -oo
-/ch/25/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/25/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/25/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/25/eq OFF
 /ch/25/eq/1 PEQ 124.7 +0.00 2.0
@@ -653,7 +653,7 @@
 /ch/26/config "" 1 BL 26
 /ch/26/preamp +0.0 OFF OFF 24 100.2
 /ch/26/mix OFF -oo OFF +0 OFF -oo
-/ch/26/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/26/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/26/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/26/eq OFF
 /ch/26/eq/1 PEQ 124.7 +0.00 2.0
@@ -680,7 +680,7 @@
 /ch/27/config " L" 1 BL 27
 /ch/27/preamp -6.0 OFF OFF 24 100.2
 /ch/27/mix OFF -18.0 OFF -100 OFF -oo
-/ch/27/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/27/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/27/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/27/eq OFF
 /ch/27/eq/1 PEQ 124.7 +0.00 2.0
@@ -707,7 +707,7 @@
 /ch/28/config " R" 1 BL 28
 /ch/28/preamp -6.0 OFF OFF 24 100.2
 /ch/28/mix OFF -18.0 OFF +100 OFF -oo
-/ch/28/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/28/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/28/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/28/eq OFF
 /ch/28/eq/1 PEQ 124.7 +0.00 2.0
@@ -734,7 +734,7 @@
 /ch/29/config "" 1 BL 29
 /ch/29/preamp +0.0 OFF OFF 24 100.2
 /ch/29/mix OFF -0.0 OFF +0 OFF -oo
-/ch/29/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/29/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/29/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/29/eq OFF
 /ch/29/eq/1 PEQ 124.7 +0.00 2.0
@@ -761,7 +761,7 @@
 /ch/30/config "" 1 BL 30
 /ch/30/preamp +0.0 OFF OFF 24 100.2
 /ch/30/mix OFF -oo OFF +0 OFF -oo
-/ch/30/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/30/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/30/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/30/eq OFF
 /ch/30/eq/1 PEQ 124.7 +0.00 2.0
@@ -788,7 +788,7 @@
 /ch/31/config "" 1 BL 31
 /ch/31/preamp +0.0 OFF OFF 24 100.2
 /ch/31/mix OFF -oo OFF +0 OFF -oo
-/ch/31/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/31/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/31/dyn OFF COMP RMS LOG -10.0 3.0 3 0.00 50 20.00 153 POST 0 100 OFF
 /ch/31/eq OFF
 /ch/31/eq/1 PEQ 124.7 +0.00 2.0
@@ -815,7 +815,7 @@
 /ch/32/config "" 1 BL 32
 /ch/32/preamp +0.0 OFF ON 24 100.2
 /ch/32/mix ON +0.0 OFF +0 OFF -oo
-/ch/32/gate OFF GATE -40.0 40.0 10 10.00 199 0
+/ch/32/gate OFF EXP3 -40.0 40.0 10 10.00 199 0
 /ch/32/dyn ON COMP RMS LOG -50.0 4.0 3 8.00 50 20.00 153 POST 0 100 OFF
 /ch/32/eq OFF
 /ch/32/eq/1 PEQ 124.7 +0.00 2.0

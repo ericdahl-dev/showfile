@@ -7,7 +7,7 @@
 /config/mute OFF OFF OFF OFF
 /ch/01/config "Interview 1" 1 In01 U01
 /ch/01/preamp +0.0 OFF OFF ON  75
-/ch/01/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/01/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/01/gate/filter OFF 3.0 990.9
 /ch/01/dyn ON COMP RMS LOG -37.0 3.0 2 2.00 3 5.0 77 100 SELF OFF
 /ch/01/dyn/filter OFF 3.0 990.9
@@ -32,7 +32,7 @@
 /ch/01/automix OFF  +0.0
 /ch/02/config "Interview 2" 7 In02 U02
 /ch/02/preamp +0.0 OFF OFF ON  79
-/ch/02/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/02/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/02/gate/filter OFF 3.0 990.9
 /ch/02/dyn ON COMP RMS LOG -39.0 3.0 2 2.00 3 5.0 77 100 SELF OFF
 /ch/02/dyn/filter OFF 3.0 990.9
@@ -57,7 +57,7 @@
 /ch/02/automix OFF  +0.0
 /ch/03/config "Interview 3" 3 In03 U03
 /ch/03/preamp +0.0 OFF OFF ON  79
-/ch/03/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/03/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/03/gate/filter OFF 3.0 990.9
 /ch/03/dyn ON COMP RMS LOG -37.0 3.0 2 0.00 3 5.0 77 100 SELF OFF
 /ch/03/dyn/filter OFF 3.0 990.9
@@ -82,7 +82,7 @@
 /ch/03/automix OFF  +0.0
 /ch/04/config "Interview 4" 4 In04 U04
 /ch/04/preamp +0.0 OFF OFF ON  79
-/ch/04/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/04/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/04/gate/filter OFF 3.0 990.9
 /ch/04/dyn ON COMP RMS LOG -37.0 3.0 2 0.00 3 5.0 77 100 SELF OFF
 /ch/04/dyn/filter OFF 3.0 990.9
@@ -107,7 +107,7 @@
 /ch/04/automix OFF  +0.0
 /ch/05/config "Interview 5" 5 In05 U05
 /ch/05/preamp +0.0 OFF OFF ON  79
-/ch/05/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/05/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/05/gate/filter OFF 3.0 990.9
 /ch/05/dyn ON COMP RMS LOG -35.0 4.0 2 2.00 3 5.0 77 100 SELF OFF
 /ch/05/dyn/filter OFF 3.0 990.9
@@ -132,7 +132,7 @@
 /ch/05/automix OFF  +0.0
 /ch/06/config "" 8 In06 U06
 /ch/06/preamp +0.0 OFF OFF ON  79
-/ch/06/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/06/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/06/gate/filter OFF 3.0 990.9
 /ch/06/dyn ON COMP RMS LOG -35.0 4.0 1 0.00 3 5.0 77 100 SELF OFF
 /ch/06/dyn/filter OFF 3.0 990.9
@@ -157,7 +157,7 @@
 /ch/06/automix OFF  +0.0
 /ch/07/config "" 8 In07 U07
 /ch/07/preamp +0.0 OFF OFF ON  79
-/ch/07/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/07/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/07/gate/filter OFF 3.0 990.9
 /ch/07/dyn ON COMP RMS LOG -35.0 4.0 1 0.00 3 5.0 77 100 SELF OFF
 /ch/07/dyn/filter OFF 3.0 990.9
@@ -182,7 +182,7 @@
 /ch/07/automix OFF  +0.0
 /ch/08/config "" 8 In08 U08
 /ch/08/preamp +0.0 OFF OFF ON  79
-/ch/08/gate ON GATE -62.0 35.0 1 100.0 101 SELF
+/ch/08/gate ON EXP3 -62.0 35.0 1 100.0 101 SELF
 /ch/08/gate/filter OFF 3.0 990.9
 /ch/08/dyn ON COMP RMS LOG -35.0 4.0 1 0.00 3 5.0 77 100 SELF OFF
 /ch/08/dyn/filter OFF 3.0 990.9
@@ -307,7 +307,7 @@
 /ch/12/automix OFF  +0.0
 /ch/13/config "RemoteHost A" 3 In13 U13
 /ch/13/preamp +0.0 OFF OFF OFF  40
-/ch/13/gate OFF GATE -40.0 60.0 1 502.0 983 SELF
+/ch/13/gate OFF EXP2 -40.0 60.0 1 502.0 983 SELF
 /ch/13/gate/filter OFF 3.0 990.9
 /ch/13/dyn OFF COMP PEAK LOG -26.0 2.5 5 5.00 15 10.0 151 100 SELF OFF
 /ch/13/dyn/filter OFF 3.0 990.9
@@ -332,7 +332,7 @@
 /ch/13/automix OFF  +0.0
 /ch/14/config "RemoteHost B" 3 In14 U14
 /ch/14/preamp +0.0 OFF OFF OFF  40
-/ch/14/gate OFF GATE -40.0 60.0 1 502.0 983 SELF
+/ch/14/gate OFF EXP2 -40.0 60.0 1 502.0 983 SELF
 /ch/14/gate/filter OFF 3.0 990.9
 /ch/14/dyn OFF COMP PEAK LOG -26.0 2.5 5 5.00 15 10.0 151 100 SELF OFF
 /ch/14/dyn/filter OFF 3.0 990.9
@@ -357,7 +357,7 @@
 /ch/14/automix OFF  +0.0
 /ch/15/config "Host" 13 In15 U15
 /ch/15/preamp +0.0 OFF OFF OFF  20
-/ch/15/gate OFF GATE -40.0 60.0 1 502.0 983 SELF
+/ch/15/gate OFF EXP2 -40.0 60.0 1 502.0 983 SELF
 /ch/15/gate/filter OFF 3.0 990.9
 /ch/15/dyn OFF COMP PEAK LOG -26.0 2.5 5 5.00 15 10.0 151 100 SELF OFF
 /ch/15/dyn/filter OFF 3.0 990.9
@@ -382,7 +382,7 @@
 /ch/15/automix OFF  +0.0
 /ch/16/config "Talkback" 6 In16 U16
 /ch/16/preamp +0.0 OFF OFF ON  66
-/ch/16/gate ON GATE -50.0 60.0 1 79.6 226 SELF
+/ch/16/gate ON EXP4 -50.0 60.0 1 79.6 226 SELF
 /ch/16/gate/filter OFF 3.0 990.9
 /ch/16/dyn ON COMP PEAK LOG -27.0 5.0 5 19.00 10 10.0 151 100 SELF OFF
 /ch/16/dyn/filter OFF 3.0 990.9

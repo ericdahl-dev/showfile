@@ -132,6 +132,24 @@ export function snapRatioReported(losses, ratio, { desk, target }, at) {
   return r;
 }
 
+// The .scn desks spell the gate's mode as one token: GATE, DUCK, or EXP2-EXP4
+// for an expander at 1:2-1:4. An expander ratio they lack goes to the nearest.
+const EXP_RATIOS = [2, 3, 4];
+const nearestExp = (r) => EXP_RATIOS.reduce((a, b) => (Math.abs(b - r) < Math.abs(a - r) ? b : a));
+export function gateToken(gate) {
+  if (gate?.mode === 'duck') return 'DUCK';
+  if (gate?.mode === 'exp') return 'EXP' + nearestExp(Number(gate.ratio) || 2);
+  return 'GATE';
+}
+
+export function reportGateRatio(losses, gate, { desk }, at) {
+  if (gate?.mode !== 'exp') return;
+  const to = nearestExp(Number(gate.ratio) || 2);
+  if (to !== Number(gate.ratio)) {
+    losses.push(loss('dyn.gate-ratio-snapped', { label: at.label, from: gate.ratio, to, desk }, scope(at)));
+  }
+}
+
 // The bands the desk can hold; if some had to go, say how many there were.
 export function fitBandsReported(losses, bands, { desk, limit }, at) {
   const fitted = fitBands(bands, limit);

@@ -65,7 +65,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:4"
         },
         "dyn": {
           "on": false,
@@ -184,7 +185,8 @@
           "range": 60,
           "att": 16,
           "hld": 126,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -303,7 +305,8 @@
           "range": 60,
           "att": 16,
           "hld": 126,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -422,7 +425,8 @@
           "range": 60,
           "att": 16,
           "hld": 126,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -541,7 +545,8 @@
           "range": 60,
           "att": 16,
           "hld": 126,
-          "rel": 983
+          "rel": 983,
+          "ratio": "1:2"
         },
         "dyn": {
           "on": false,
@@ -657,7 +662,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -773,7 +779,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -889,7 +896,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1005,7 +1013,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1121,7 +1130,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1237,7 +1247,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1353,7 +1364,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1469,7 +1481,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
@@ -1585,7 +1598,8 @@
           "range": 60,
           "att": 1,
           "hld": 502,
-          "rel": 983
+          "rel": 983,
+          "ratio": "gate"
         },
         "dyn": {
           "on": false,
