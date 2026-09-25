@@ -1,0 +1,8 @@
+# Showfile: three public pages. The rest of the repo is served as well
+# (share-image source, test fixtures, build scripts); none of it is a page.
+User-agent: *
+Disallow: /og/
+Disallow: /test/
+Disallow: /scripts/
+
+Sitemap: https://showfile.ericdahl.dev/sitemap.xml
