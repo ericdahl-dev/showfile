@@ -21,6 +21,7 @@
 //   * Headamps are 1-based and indexed by INPUT number, with no AES50 offsets.
 
 import { colorFrom } from './console-map.js';
+import { makeChannel } from './scene.js';
 import { INF, num, bool, bits, parseNodes } from './scene-text.js';
 import { loss, render } from './losses.js';
 
@@ -130,7 +131,6 @@ export function parseXAirScene(text, fileName = '') {
       name:  cfg[0] || '',
       icon:  null,                                   // the X Air has no icon field
       color: colorFrom('xair', num(cfg[1], 0)),
-      source: num(cfg[1], 0),
       patch,
 
       // preamp: trim rpdgt invert hpon hpf. The two flags are adjacent and a
@@ -180,13 +180,13 @@ export function parseXAirScene(text, fileName = '') {
     const s = strips[i];
     const pairIdx = Math.ceil(s.ch / 2) - 1;
     const linked = s.ch % 2 === 1 && chlink[pairIdx] === true && strips[i + 1]?.ch === s.ch + 1;
-    channels.push({
+    channels.push(makeChannel({
       ...s,
       index: channels.length + 1,
-      stereo: linked,
+      pairing: linked ? 'linked' : 'mono',
       srcChannels: linked ? [s.ch, s.ch + 1] : [s.ch],
       headamp: headampFor(s.patch),
-    });
+    }));
     i += linked ? 2 : 1;
   }
 

@@ -64,6 +64,9 @@ const CODES = {
   'patch.input-overflow': { severity: 'check', render: (d) =>
     `${d.label}: local input ${d.input} is past the ${d.desk}'s ${d.limit}; repatch to a stagebox.` },
 
+  'send.bus-overflow': { severity: 'dropped', render: (d) =>
+    `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} dropped — the ${d.desk} has ${d.limit} buses. Rebuild ${d.buses.length === 1 ? 'that mix' : 'those mixes'} on the desk.` },
+
   'color.palette-collapse': { severity: 'degraded', render: (d) =>
     `The ${d.desk} has ${d.to} strip colours to the source's ${d.from}, so ${d.count} colour group${plural(d.count)} collapsed — channels that looked different now share a colour.` },
 
@@ -112,8 +115,8 @@ export const KNOWN_CODES = Object.keys(CODES);
 // made before the mask is built.
 export function reportLostMembership(out, c, n, name, desk, dcaLimit, mgLimit) {
   const label = `ch ${n} "${name}"`;
-  const lostD = (c.dcas || []).filter(d => d > dcaLimit);
-  const lostM = (c.muteGroups || []).filter(m => m > mgLimit);
+  const lostD = c.dcas.filter(d => d > dcaLimit);
+  const lostM = c.muteGroups.filter(m => m > mgLimit);
   if (lostD.length) out.push(loss('group.membership-dropped',
     { label, kind: 'DCA', lost: lostD, desk, limit: dcaLimit }, { kind: 'channel', n, name }));
   if (lostM.length) out.push(loss('group.membership-dropped',

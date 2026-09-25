@@ -10,6 +10,7 @@
 
 import { colorFrom, wingIconToX32 } from './console-map.js';
 import { loss, render } from './losses.js';
+import { makeChannel } from './scene.js';
 
 const INF = -Infinity;
 const NEG_INF = -144;                  // the Wing's -oo sentinel
@@ -163,7 +164,7 @@ export function parseWingSnapshot(text) {
     const { dcas, muteGroups } = parseTags(c.tags);
     const mainOn = isObj(c.main?.['1']) ? c.main['1'].on !== false : true;
 
-    channels.push({
+    channels.push(makeChannel({
       index: channels.length + 1,
       ch: n,
       name: String(c.name || ''),
@@ -171,7 +172,7 @@ export function parseWingSnapshot(text) {
       color: colorFrom('wing', c.col),
       patch,
       headamp: ha ? { gain: ha.gain, phantom: ha.phantom } : null,
-      stereo,
+      pairing: stereo ? 'native' : 'mono',
       srcChannels: [n],
 
       trim: numOr(c.in?.set?.trim, 0),
@@ -202,7 +203,7 @@ export function parseWingSnapshot(text) {
       sends: readSends(c.send),
       dcas,
       muteGroups,
-    });
+    }));
   }
 
   if (!channels.length) throw new Error('The snapshot has no channel data to convert.');
