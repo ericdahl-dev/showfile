@@ -106,8 +106,7 @@ function fitBands(bands, limit) {
 }
 
 export function emitXAirScene(ir, opts = {}) {
-  const losses = [];
-  const carried = (ir.warnings || []);            // reader warnings, already strings
+  const losses = [...(ir.losses || [])];   // what the reader already found
   const include = Object.assign(
     { names: true, colors: true, patch: true, preamp: true, levels: true,
       eq: true, dynamics: true, sends: true, groups: true },
@@ -349,7 +348,7 @@ export function emitXAirScene(ir, opts = {}) {
 
   return {
     text: lines.join('\n') + '\n',
-    warnings: [...carried, ...renderAll(losses)],
+    warnings: renderAll(losses),
     losses,
     preview,
     stats: {

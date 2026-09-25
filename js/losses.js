@@ -116,10 +116,9 @@ export function loss(code, detail = {}, scope = null) {
   return { code, severity: spec.severity, scope, detail };
 }
 
-export const render = (l) => (typeof l === 'string' ? l : CODES[l.code].render(l.detail));
+export const render = (l) => CODES[l.code].render(l.detail);
 
-// Existing callers still take warnings as a flat string[]; the structured list
-// rides alongside until the UI consumes it (Phase 5).
+// The report's text: one line per loss.
 export const renderAll = (losses) => (losses || []).map(render);
 
 export const KNOWN_CODES = Object.keys(CODES);

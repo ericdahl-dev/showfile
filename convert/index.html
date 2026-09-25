@@ -560,6 +560,17 @@
     .warns { display: flex; flex-direction: column; gap: 9px; }
     .warn-row { display: flex; gap: 10px; font-size: 13px; color: var(--muted); line-height: 1.55; }
     .warn-row .mk { color: var(--warn); flex: none; font-family: var(--font-mono); }
+    /* Each line carries its grade, so the ones that need action stand out. */
+    .sev {
+      flex: none; align-self: flex-start; margin-top: 2px;
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em;
+      padding: 1px 7px; border-radius: 20px; border: 1px solid currentColor;
+      color: var(--muted); min-width: 92px; text-align: center;
+    }
+    .sev-dropped      { color: var(--danger); }
+    .sev-degraded     { color: var(--warn); }
+    .sev-approximated { color: var(--amber); }
+    .sev-relocated    { color: var(--cyan); }
 
     /* ── Explainer ──────────────────────────────────────────────────────────── */
     .prose h2 {

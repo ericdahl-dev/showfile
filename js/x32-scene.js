@@ -212,7 +212,8 @@ export function parseX32Scene(text) {
     matrices: named('/mtx', 6),
     dcas,
     muteGroups: get('/config/mute').map(bool),
-    warnings,
+    losses: warnings,
+    warnings: [],
     raw: nodes,
   };
 }
