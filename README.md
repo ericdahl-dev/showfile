@@ -64,7 +64,7 @@ Real `.scn` and `.snap` files from each desk would make much stronger fixtures.
 The first commit is the site exactly as stagebuilderpro.com served it on 2026-09-24
 (APP_VERSION 2.6), recovered because the original source repo was not available.
 The tools began as part of StageBuilder Pro and were split out as Showfile on the same day,
-with their own name, mark, domain and version (starting at 1.0).
+with their own name, mark and domain. Releases: v1.0.0 is that untouched snapshot; v2.0.0 is Showfile with the Stage Wash redesign.
 
 ## Icons
 
