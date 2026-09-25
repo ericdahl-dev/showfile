@@ -183,8 +183,9 @@ export function parseWingSnapshot(text) {
     // Wing's -oo, and nothing else — is our writer blanking the rest of the
     // desk so a converted show lands the same way every time. Reading those
     // back as real channels would overflow the next desk down.
+    const patched = isObj(c.in?.conn) && c.in.conn.grp && c.in.conn.grp !== 'OFF';
     if (!c.name && c.mute === true && c.fdr === NEG_INF
-        && !c.in && !c.eq && !c.gate && !c.dyn && !c.flt) continue;
+        && !patched && !c.eq && !c.gate && !c.dyn && !c.flt) continue;
 
     const conn = isObj(c.in?.conn) ? c.in.conn : null;
     const ha = headampFor(conn);

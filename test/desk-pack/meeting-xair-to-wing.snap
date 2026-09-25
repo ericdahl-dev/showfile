@@ -1657,156 +1657,364 @@
       },
       "15": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "16": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "17": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "18": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "19": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "20": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "21": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "22": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "23": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "24": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "25": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "26": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "27": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "28": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "29": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "30": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "31": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "32": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "33": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "34": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "35": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "36": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "37": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "38": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "39": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "40": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
