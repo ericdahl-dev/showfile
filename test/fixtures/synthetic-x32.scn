@@ -1,7 +1,7 @@
 #4.0# "Synthetic" "" %000000000 1
 /config/chlink ON OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF OFF
 /config/mute OFF OFF OFF OFF OFF OFF
-/config/routing/IN AN1-8 AN9-16 A1-8 CARD9-16 AUX1-6/USB
+/config/routing/IN AN1-8 AN9-16 A1-8 CARD9-16 AUX1-4
 /headamp/000 +32.5 ON
 /headamp/001 +32.5 ON
 /headamp/002 +20.0 OFF

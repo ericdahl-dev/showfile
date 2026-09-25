@@ -125,12 +125,20 @@ function routingBlocks(placed, warnings) {
     // Pick the start that satisfies the most channels, rather than whichever
     // happened to come first. After a stereo expansion the inputs no longer sit
     // one-per-slot, so the first channel is often the worst anchor available.
-    const votes = {};
-    for (const m of mine) {
-      const s = Math.max(1, m.patch.input - m.offset);
-      votes[s] = (votes[s] || 0) + 1;
-    }
-    const start = Number(Object.entries(votes).sort((a, b2) => b2[1] - a[1] || a[0] - b2[0])[0][0]);
+    //
+    // The desk only has fixed blocks (AN1-8, AN9-16 ... never AN3-10), so a
+    // start is only a candidate when it sits on a block boundary. A channel
+    // votes for the block that would give it exactly its input; if none can,
+    // the block holding most of the channels' inputs is the least-bad choice.
+    const aligned = (s) => (s - 1) % BLOCK === 0 && s >= 1;
+    const blockOf = (input) => Math.floor((Math.max(1, input) - 1) / BLOCK) * BLOCK + 1;
+    const tally = (list) => {
+      const votes = {};
+      for (const s of list) votes[s] = (votes[s] || 0) + 1;
+      return Number(Object.entries(votes).sort((a, b2) => b2[1] - a[1] || a[0] - b2[0])[0][0]);
+    };
+    const exact = mine.map(m => m.patch.input - m.offset).filter(aligned);
+    const start = exact.length ? tally(exact) : tally(mine.map(m => blockOf(m.patch.input)));
 
     // One warning per block naming the channels, not one per channel: a stereo
     // expansion can knock every later channel out of line, and a wall of near
@@ -146,7 +154,9 @@ function routingBlocks(placed, warnings) {
     tokens.push(`${BLOCK_PREFIX[group] || 'AN'}${start}-${start + BLOCK - 1}`);
   }
 
-  tokens.push('AUX1-6');
+  // The aux inputs are really six, but the desk keeps the token AUX1-4 for
+  // backward compatibility (X32 OSC protocol, /config/routing/IN).
+  tokens.push('AUX1-4');
   return tokens;
 }
 
@@ -204,7 +214,7 @@ export function emitX32Scene(ir, opts = {}) {
     if (used.has(n)) continue;
     const id = pad2(n);
     lines.push(`/ch/${id}/config "" 1 OFF ${n}`);
-    if (include.levels) lines.push(`/ch/${id}/mix ON ${lvl(-Infinity)} ON +0 ON ${lvl(0)}`);
+    if (include.levels) lines.push(`/ch/${id}/mix ON ${lvl(-Infinity)} ON +0 OFF ${lvl(-Infinity)}`);
     if (include.groups) lines.push(`/ch/${id}/grp %00000000 %000000`);
   }
 
@@ -256,7 +266,7 @@ export function emitX32Scene(ir, opts = {}) {
 
       if (include.levels) {
         const pan = width === 2 ? (k === 0 ? -100 : 100) : Math.round(c.pan || 0);
-        lines.push(`/ch/${id}/mix ${onOff(!c.muted)} ${lvl(c.fader)} ${onOff(c.toMain !== false)} ${pan >= 0 ? '+' : ''}${pan} ON ${lvl(0)}`);
+        lines.push(`/ch/${id}/mix ${onOff(!c.muted)} ${lvl(c.fader)} ${onOff(c.toMain !== false)} ${pan >= 0 ? '+' : ''}${pan} OFF ${lvl(-Infinity)}`);
       }
 
       if (include.dynamics) {
@@ -328,7 +338,7 @@ export function emitX32Scene(ir, opts = {}) {
     (ir.buses || []).forEach(b => {
       if (b.n < 1 || b.n > 16 || !b.name) return;
       lines.push(`/bus/${pad2(b.n)}/config "${q(b.name).slice(0, 12)}" ${mapIcon(b.icon, 'x32')} ${mapColor(b.color, 'x32')}`);
-      lines.push(`/bus/${pad2(b.n)}/mix ${onOff(!b.muted)} ${lvl(b.fader)} ON +0 ON ${lvl(0)}`);
+      lines.push(`/bus/${pad2(b.n)}/mix ${onOff(!b.muted)} ${lvl(b.fader)} ON +0 OFF ${lvl(-Infinity)}`);
     });
     const mtx = (ir.matrices || []).filter(m => m.name);
     if (mtx.length > MAX_MATRIX) warnings.push(loss('matrix.overflow', { count: mtx.length, desk: DESK, limit: MAX_MATRIX }));
