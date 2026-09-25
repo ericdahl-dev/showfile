@@ -73,6 +73,12 @@ const CODES = {
   'send.tap-approximated': { severity: 'approximated', render: (d) =>
     `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} taken before the EQ or at the input — the ${d.desk} has no such tap, so ${d.buses.length === 1 ? 'it is' : 'they are'} now pre-fader.` },
 
+  'range.clamped': { severity: 'approximated', render: (d) =>
+    `${d.label}: ${d.what} ${d.from} dB is outside the ${d.desk}'s range; set to ${d.to} dB.` },
+
+  'dyn.model-unsupported': { severity: 'unsupported', render: (d) =>
+    `${d.label}: the ${d.what} slot holds a ${d.model}, which other desks don't have; left off.` },
+
   'dyn.ratio-snapped': { severity: 'approximated', render: (d) =>
     `${d.label}: compressor ratio ${d.from}:1 is not on the ${d.desk}; set to ${d.to}:1.` },
 

@@ -142,6 +142,18 @@ export function parseWingSnapshot(text) {
     return { gain: numOr(e.g, 0), phantom: e.vph === true, mode: e.mode || null };
   }
 
+  // The gate and compressor slots each hold one of several models (a
+  // de-esser, a ducker, a vintage compressor...). Only the plain GATE and
+  // COMP models mean what the other desks' gate and compressor mean;
+  // anything else is reported and left off rather than misread.
+  function modelOk(block, want, what, n, name) {
+    if (!isObj(block)) return false;
+    const mdl = String(block.mdl || want).toUpperCase();
+    if (mdl === want) return true;
+    warnings.push(render(loss('dyn.model-unsupported', { label: `ch ${n} "${name || ''}"`, what, model: mdl })));
+    return false;
+  }
+
   const keys = Object.keys(ae.ch)
     .map(k => parseInt(k, 10))
     .filter(n => Number.isFinite(n) && n > 0)
@@ -200,12 +212,12 @@ export function parseWingSnapshot(text) {
       pan: numOr(c.pan, 0),
       toMain: mainOn,
 
-      gate: isObj(c.gate) ? {
+      gate: modelOk(c.gate, 'GATE', 'gate', n, c.name) ? {
         on: c.gate.on !== false, thr: numOr(c.gate.thr, -40), range: numOr(c.gate.range, 20),
         att: numOr(c.gate.att, 10), hold: numOr(c.gate.hld, 20), rel: numOr(c.gate.rel, 250),
       } : null,
 
-      dyn: isObj(c.dyn) ? {
+      dyn: modelOk(c.dyn, 'COMP', 'compressor', n, c.name) ? {
         on: c.dyn.on !== false, det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
         env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG',
         thr: numOr(c.dyn.thr, -20), ratio: numOr(c.dyn.ratio, 3), knee: numOr(c.dyn.knee, 0),
