@@ -34,6 +34,7 @@ with Python's `zipfile`.
 | `js/scene-text.js` | Shared `.scn` tokenising |
 | `js/convert.js` | Converter page UI |
 | `js/ltc.js`, `js/zip.js` | LTC encoder and the zip writer for batch export |
+| `js/ltc-batch.js` | LTC batch plan: file names, timecode spans, limits, sizes, manifest |
 | `js/nav-tools.js`, `js/version-tag.js`, `css/brand.css`, `fonts/` | Shared chrome |
 | `favicon.svg` | The mark (a fresnel, head-on); also the logo in the lockup. PNG icons are rendered from it |
 | `css/brand.css` | Every colour and font token, the stage-wash background and the logo lockup |
