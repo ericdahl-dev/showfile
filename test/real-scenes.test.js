@@ -43,3 +43,11 @@ test('a real X32 scene keeps its stereo pairs and patch', () => {
   assert.deepEqual(byName['PC L'].srcChannels, [9, 10]);
   assert.deepEqual(byName['Interview 1'].patch, { group: 'local', input: 1 });
 });
+
+test('a real X32 channel is patched from its own source, not its channel number (#16)', () => {
+  const scene = readScene('x32', fixture('gdq/sgdq2023-post.scn'));
+  const ch = (n) => scene.channels.find(c => c.srcChannels.includes(n));
+  assert.deepEqual(ch(9).patch, { group: 'aux', input: 1 });          // source 33 = Aux 1
+  assert.deepEqual(ch(11).patch, { group: 'aes50a', input: 45 });     // source 29 = routing slot 29 = A41-48, 5th
+  assert.equal(ch(6).patch, null);                                     // source 0 = OFF
+});

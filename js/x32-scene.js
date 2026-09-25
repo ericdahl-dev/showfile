@@ -47,14 +47,26 @@ export function parseX32Scene(text) {
   // per-channel `source` field in /ch/NN/config is NOT the patch.
   const routeBlocks = get('/config/routing/IN');
   const BLOCK_RE = /^(AN|CARD|UIN|AUX|A|B)(\d+)-(\d+)$/;
-  function patchFor(chNum) {
-    const blockIdx = Math.floor((chNum - 1) / 8);
-    const offset   = (chNum - 1) % 8;
+  function patchFor(slot) {
+    const blockIdx = Math.floor((slot - 1) / 8);
+    const offset   = (slot - 1) % 8;
     const tok = routeBlocks[blockIdx];
     if (!tok) return null;
     const m = BLOCK_RE.exec(tok);
     if (!m) return null;
     return { group: IN_GROUP[m[1]] || null, input: parseInt(m[2], 10) + offset };
+  }
+
+  // A channel plays whatever its /ch/NN/config source names, which is not
+  // always its own number: 0 OFF, 1-32 a routing slot (In01-32), 33-38 Aux
+  // 1-6, 39-40 USB L/R, 41-48 FX returns 1L-4R, 49-64 Bus 01-16.
+  function sourcePatch(s) {
+    if (s >= 1 && s <= 32) return patchFor(s);
+    if (s >= 33 && s <= 38) return { group: 'aux', input: s - 32 };
+    if (s >= 39 && s <= 40) return { group: 'usb', input: s - 38 };
+    if (s >= 41 && s <= 48) return { group: 'fx', input: s - 40 };
+    if (s >= 49 && s <= 64) return { group: 'bus', input: s - 48 };
+    return null;
   }
 
   // Headamps carry the real preamp gain and phantom; channels reference them
@@ -121,7 +133,7 @@ export function parseX32Scene(text) {
       name:  cfg[0] || '',
       icon:  num(cfg[1]),
       color: colorFrom('x32', cfg[2] || 'OFF'),
-      patch: patchFor(n),
+      patch: sourcePatch(num(cfg[3])),
 
       trim:   num(pre[0]),
       invert: bool(pre[1]),

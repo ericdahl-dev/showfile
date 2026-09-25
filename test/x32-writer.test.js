@@ -61,3 +61,11 @@ test('a cut survives when the X32 runs short of EQ bands (#18)', () => {
   const text = writeScene(readScene('wing', JSON.stringify(snap)), 'x32').file.text;
   assert.match(text, /^\/ch\/01\/eq\/\d HCut 8000\.0 /m);
 });
+
+test('aux, FX-return and bus inputs are patched by channel source, not routing blocks (#16)', () => {
+  const scene = readScene('x32', synthetic);
+  scene.channels[1].patch = { group: 'aux', input: 2 };      // Vox on Aux 2
+  const text = writeScene(scene, 'x32').file.text;
+  for (const t of routingIn(text).slice(0, 4)) assert.match(t, BLOCK_TOKEN, `token ${t}`);
+  assert.match(text, /^\/ch\/03\/config "Vox" \d+ \w+ 34$/m);  // source 34 = Aux 2
+});
