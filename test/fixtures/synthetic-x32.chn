@@ -1,0 +1,15 @@
+#4.0# 12 "Lead Vox" 0 %0011111100111100 1
+/config "Lead Vox" 40 RD
+/delay OFF   0.3
+/preamp +0.0 OFF ON 24 110
+/gate ON EXP2 -48.0 20.0 1 10 200 0
+/gate/filter OFF 3.0 990.9
+/dyn ON COMP RMS LOG -20.0 4.0 1 0.00 20 1.00  100 POST 0 100 OFF
+/dyn/filter OFF 3.0 990.9
+/eq ON
+/eq/1 LCut 120.0 +0.00 1.0
+/eq/2 PEQ 350.0 -2.50 1.5
+/eq/3 PEQ 3k00 +2.00 1.2
+/eq/4 HShv 10k02 +1.50 0.7
+/mix ON  -3.0 ON +0 OFF -oo
+/headamp/000 +34.0 ON

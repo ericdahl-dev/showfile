@@ -6,11 +6,16 @@
 // tested directly. This page owns only what a person sees: the desk pickers,
 // the wording for each pairing, the report and the download.
 
-import { DESKS, canRead, canConvert, readScene, writeScene, reportRows } from './conversion.js';
+import { DESKS, accepts, canRead, canConvert, readScene, writeScene, reportRows } from './conversion.js';
 
 const $ = (id) => document.getElementById(id);
 
 const CONSOLES = DESKS;
+
+// The partial files a reader takes besides the desk's own, by extension.
+const PARTIAL = { chn: 'channel preset', snp: 'snippet' };
+const readsOf = (desk) => desk.reads || [desk.ext];
+const extList = (exts) => exts.map(e => `.${e}`).join(exts.length > 2 ? ', ' : ' or ').replace(/, ([^,]+)$/, ' or $1');
 
 // What the page says about each pairing. Which pairings exist is conversion.js's
 // call (canConvert); this is only the wording.
@@ -37,7 +42,7 @@ const SECTIONS = [
   ['dynamics', 'Gate & compressor'], ['sends', 'Bus sends'], ['groups', 'DCAs & mute groups'],
 ];
 
-let state = { ir: null, out: null, baseName: 'scene', shown: false };
+let state = { ir: null, out: null, baseName: 'scene', inExt: '', shown: false };
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -96,7 +101,7 @@ function paintCard() {
 
   card.classList.add('on');
   card.classList.toggle('done', state.shown);
-  const ext = state.shown && r ? CONSOLES[$('to').value].ext : src.ext;
+  const ext = state.shown && r ? CONSOLES[$('to').value].ext : (state.inExt || src.ext);
   const desk = state.shown ? CONSOLES[$('to').value]?.label : src.label;
   $('fcExt').textContent = ext.toUpperCase();
   $('fcName').textContent = `${state.baseName}.${ext}`;
@@ -161,10 +166,12 @@ function syncTargets() {
 function syncHints() {
   const src = CONSOLES[$('from').value];
   const r = route();
-  $('fromHint').textContent = `Expects a .${src.ext} ${src.what}.`;
+  const partial = readsOf(src).filter(e => PARTIAL[e]);
+  $('fromHint').textContent = `Expects a .${src.ext} ${src.what}` +
+    (partial.length ? `; ${partial.map(e => `.${e} ${PARTIAL[e]}s`).join(' and ')} work too.` : '.');
   $('toHint').textContent = r ? r.hint : 'No converter for this pairing yet.';
-  $('file').setAttribute('accept', '.' + src.ext);
-  $('dropTitle').innerHTML = `Drop a <code>.${esc(src.ext)}</code> file here`;
+  $('file').setAttribute('accept', readsOf(src).map(e => '.' + e).join(','));
+  $('dropTitle').innerHTML = `Drop a ${readsOf(src).map(e => `<code>.${esc(e)}</code>`).join(', ').replace(/, ([^,]+)$/, ' or $1')} file here`;
   $('optcard').hidden = !r;
   if (state.ir) { state.shown = false; cancelCurtain(); render(); } else reset(false);
 }
@@ -244,9 +251,9 @@ function handleFile(file) {
   const src = CONSOLES[$('from').value];
 
   const ext = (file.name.split('.').pop() || '').toLowerCase();
-  if (ext !== src.ext) {
+  if (!accepts($('from').value, file.name)) {
     reset(false);
-    setStatus(`That's a .${ext} file — ${src.label} uses .${src.ext}. Pick the right "From console", or choose a different file.`, true);
+    setStatus(`That's a .${ext} file — ${src.label} uses ${extList(readsOf(src))}. Pick the right "From console", or choose a different file.`, true);
     return;
   }
   if (file.size > 8 * 1024 * 1024) {
@@ -262,6 +269,7 @@ function handleFile(file) {
       state.shown = false;
       state.ir = readScene($('from').value, String(fr.result), file.name);
       state.baseName = file.name.replace(/\.[^.]+$/, '') || 'scene';
+      state.inExt = ext;
       $('fname').textContent = file.name + (state.ir.name ? ` — “${state.ir.name}”` : '');
       $('drop').classList.add('loaded');
       render();

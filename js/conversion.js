@@ -9,6 +9,8 @@
 // preview and the stats. The page only renders it.
 
 import { parseX32Scene } from './x32-scene.js';
+import { isChannelPreset, readChannelPreset } from './x32-preset.js';
+import { isSnippet, readSnippet } from './x32-snippet.js';
 import { parseXAirScene } from './xair-scene.js';
 import { parseWingSnapshot } from './wing-scene.js';
 import { emitX32Scene } from './x32-emit.js';
@@ -17,14 +19,20 @@ import { emitWingSnapshot } from './wing-snap.js';
 import { SEVERITY, render } from './losses.js';
 
 // dcas is the desk's DCA count: what a scene written for it can actually hold.
+// reads lists the file types the desk's reader takes, where it takes more
+// than the one it writes: the X32 reader also takes channel presets and
+// snippets, read as partial scenes.
 export const DESKS = {
-  x32:  { label: 'Behringer X32 / Midas M32', ext: 'scn',  what: 'scene file', mime: 'text/plain',       dcas: 8 },
+  x32:  { label: 'Behringer X32 / Midas M32', ext: 'scn',  what: 'scene file', mime: 'text/plain',       dcas: 8,
+          reads: ['scn', 'chn', 'snp'] },
   xair: { label: 'Behringer X Air / Midas MR', ext: 'scn',  what: 'scene file', mime: 'text/plain',       dcas: 4 },
   wing: { label: 'Behringer Wing',            ext: 'snap', what: 'snapshot',   mime: 'application/json', dcas: 16 },
 };
 
 const READERS = {
-  x32:  (text) => parseX32Scene(text),
+  x32:  (text) => (isChannelPreset(text) ? readChannelPreset(text)
+                 : isSnippet(text) ? readSnippet(text)
+                 : parseX32Scene(text)),
   xair: (text, fileName) => parseXAirScene(text, fileName),
   wing: (text) => parseWingSnapshot(text),
 };
@@ -43,6 +51,13 @@ const WRITERS = {
 
 export function canRead(from) {
   return from in READERS;
+}
+
+// Whether a file's name says it is one this desk's reader takes.
+export function accepts(from, fileName) {
+  const desk = DESKS[from];
+  const ext = (String(fileName).split('.').pop() || '').toLowerCase();
+  return Boolean(desk) && (desk.reads || [desk.ext]).includes(ext);
 }
 
 export function canConvert(from, to) {
