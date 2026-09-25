@@ -55,9 +55,10 @@ The timecode waveform is drawn from `js/ltc.js`, so it is real LTC for 01:00:00;
 
 ## Tests and their limits
 
-`test/fixtures/synthetic-x32.scn` is hand-written, not saved off a desk. The round-trip tests prove
-the readers and writers agree with each other; they do not prove a console will load the output.
-Real `.scn` and `.snap` files from each desk would make much stronger fixtures.
+`test/fixtures/real/` holds real scene files off an X32, an X Air and a Wing (see its `SOURCES.md`); the
+tests read each one and convert it to both other desks. `test/fixtures/synthetic-x32.scn` is
+hand-written, for cases the real files don't cover. Passing tests still don't prove a console loads
+the output: that needs a round trip through the desk or its editor.
 
 ## History
 
@@ -73,3 +74,14 @@ rsvg-convert -w 32 -h 32 favicon.svg -o favicon.png
 rsvg-convert -w 120 -h 120 favicon.svg -o /tmp/mark.png
 magick -size 180x180 xc:'#0B1026' /tmp/mark.png -gravity center -composite -strip apple-touch-icon.png
 ```
+
+## Licence
+
+Showfile is free software under the GNU General Public License, version 3 or later
+([`LICENSE`](LICENSE)). The real scene files in `test/fixtures/real/` come from other projects
+under MIT and Apache-2.0; each folder keeps its own licence, and
+[`SOURCES.md`](test/fixtures/real/SOURCES.md) lists where each file came from.
+
+The X32, X Air and Wing file formats were checked against Patrick Maillot's unofficial protocol
+documentation (https://sites.google.com/site/patrickmaillot/x32). It is used as a reference only;
+none of it is copied here.

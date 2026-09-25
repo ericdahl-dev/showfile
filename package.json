@@ -1,6 +1,7 @@
 {
   "name": "showfile",
-  "version": "2.0.1",
+  "version": "2.0.2",
+  "license": "GPL-3.0-or-later",
   "private": true,
   "type": "module",
   "description": "Showfile: free browser tools for live production. Console scene converter and LTC timecode generator.",
