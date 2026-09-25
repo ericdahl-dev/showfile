@@ -249,7 +249,7 @@ export function emitWingSnapshot(ir, opts = {}) {
   });
 
   // Same reasoning as the EQ bands, one level up: a channel the show does not
-  // reach keeps the last scene's name, colour and patch. Blank the rest of the
+  // reach keeps the last scene's name, color and patch. Blank the rest of the
   // desk so a converted show lands the same way every time.
   for (let n = ir.channels.length + 1; n <= MAX_CH; n++) {
     if (ch[String(n)]) continue;

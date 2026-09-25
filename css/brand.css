@@ -1,12 +1,12 @@
 /* brand.css — Showfile's tokens, stage wash and logo lockup. One definition, every page.
  *
- * Direction: "Stage Wash". A navy stage with colour-gel light (amber, magenta,
+ * Direction: "Stage Wash". A navy stage with color-gel light (amber, magenta,
  * cyan) washing in from the edges, a high-contrast serif for display type and
- * Inter for everything you read. Amber is the one action colour: buttons,
+ * Inter for everything you read. Amber is the one action color: buttons,
  * focus, current state. Magenta and cyan are atmosphere only; putting them on
  * controls as well would give every page three competing accents.
  *
- * Pages keep their own layout CSS but take every colour and font from here, so
+ * Pages keep their own layout CSS but take every color and font from here, so
  * the palette is defined once.
  */
 
@@ -36,7 +36,7 @@
 /* ── stage wash ───────────────────────────────────────────────────────────
    Three gels hitting haze, fixed behind the page so content scrolls over the
    light rather than the light scrolling away. Sized in vw so a phone gets a
-   hint of each colour instead of one wash filling the screen. Kept faint:
+   hint of each color instead of one wash filling the screen. Kept faint:
    the converter carries a long FAQ, and it has to stay easy to read. */
 body {
   background: var(--bg);

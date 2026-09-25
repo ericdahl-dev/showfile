@@ -37,7 +37,7 @@ const COPY = {
 };
 
 const SECTIONS = [
-  ['names', 'Names & icons'], ['colors', 'Strip colours'], ['patch', 'Input patch'],
+  ['names', 'Names & icons'], ['colors', 'Strip colors'], ['patch', 'Input patch'],
   ['preamp', 'Gain, 48V, filters'], ['levels', 'Faders, mutes, pan'], ['eq', 'EQ'],
   ['dynamics', 'Gate & compressor'], ['sends', 'Bus sends'], ['groups', 'DCAs & mute groups'],
 ];

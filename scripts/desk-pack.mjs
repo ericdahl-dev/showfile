@@ -65,7 +65,7 @@ export function buildDeskPack() {
     '## On every file',
     '',
     '- It loads, with no error or partial load.',
-    '- Channel names and colours match the list below.',
+    '- Channel names and colors match the list below.',
     '- The patch: X32 routing blocks, per-channel sources, USB returns on the X Air.',
     '- Stereo pairs are linked, and nothing sits on the wrong side.',
     '- EQ (bands, cuts, shelves), gate and compressor match the source.',

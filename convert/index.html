@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0B1026" />
   <title>Console Scene Converter — X32, M32, X Air and Wing, any direction | Showfile</title>
-  <meta name="description" content="Convert scene files between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of the three, in either direction, in your browser. Names, colours, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that cannot is listed channel by channel. Free, nothing uploaded." />
+  <meta name="description" content="Convert scene files between the Behringer X32, Midas M32, Behringer X Air, Midas MR and Behringer Wing — any of the three, in either direction, in your browser. Names, colors, patch, gains, EQ, dynamics, sends and DCAs carry across, and everything that cannot is listed channel by channel. Free, nothing uploaded." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -28,7 +28,7 @@
   <meta property="og:site_name" content="Showfile" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Console Scene Converter — X32, M32, X Air and Wing" />
-  <meta name="twitter:description" content="Move a show between the X32, M32, X Air, MR and Wing, either direction. Names, colours, patch, gains, EQ and dynamics carry across; anything that cannot is listed. Free, nothing uploaded." />
+  <meta name="twitter:description" content="Move a show between the X32, M32, X Air, MR and Wing, either direction. Names, colors, patch, gains, EQ and dynamics carry across; anything that cannot is listed. Free, nothing uploaded." />
   <meta name="twitter:image" content="https://showfile.ericdahl.dev/og-image-convert.jpg" />
   <script type="application/ld+json">
   {
@@ -38,11 +38,11 @@
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Any (web browser)",
     "url": "https://showfile.ericdahl.dev/convert",
-    "description": "Convert mixing console scene files between the Behringer X32, Midas M32, Behringer X Air (XR12/XR16/XR18), Midas MR and Behringer Wing, in either direction, entirely in the browser. Channel names, strip colours, input patch, preamp gains, phantom power, filters, EQ, gate, compressor, bus sends, DCAs and mute groups carry across. Stereo handling is translated between desks that link mono pairs and desks with native stereo channels. Every setting the target console cannot represent is reported channel by channel rather than dropped silently.",
+    "description": "Convert mixing console scene files between the Behringer X32, Midas M32, Behringer X Air (XR12/XR16/XR18), Midas MR and Behringer Wing, in either direction, entirely in the browser. Channel names, strip colors, input patch, preamp gains, phantom power, filters, EQ, gate, compressor, bus sends, DCAs and mute groups carry across. Stereo handling is translated between desks that link mono pairs and desks with native stereo channels. Every setting the target console cannot represent is reported channel by channel rather than dropped silently.",
     "featureList": [
       "Converts between the Behringer X32 / Midas M32, the Behringer X Air / Midas MR and the Behringer Wing, in either direction",
       "X32 and M32 .scn scene files, X Air .scn scene files and Wing .snap snapshots",
-      "Channel names and strip colours matched perceptually between each console's palette",
+      "Channel names and strip colors matched perceptually between each console's palette",
       "Input patch, including per-channel patching on the X Air and Wing and blocks of eight on the X32",
       "Preamp gain and phantom power",
       "High-pass and low-pass filters, EQ, gate and compressor",
@@ -74,7 +74,7 @@
         "name": "Can I convert an X32 scene to a Behringer Wing?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Drop an X32 or M32 .scn scene file in and you get a Wing .snap snapshot back. Channel names, icons, strip colours, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not."
+          "text": "Yes. Drop an X32 or M32 .scn scene file in and you get a Wing .snap snapshot back. Channel names, icons, strip colors, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not."
         }
       },
       {
@@ -82,7 +82,7 @@
         "name": "Can I convert a Wing snapshot to an X32 or M32 scene?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Drop a Wing .snap snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colours to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently."
+          "text": "Yes. Drop a Wing .snap snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colors to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently."
         }
       },
       {
@@ -130,7 +130,7 @@
         "name": "Which firmware does this expect, and can an update break it?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Scene files are a list of settings \u2014 plain text on the X32, M32, X Air and MR, JSON on the Wing \u2014 and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches \u2014 names, colours, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups \u2014 have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there \u2014 the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors."
+          "text": "Scene files are a list of settings \u2014 plain text on the X32, M32, X Air and MR, JSON on the Wing \u2014 and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches \u2014 names, colors, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups \u2014 have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there \u2014 the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors."
         }
       },
       {
@@ -167,10 +167,10 @@
       },
       {
         "@type": "Question",
-        "name": "Why are the channel colours different from other X32 to Wing converters?",
+        "name": "Why are the channel colors different from other X32 to Wing converters?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Because the two consoles use unrelated colour palettes. The X32 has eight colours plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's colour index straight through lands a green channel on Wing colour 2, which is blue. This converter matches colours by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colours, so those two are exact in both directions."
+          "text": "Because the two consoles use unrelated color palettes. The X32 has eight colors plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's color index straight through lands a green channel on Wing color 2, which is blue. This converter matches colors by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colors, so those two are exact in both directions."
         }
       }
     ]
@@ -435,8 +435,8 @@
     .warns.staggered .warn-row { opacity: 0; animation: warn-in 0.28s ease-out forwards;
                                  animation-delay: calc(var(--i) * 45ms); }
 
-    /* The swatch lands on the colour the channel will wear on the TARGET desk,
-       starting from the one it arrived with — so 18 colours collapsing onto 8
+    /* The swatch lands on the color the channel will wear on the TARGET desk,
+       starting from the one it arrived with — so 18 colors collapsing onto 8
        is something you watch happen, not just something the warning says. */
     @keyframes swatch-land { from { background: var(--from); } to { background: var(--to); } }
     .chlist.landing .swatch { animation: swatch-land 0.36s ease-out forwards;
@@ -579,7 +579,7 @@
 
     <p class="disclaimer">
       <strong>No two desks are built the same.</strong> Channel counts, stereo handling, input
-      routing, EQ bands and colour palettes all differ between consoles, so some settings have no
+      routing, EQ bands and color palettes all differ between consoles, so some settings have no
       equivalent on the other desk and cannot be carried across. Converting to a smaller console
       loses more than converting up. Anything that could not be transferred is listed under
       <strong>Check these on the desk</strong> once you convert. Treat the result as a head start,
@@ -619,17 +619,17 @@
     </p>
     <h3>The three desks</h3>
     <ul>
-      <li><strong>Behringer X32 / Midas M32</strong> — 32 channels, 16 buses, 6 matrices, 8 DCAs, 6 mute groups, 4 EQ bands, 8 strip colours. Mono channels linked in pairs for stereo. Patches inputs in blocks of eight. AES50 stageboxes.</li>
-      <li><strong>Behringer X Air / Midas MR</strong> (XR12, XR16, XR18) — 16 channels, 6 buses, 4 FX sends, no matrices, 4 DCAs, 4 mute groups, 4 EQ bands, the same 8 strip colours as the X32. Mono channels linked in pairs. Patches <em>per channel</em>, which the X32 cannot. Local inputs and USB only, no AES50.</li>
-      <li><strong>Behringer Wing</strong> — 40 channels, 18 strip colours, 6 EQ bands, native stereo channels, local inputs and AES50.</li>
+      <li><strong>Behringer X32 / Midas M32</strong> — 32 channels, 16 buses, 6 matrices, 8 DCAs, 6 mute groups, 4 EQ bands, 8 strip colors. Mono channels linked in pairs for stereo. Patches inputs in blocks of eight. AES50 stageboxes.</li>
+      <li><strong>Behringer X Air / Midas MR</strong> (XR12, XR16, XR18) — 16 channels, 6 buses, 4 FX sends, no matrices, 4 DCAs, 4 mute groups, 4 EQ bands, the same 8 strip colors as the X32. Mono channels linked in pairs. Patches <em>per channel</em>, which the X32 cannot. Local inputs and USB only, no AES50.</li>
+      <li><strong>Behringer Wing</strong> — 40 channels, 18 strip colors, 6 EQ bands, native stereo channels, local inputs and AES50.</li>
     </ul>
     <h3>How the differences are handled</h3>
     <ul>
       <li><strong>Stereo is translated, not copied.</strong> The X32 and X Air build stereo from two hard-panned mono strips; the Wing has real stereo channels. Going up, every linked pair collapses into one Wing channel — which is why channel numbers shift as you go down the list. Coming back, each Wing stereo channel becomes two linked mono channels. Both smaller desks only link odd-aligned pairs (1-2, 3-4 — never 2-3), so a stereo channel that would land on an even channel leaves that one empty rather than renumbering the rest of your show. A Wing stereo channel with its balance off centre loses that balance on the way down, and the report says so.</li>
-      <li><strong>Colours are matched, not copied.</strong> The X32 and X Air share the same eight colours, so those two are exact in both directions. The Wing's eighteen are entirely different, and an X32 green becomes the Wing's green rather than whichever Wing colour happens to share green's index number. Coming down from the Wing, eighteen colours collapse onto eight and the report counts how many groups merged.</li>
+      <li><strong>Colors are matched, not copied.</strong> The X32 and X Air share the same eight colors, so those two are exact in both directions. The Wing's eighteen are entirely different, and an X32 green becomes the Wing's green rather than whichever Wing color happens to share green's index number. Coming down from the Wing, eighteen colors collapse onto eight and the report counts how many groups merged.</li>
       <li><strong>The patch is read from wherever that desk keeps it</strong> — the routing blocks on an X32, the channel itself on an X Air or Wing. That means a rig on an AES50 stagebox lands on the Wing's stagebox inputs instead of its local XLRs. The X Air has no AES50 at all, so those channels arrive unpatched and are named individually. And the X32's blocks of eight are a hard limit in reverse: a channel-by-channel patch can't always be expressed, so the converter picks the routing that fits the most channels per block and names the ones that fall outside it.</li>
       <li><strong>You get the whole channel layer.</strong> An X32 or X Air conversion is a full scene file covering every channel on the desk; the Wing output is a snapshot covering all 40. Channels your show doesn't use are written blank rather than left holding whatever was on the console — so a converted show lands the same way every time instead of inheriting last night's band. Buses, effects and routing outside the channel layer are left alone.</li>
-      <li><strong>Going down costs something, and the report prices it.</strong> Every loss is graded by what you have to do about it: <em>dropped</em>, <em>degraded</em>, <em>approximated</em>, <em>relocated</em>, <em>unsupported</em>, or just <em>check</em>. Channels past the end, EQ bands that didn't fit, DCAs that don't exist on the target, colours that merged, a channel that fell out of a group you were riding — each one named with its channel number.</li>
+      <li><strong>Going down costs something, and the report prices it.</strong> Every loss is graded by what you have to do about it: <em>dropped</em>, <em>degraded</em>, <em>approximated</em>, <em>relocated</em>, <em>unsupported</em>, or just <em>check</em>. Channels past the end, EQ bands that didn't fit, DCAs that don't exist on the target, colors that merged, a channel that fell out of a group you were riding — each one named with its channel number.</li>
       <li><strong>Effects, inserts, graphic EQ and automix don't transfer.</strong> Neither does anything else the target desk has no equivalent for. Those are listed rather than guessed at.</li>
       <li><strong>Check it on the desk before a show.</strong> Gain structure and dynamics especially. This saves you forty minutes of typing, not soundcheck.</li>
     </ul>
@@ -642,12 +642,12 @@
 
     <h3>Can I convert an X32 scene to a Behringer Wing?</h3>
     <p>
-      Yes. Drop an X32 or M32 <code>.scn</code> scene file in and you get a Wing <code>.snap</code> snapshot back. Channel names, icons, strip colours, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not.
+      Yes. Drop an X32 or M32 <code>.scn</code> scene file in and you get a Wing <code>.snap</code> snapshot back. Channel names, icons, strip colors, input patch, preamp gain and phantom power, high-pass and low-pass filters, EQ, gate, compressor, bus sends, and DCA and mute group membership all carry across. Effects, inserts and the routing matrix do not.
     </p>
 
     <h3>Can I convert a Wing snapshot to an X32 or M32 scene?</h3>
     <p>
-      Yes. Drop a Wing <code>.snap</code> snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colours to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently.
+      Yes. Drop a Wing <code>.snap</code> snapshot in and choose the X32 or M32 as the target. The X32 is the smaller desk, so expect some loss: 32 channels to the Wing's 40, eight strip colors to eighteen, four EQ bands to six, and it patches inputs in blocks of eight rather than per channel. Everything that cannot be carried across is listed in the report rather than dropped silently.
     </p>
 
     <h3>Can I convert to and from a Behringer X Air or Midas MR?</h3>
@@ -677,7 +677,7 @@
 
     <h3>Which firmware does this expect, and can an update break it?</h3>
     <p>
-      Scene files are a list of settings — plain text on the X32, M32, X Air and MR, JSON on the Wing — and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches — names, colours, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups — have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there — the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors.
+      Scene files are a list of settings — plain text on the X32, M32, X Air and MR, JSON on the Wing — and a console applies the ones it recognises and passes over the rest. That is what makes the format tolerant: every firmware release still has to open the scenes engineers already have, so the parts a conversion touches — names, colors, patch, preamp, filters, EQ, dynamics, sends, DCAs and mute groups — have been stable across years of updates on all three desks. The real exposure runs the other way. This writes a scene file rather than exporting one from your desk, so it has to declare a scene version, and it writes the one current X32 firmware uses. If your console is several firmware versions behind, convert as normal and then open the result in X32-Edit, M32-Edit or X AIR Edit and save it from there — the editor rewrites the file in exactly the shape that build expects, and it costs you a minute. Whatever the firmware, loading a scene cannot harm a console: the worst case is that it loads wrong and you reload your own show. Save the current show first, load the converted one into a spare scene slot, and check it before doors.
     </p>
 
     <h3>What if my console will not load the converted file?</h3>
@@ -700,9 +700,9 @@
       No. The conversion runs entirely in your browser using the File API. The scene file is read into memory, converted, and handed back as a download — it is never uploaded, and no part of it is stored. Nothing leaves the page: no analytics, no counters, no network requests of any kind.
     </p>
 
-    <h3>Why are the channel colours different from other X32 to Wing converters?</h3>
+    <h3>Why are the channel colors different from other X32 to Wing converters?</h3>
     <p>
-      Because the two consoles use unrelated colour palettes. The X32 has eight colours plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's colour index straight through lands a green channel on Wing colour 2, which is blue. This converter matches colours by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colours, so those two are exact in both directions.
+      Because the two consoles use unrelated color palettes. The X32 has eight colors plus inverted variants; the Wing has eighteen entirely different ones. Passing the X32's color index straight through lands a green channel on Wing color 2, which is blue. This converter matches colors by how they actually look, so an X32 green becomes the Wing's green. The X Air shares the X32's eight colors, so those two are exact in both directions.
     </p>
 
   </div>

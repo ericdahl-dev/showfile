@@ -12,7 +12,7 @@ import { render } from '../js/losses.js';
 const fixture = (p) => readFileSync(new URL(`./fixtures/${p}`, import.meta.url), 'utf8');
 const chn = fixture('synthetic-x32.chn');
 
-test('a channel preset reads as one channel, with its name, colour, EQ and dynamics', () => {
+test('a channel preset reads as one channel, with its name, color, EQ and dynamics', () => {
   const scene = readScene('x32', chn, 'Lead Vox.chn');
   assert.equal(scene.channels.length, 1);
   const [c] = scene.channels;

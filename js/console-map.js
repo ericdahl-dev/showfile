@@ -1,4 +1,4 @@
-// ─── Console colour / icon mapping tables ──────────────────────────────────
+// ─── Console color / icon mapping tables ──────────────────────────────────
 // Shared by the Input List console exporter (ui.js) and the scene converter.
 //
 // The Wing palette below was derived empirically: eighteen channels were set to
@@ -6,8 +6,8 @@
 // back out of the saved snapshot. All 18 indices appear exactly once.
 //
 // This matters because the widely-used XM32-to-Wing converter passes the X32's
-// colour *index* straight through, and the two palettes are unrelated — an X32
-// green channel (GN = 2) lands on Wing colour 2, which is blue.
+// color *index* straight through, and the two palettes are unrelated — an X32
+// green channel (GN = 2) lands on Wing color 2, which is blue.
 
 export const WING_PALETTE = [
   { col: 1,  name: 'indigo',      rgb: [ 79,  70, 229] },
@@ -30,9 +30,9 @@ export const WING_PALETTE = [
   { col: 18, name: 'white',       rgb: [235, 235, 235] },
 ];
 
-// X32/M32 strip colour enum. Index is the value written in .scn files; the
+// X32/M32 strip color enum. Index is the value written in .scn files; the
 // `i` suffixed entries (8-15) are the same hue shown inverted, which the Wing
-// has no equivalent for, so they collapse onto the same base colour.
+// has no equivalent for, so they collapse onto the same base color.
 export const X32_PALETTE = [
   { code: 'OFF', idx: 0,  rgb: [ 32,  32,  32] },
   { code: 'RD',  idx: 1,  rgb: [255,   0,   0] },
@@ -78,7 +78,7 @@ function nearest(rgb, palette, key, fallback) {
 export function hexToWingCol(hex)  { return nearest(hexToRgb(hex), WING_PALETTE, 'col',  17); }
 export function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'code', 'WH'); }
 
-// X32 colour code -> Wing col.
+// X32 color code -> Wing col.
 //
 // Explicit rather than nearest-RGB: the eight X32 codes are the complete set a
 // scene can contain, and the Wing palette has several candidates in the same
@@ -87,7 +87,7 @@ export function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.s
 // looking at the two palettes side by side.
 //
 // The `i` (inverted) variants have no Wing equivalent and collapse onto the base
-// colour; OFF becomes grey, since the Wing has no "no colour" state.
+// color; OFF becomes grey, since the Wing has no "no color" state.
 export const X32_COLOR_TO_WING = {
   OFF: 17, RD:  9, GN:  5, YE:  7, BL:  2, MG: 11, CY:  4, WH: 18,
   OFFi: 17, RDi: 9, GNi: 5, YEi: 7, BLi: 2, MGi: 11, CYi: 4, WHi: 18,
@@ -110,7 +110,7 @@ export function x32IconToWing(icon) {
   return X32_ICON_TO_WING[Number(icon)] ?? 0;
 }
 
-// ─── Neutral colour / icon exchange ────────────────────────────────────────
+// ─── Neutral color / icon exchange ────────────────────────────────────────
 // Readers put a neutral value in the IR and writers take it out again, so a new
 // desk needs no knowledge of the desks already here. Two wrinkles make that
 // more than a hex string:
@@ -120,13 +120,13 @@ export function x32IconToWing(icon) {
 //     blue, but turquoise is what an engineer would pick. So a curated table for
 //     a known pair wins, and nearest-RGB is the fallback for pairs nobody has
 //     curated.
-//   * A colour therefore travels as { hex, code, format } — the neutral value
+//   * A color therefore travels as { hex, code, format } — the neutral value
 //     plus where it came from — and mapColor consults CURATED first.
 
 const CURATED = {
   'x32>wing': (code) => X32_COLOR_TO_WING[String(code || '').trim()],
   'wing>x32': (col)  => WING_COL_TO_X32[Number(col)],
-  // An X Air colour is an X32 colour wearing a different label, so it reaches
+  // An X Air color is an X32 color wearing a different label, so it reaches
   // the Wing through the same curated table rather than through nearest-RGB.
   'xair>wing': (idx) => X32_COLOR_TO_WING[xairIdxToX32Code(idx)],
   'xair>x32':  (idx) => xairIdxToX32Code(idx),
@@ -134,7 +134,7 @@ const CURATED = {
   'wing>xair': (col)  => x32CodeToXairIdx(WING_COL_TO_X32[Number(col)]),
 };
 
-// Wing col -> X32 colour code. The Wing's 18 collapse onto the X32's 8, so
+// Wing col -> X32 color code. The Wing's 18 collapse onto the X32's 8, so
 // several entries share a target; that loss is real and is warned about at the
 // call site rather than hidden here.
 export const WING_COL_TO_X32 = {
@@ -143,24 +143,24 @@ export const WING_COL_TO_X32 = {
   13: 'YE', 14: 'CY', 15: 'RD', 16: 'GN', 17: 'OFF', 18: 'WH',
 };
 
-// The X Air series shares the X32's eight colours but writes the palette INDEX
+// The X Air series shares the X32's eight colors but writes the palette INDEX
 // where the X32 writes the mnemonic — /ch/01/config "Kick" 1 In01 U01 is red,
-// the same colour the X32 spells RD. Same table, different key, so an X Air
-// colour needs no new palette and x32<->xair is lossless.
+// the same color the X32 spells RD. Same table, different key, so an X Air
+// color needs no new palette and x32<->xair is lossless.
 const PALETTES = {
   x32:  { table: X32_PALETTE, key: 'code', hexKey: 'code', fallback: 'WH' },
   wing: { table: WING_PALETTE, key: 'col', hexKey: 'col', fallback: 17 },
   xair: { table: X32_PALETTE, key: 'idx', hexKey: 'idx', fallback: 7 },
 };
 
-// X Air palette index <-> X32 colour code, both directions, off the one table.
+// X Air palette index <-> X32 color code, both directions, off the one table.
 export const xairIdxToX32Code = (idx) => X32_PALETTE.find(e => e.idx === Number(idx))?.code;
 export const x32CodeToXairIdx = (code) => X32_PALETTE.find(e => e.code === String(code).trim())?.idx;
 export function hexToXairIdx(hex) { return nearest(hexToRgb(hex), X32_PALETTE.slice(0, 8), 'idx', 7); }
 
 const toHexStr = (rgb) => '#' + rgb.map(v => v.toString(16).padStart(2, '0')).join('');
 
-// Look a desk's own colour value up to a neutral hex string.
+// Look a desk's own color value up to a neutral hex string.
 export function codeToHex(format, code) {
   const p = PALETTES[format];
   if (!p) return null;
@@ -168,12 +168,12 @@ export function codeToHex(format, code) {
   return hit ? toHexStr(hit.rgb) : null;
 }
 
-// Build the neutral colour an IR carries.
+// Build the neutral color an IR carries.
 export function colorFrom(format, code) {
   return { hex: codeToHex(format, code), code: code ?? null, format };
 }
 
-// Resolve a neutral colour to one desk's own value: curated pair first, then
+// Resolve a neutral color to one desk's own value: curated pair first, then
 // nearest RGB, then the target's fallback.
 export function mapColor(color, target) {
   if (!color) return PALETTES[target]?.fallback;

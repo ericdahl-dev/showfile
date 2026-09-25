@@ -29,7 +29,7 @@ with Python's `zipfile`.
 | `timecode-generator/index.html` | LTC generator page (its UI script is inline) |
 | `js/x32-scene.js`, `js/xair-scene.js`, `js/wing-scene.js` | Readers: desk file → neutral IR |
 | `js/x32-emit.js`, `js/xair-emit.js`, `js/wing-snap.js` | Writers: IR → desk file |
-| `js/console-map.js` | Colour and icon mapping between desks |
+| `js/console-map.js` | Color and icon mapping between desks |
 | `js/losses.js` | The graded "check these on the desk" report |
 | `js/scene-text.js` | Shared `.scn` tokenising |
 | `js/convert.js` | Converter page UI |
@@ -37,7 +37,7 @@ with Python's `zipfile`.
 | `js/ltc-batch.js` | LTC batch plan: file names, timecode spans, limits, sizes, manifest |
 | `js/nav-tools.js`, `js/version-tag.js`, `css/brand.css`, `fonts/` | Shared chrome |
 | `favicon.svg` | The mark (a fresnel, head-on); also the logo in the lockup. PNG icons are rendered from it |
-| `css/brand.css` | Every colour and font token, the stage-wash background and the logo lockup |
+| `css/brand.css` | Every color and font token, the stage-wash background and the logo lockup |
 | `index.html` | Home page listing the tools |
 | `og/index.html` | Source for the share images (not linked from the site) |
 
