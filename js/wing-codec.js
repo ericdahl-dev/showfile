@@ -7,6 +7,8 @@
 // The shapes follow WING-EDIT: what it writes is what we write, and what it
 // ignores we ignore when reading.
 
+import { tapCodec } from './console-map.js';
+
 export const NEG_INF = -144;                   // the Wing's -oo sentinel
 
 // DCA and mute-group membership: "#D5,#M1". Comma-separated, as WING-EDIT
@@ -101,4 +103,9 @@ export const wingDesk = {
   label: 'Behringer Wing', short: 'Wing', ext: 'snap', what: 'snapshot', mime: 'application/json',
   reads: ['snap'], partials: {},
   channels: 40, dcas: 16, muteGroups: 8, buses: 16, stereo: 'native',
+  ratios: [1.1, 1.2, 1.3, 1.5, 1.7, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 20, 50, 100],
 };
+
+// Send taps, as this desk spells them (in console-map.js's neutral order:
+// input, pre-EQ, post-EQ, pre-fader, post-fader, group; null where it has none).
+export const sendTap = tapCodec([null, null, null, 'PRE', 'POST', 'GRP']);

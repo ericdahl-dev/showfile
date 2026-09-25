@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   WING_PALETTE, X32_PALETTE, hexToRgb, xairIdxToX32Code, x32CodeToXairIdx,
-  codeToHex, colorFrom, mapColor, x32IconToWing, wingIconToX32,
+  codeToHex, colorFrom, mapColor, x32IconToWing, wingIconToX32, snapRatio,
 } from '../js/console-map.js';
 
 test('the Wing palette has each of its 18 col values exactly once', () => {
@@ -72,4 +72,18 @@ test('a Wing icon with an X32 picture comes back as that picture (#42)', () => {
   assert.equal(wingIconToX32(312), 37);
   assert.equal(wingIconToX32(603), 45);
   assert.equal(wingIconToX32(999), 1);    // unknown -> the X32's blank icon
+});
+
+test('a desk\'s send taps come back through its tap codec; a missing tap falls back to pre-fader', async () => {
+  const { tapCodec } = await import('../js/console-map.js');
+  const x32 = tapCodec(['IN/LC', '<-EQ', 'EQ->', 'PRE', 'POST', 'GRP']);
+  for (const tap of ['input', 'preeq', 'posteq', 'pre', 'post', 'group']) assert.equal(x32.read(x32.write(tap).token), tap);
+  const wing = tapCodec([null, null, null, 'PRE', 'POST', 'GRP']);
+  assert.deepEqual(wing.write('posteq'), { token: 'PRE', exact: false });
+  assert.equal(wing.read('???'), 'pre');
+});
+
+test('snapRatio picks the nearest ratio in the list it is given (#56)', () => {
+  assert.deepEqual(snapRatio(7, [1.1, 2, 4, 6, 8]), { value: 6, exact: false });
+  assert.deepEqual(snapRatio(4, [1.1, 2, 4]), { value: 4, exact: true });
 });

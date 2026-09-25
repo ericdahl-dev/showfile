@@ -5,12 +5,12 @@
 // Field positions below were derived empirically from real scene files rather
 // than from any existing converter's source.
 
-import { colorFrom, tapFrom } from './console-map.js';
+import { colorFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { loss } from './losses.js';
 import { INF, num, bool, parseNodes, collapsePairs } from './scene-text.js';
 import { membership, eqLine } from './scn-codec.js';
-import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine } from './x32-codec.js';
+import { routingBlock, channelSource, headampIndex, spareSlot, gateLine, dynLine, sendTap } from './x32-codec.js';
 
 
 export function parseX32Scene(text) {
@@ -114,7 +114,7 @@ export function parseX32Scene(text) {
         on: bool(s[0]),
         level: num(s[1], INF),
         pan: s.length > 2 ? num(s[2]) : 0,
-        tap: s.length > 3 ? tapFrom('x32', s[3]) : null,   // even buses take the odd bus's
+        tap: s.length > 3 ? sendTap.read(s[3]) : null,   // even buses take the odd bus's
       });
     }
     // An even bus carries only on and level; its tap is its odd partner's.
