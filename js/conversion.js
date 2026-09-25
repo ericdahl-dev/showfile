@@ -78,10 +78,27 @@ export function writeScene(scene, to, include = {}) {
 
 // The report as the page shows it: one row per loss, graded, the most serious
 // first (the order of SEVERITY), keeping the writer's order within a grade.
+// Lines that say the same thing about different channels become one line
+// naming them: nine headsets with the same unsupported gate read as one.
 const RANK = Object.fromEntries(Object.keys(SEVERITY).map((s, i) => [s, i]));
+const CHANNEL_LABEL = /^ch (\d+) "([^"]*)"(.*)$/s;
+
 export function reportRows(losses) {
-  return losses
-    .map((l, i) => ({ severity: l.severity, rank: RANK[l.severity] ?? 99, text: render(l), i }))
+  const groups = new Map();
+  losses.forEach((l, i) => {
+    const text = render(l);
+    const m = CHANNEL_LABEL.exec(text);
+    const key = m ? `${l.code}|${m[3]}` : `${i}|${text}`;
+    if (!groups.has(key)) groups.set(key, { l, i, text, rest: m?.[3], who: [] });
+    if (m) groups.get(key).who.push(m[2] || `ch ${m[1]}`);
+  });
+  return [...groups.values()]
+    .map(g => ({
+      severity: g.l.severity,
+      rank: RANK[g.l.severity] ?? 99,
+      text: g.who.length > 1 ? `${g.who.length} channels (${g.who.join(', ')})${g.rest}` : g.text,
+      i: g.i,
+    }))
     .sort((a, b) => a.rank - b.rank || a.i - b.i)
     .map(({ i, ...row }) => row);
 }

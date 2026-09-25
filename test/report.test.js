@@ -22,9 +22,23 @@ test('report rows come graded, the most serious first (#8)', async () => {
   const { reportRows } = await import('../js/conversion.js');
   const out = writeScene(readScene('wing', realWing), 'x32');
   const rows = reportRows(out.losses);
-  assert.equal(rows.length, out.losses.length);
+  assert.ok(rows.length > 0 && rows.length <= out.losses.length);
   const order = rows.map(r => r.rank);
   assert.deepEqual(order, [...order].sort((a, b) => a - b));
   assert.equal(rows[0].severity, 'dropped');
   for (const r of rows) assert.equal(typeof r.text, 'string');
+});
+
+test('lines that differ only in the channel become one line (#33)', async () => {
+  const { reportRows } = await import('../js/conversion.js');
+  const losses = writeScene(readScene('wing', realWing), 'x32').losses;
+  const rows = reportRows(losses);
+  const ds902 = rows.filter(r => /DS902/.test(r.text));
+  assert.equal(ds902.length, 1);
+  // Headsets 1-8 carry a DS902; ch 9's slot is a DUCK, so it keeps its own line.
+  assert.ok(ds902[0].text.startsWith('8 channels (Headset 1, Headset 2, Headset 3, Headset 4, Headset 5, Headset 6, Headset 7, Headset 8): '), ds902[0].text);
+  assert.ok(rows.some(r => /^ch 9 "": the gate slot holds a DUCK/.test(r.text)));
+  assert.match(ds902[0].text, /the gate slot holds a DS902/);
+  // Different messages stay apart.
+  assert.ok(rows.some(r => /past the X32's 32 channels/.test(r.text)));
 });
