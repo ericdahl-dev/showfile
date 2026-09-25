@@ -17,7 +17,7 @@
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
-import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -336,7 +336,11 @@ export function emitX32Scene(ir, opts = {}) {
       if (include.sends) {
         for (const s of c.sends) {
           if (s.bus < 1 || s.bus > 16) continue;
-          lines.push(`/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)} ${(s.pan || 0) >= 0 ? '+' : ''}${Math.round(s.pan || 0)} ${s.tap === 'POST' ? 'POST' : 'PRE'} 0`);
+          // Odd buses carry on, level, pan, tap and pan-follow; an even bus
+          // carries on and level only, and shares its odd partner's tap.
+          lines.push(s.bus % 2 === 1
+            ? `/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)} ${(s.pan || 0) >= 0 ? '+' : ''}${Math.round(s.pan || 0)} ${tapTo('x32', s.tap).token} 0`
+            : `/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)}`);
         }
       }
 

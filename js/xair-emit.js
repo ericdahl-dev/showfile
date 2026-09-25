@@ -17,7 +17,7 @@
 // accepts a partial snapshot, so every node a real scene contains is written
 // here, with the desk's own defaults where the IR has nothing to say.
 
-import { mapColor, codeToHex, snapRatio, ratioToken } from './console-map.js';
+import { mapColor, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X Air';
@@ -405,7 +405,7 @@ export function emitXAirScene(ir, opts = {}) {
     const byBus = new Map((sends || []).map(s => [s.bus, s]));
     for (let b = 1; b <= BUSES + FX_SENDS; b++) {
       const s = b <= BUSES ? byBus.get(b) : null;
-      const tap = b > BUSES ? 'POST' : (s && String(s.tap).toUpperCase() === 'POST' ? 'POST' : 'POSTEQ');
+      const tap = b > BUSES ? 'POST' : (s ? tapTo('xair', s.tap).token : 'POSTEQ');
       const trailingPan = b <= BUSES && b % 2 === 1 ? ' +0' : '';
       out.push(`/ch/${id}/mix/${pad2(b)} ${s ? lvl(s.level) : '  -oo'} ${onOff(!!s?.on)} ${tap}${trailingPan}`);
     }

@@ -20,7 +20,7 @@
 //   * 16 channels, 6 buses, 4 FX sends, no matrices, 4 DCAs, 4 mute groups.
 //   * Headamps are 1-based and indexed by INPUT number, with no AES50 offsets.
 
-import { colorFrom } from './console-map.js';
+import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { INF, num, bool, bits, parseNodes } from './scene-text.js';
 import { loss, render } from './losses.js';
@@ -119,7 +119,7 @@ export function parseXAirScene(text, fileName = '') {
         level: num(s[0], INF),
         // POSTEQ is post-EQ but PRE-fader, so it normalises to a pre-fader
         // send at the emitters, not a post-fader one.
-        tap: String(s[2] || 'POSTEQ').toUpperCase() === 'POST' ? 'POST' : 'PRE',
+        tap: tapFrom('xair', s[2]),
         pan: s.length > 3 ? num(s[3]) : 0,
       });
     }

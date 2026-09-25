@@ -6,7 +6,7 @@
 // Key names and value encodings were derived by diffing snapshots saved from
 // WING-EDIT: an initialised baseline against files with known values set.
 
-import { mapColor, mapIcon, codeToHex, snapRatio } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
 import { loss, renderAll } from './losses.js';
 
 const NEG_INF = -144;                 // the Wing's -oo sentinel
@@ -181,12 +181,20 @@ export function emitWingSnapshot(ir, opts = {}) {
 
     if (include.sends && c.sends?.length) {
       const send = {};
+      const moved = [];
       for (const s of c.sends) {
+        const tap = tapTo('wing', s.tap);
+        if (!tap.exact && s.level > -Infinity) moved.push(s.bus);
         send[String(s.bus)] = { on: !!s.on, lvl: dB(s.level),
-                                mode: String(s.tap).toUpperCase() === 'POST' ? 'POST' : 'PRE',
+                                mode: tap.token,
                                 pan: round(s.pan || 0) };
       }
       node.send = send;
+      // The Wing has no input, pre-EQ or post-EQ send; those become pre-fader.
+      if (moved.length) {
+        warnings.push(loss('send.tap-approximated', { label, buses: moved, desk: DESK },
+          { kind: 'channel', n, name: c.name }));
+      }
     }
 
     if (include.groups) {

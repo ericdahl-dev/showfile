@@ -5,7 +5,7 @@
 // Field positions below were derived empirically from real scene files rather
 // than from any existing converter's source.
 
-import { colorFrom } from './console-map.js';
+import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
 import { INF, num, bool, bits, parseNodes } from './scene-text.js';
 
@@ -122,9 +122,11 @@ export function parseX32Scene(text) {
         on: bool(s[0]),
         level: num(s[1], INF),
         pan: s.length > 2 ? num(s[2]) : 0,
-        tap: s.length > 3 ? s[3] : 'PRE',
+        tap: s.length > 3 ? tapFrom('x32', s[3]) : null,   // even buses take the odd bus's
       });
     }
+    // An even bus carries only on and level; its tap is its odd partner's.
+    for (const s of sends) if (s.tap === null) s.tap = sends.find(o => o.bus === s.bus - 1)?.tap || 'pre';
 
     // /ch/NN/grp  %00000000 %000000  — 8 DCA bits then 6 mute-group bits.
     // bits() reads them least-significant-bit first; see scene-text.js.

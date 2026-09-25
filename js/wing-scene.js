@@ -8,7 +8,7 @@
 // section yields a missing IR field rather than a throw, and anything actively
 // surprising becomes a warning the user sees rather than a silent default.
 
-import { colorFrom, wingIconToX32 } from './console-map.js';
+import { colorFrom, wingIconToX32, tapFrom } from './console-map.js';
 import { loss, render } from './losses.js';
 import { makeChannel } from './scene.js';
 
@@ -83,7 +83,7 @@ function readSends(send) {
       on: s.on !== false,
       level: dB(s.lvl),
       pan: numOr(s.pan, 0),
-      tap: String(s.mode || 'PRE').toUpperCase() === 'POST' ? 'POST' : 'PRE',
+      tap: tapFrom('wing', s.mode),
     });
   }
   return out.sort((a, b) => a.bus - b.bus);
