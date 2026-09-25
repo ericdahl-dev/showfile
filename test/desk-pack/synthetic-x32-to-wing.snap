@@ -170,7 +170,7 @@
           "env": "LOG",
           "mix": 100
         },
-        "tags": "#D3#M1",
+        "tags": "#D3,#M1",
         "clink": false
       },
       "3": {

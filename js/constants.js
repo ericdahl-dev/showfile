@@ -1,3 +1,3 @@
 // constants.js — site-wide constants for Showfile.
 
-export const APP_VERSION = '2.0.16';
+export const APP_VERSION = '2.0.17';
