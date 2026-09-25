@@ -17,7 +17,7 @@
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
-import { mapColor, mapIcon, codeToHex } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken } from './console-map.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -308,7 +308,13 @@ export function emitX32Scene(ir, opts = {}) {
       }
       if (include.dynamics) {
         const d = c.dyn;
-        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${dec(d.ratio, 1)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
+        const ratio = snapRatio(d.ratio, 'x32');
+        if (!ratio.exact && k === 0) {
+          warnings.push(loss('dyn.ratio-snapped',
+            { label: `ch ${n} "${name}"`, from: d.ratio, to: ratio.value, desk: DESK },
+            { kind: 'channel', n, name }));
+        }
+        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
       if (include.eq) {

@@ -69,3 +69,20 @@ test('aux, FX-return and bus inputs are patched by channel source, not routing b
   for (const t of routingIn(text).slice(0, 4)) assert.match(t, BLOCK_TOKEN, `token ${t}`);
   assert.match(text, /^\/ch\/03\/config "Vox" \d+ \w+ 34$/m);  // source 34 = Aux 2
 });
+
+const X32_RATIOS = ['1.1', '1.3', '1.5', '2.0', '2.5', '3.0', '4.0', '5.0', '7.0', '10', '20', '100'];
+const ratioOf = (text, ch) => text.match(new RegExp(`^/ch/${ch}/dyn \\S+ \\S+ \\S+ \\S+ \\S+ (\\S+) `, 'm'))[1];
+
+test('compressor ratios are written as X32 ratio tokens (#19)', () => {
+  const scene = readScene('x32', synthetic);
+  const vox = scene.channels.find(c => c.name === 'Vox');
+  vox.dyn = { ...vox.dyn, on: true, ratio: 10 };
+  const out = writeScene(scene, 'x32');
+  assert.equal(ratioOf(out.file.text, '03'), '10');
+  assert.equal(out.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 0);   // exact, nothing to report
+
+  vox.dyn = { ...vox.dyn, ratio: 6 };                                                   // a Wing ratio
+  const snapped = writeScene(scene, 'x32');
+  assert.ok(X32_RATIOS.includes(ratioOf(snapped.file.text, '03')));
+  assert.equal(snapped.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 1);
+});

@@ -18,3 +18,11 @@ test('an X32 high cut becomes the Wing high-cut filter, not a bell (#18)', () =>
   assert.notEqual(vox.eq.hf, 8000);          // not squeezed into the EQ's outer band
   assert.ok(['PEQ', 'SHV'].includes(vox.eq.heq));
 });
+
+test('bus, USB and AES50-C sources carry over to the Wing (#16, #22)', () => {
+  const scene = readScene('x32', synthetic);
+  scene.channels[1].patch = { group: 'bus', input: 11 };
+  const out = writeScene(scene, 'wing');
+  assert.equal(out.losses.filter(l => l.code === 'patch.group-unsupported').length, 0);
+  assert.deepEqual(wingChannel(out.file.text, 'Vox').in.conn, { grp: 'BUS', in: 11 });
+});

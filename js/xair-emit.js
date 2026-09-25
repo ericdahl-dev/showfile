@@ -17,7 +17,7 @@
 // accepts a partial snapshot, so every node a real scene contains is written
 // here, with the desk's own defaults where the IR has nothing to say.
 
-import { mapColor, codeToHex } from './console-map.js';
+import { mapColor, codeToHex, snapRatio, ratioToken } from './console-map.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X Air';
@@ -226,6 +226,13 @@ export function emitXAirScene(ir, opts = {}) {
         { kind: 'channel', n, name }));
     }
 
+    const ratio = snapRatio(c.dyn.ratio, 'xair');
+    if (half === 0 && include.dynamics && !ratio.exact) {
+      losses.push(loss('dyn.ratio-snapped',
+        { label: `ch ${n} "${name}"`, from: c.dyn.ratio, to: ratio.value, desk: DESK },
+        { kind: 'channel', n, name }));
+    }
+
     if (half === 0 && c.pairing === 'native' && Math.round(c.pan) !== 0) {
       losses.push(loss('stereo.balance-lost',
         { label: `ch ${n} "${name}"`, balance: Math.round(c.pan), desk: DESK },
@@ -358,7 +365,7 @@ export function emitXAirScene(ir, opts = {}) {
       : `/ch/${id}/gate OFF GATE -80.0 60.0 1  502 983 SELF`);
     out.push(`/ch/${id}/gate/filter OFF 3.0 990.9`);
     out.push(dyn
-      ? `/ch/${id}/dyn ${onOff(dyn.on)} COMP ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${dec(dyn.ratio, 1)} ${Math.round(dyn.knee || 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att || 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
+      ? `/ch/${id}/dyn ${onOff(dyn.on)} COMP ${dyn.det === 'RMS' ? 'RMS' : 'PEAK'} ${dyn.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(dyn.thr, 1)} ${ratioToken(snapRatio(dyn.ratio, 'xair').value)} ${Math.round(dyn.knee || 1)} ${dec(dyn.gain, 2)} ${Math.round(dyn.att || 10)} ${dec(dyn.hold, 1)} ${Math.round(dyn.rel || 151)} ${Math.round(dyn.mix ?? 100)} SELF OFF`
       : `/ch/${id}/dyn OFF COMP PEAK LOG 0.0 3.0 1 0.00 10 10.0 151 100 SELF OFF`);
     out.push(`/ch/${id}/dyn/filter OFF 3.0 990.9`);
     out.push(`/ch/${id}/insert OFF OFF`);
