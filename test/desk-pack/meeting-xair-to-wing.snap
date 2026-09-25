@@ -1,0 +1,1840 @@
+{
+  "type": "snapshot.11",
+  "creator": "Showfile",
+  "creator_name": "real/hedgcoxekhav/meeting",
+  "creator_model": "wing",
+  "ae_data": {
+    "ch": {
+      "1": {
+        "name": "CL PC L",
+        "icon": 0,
+        "col": 2,
+        "fdr": -144,
+        "mute": true,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 3
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 1
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": false,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 17410,
+          "hg": -11,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 164.4,
+          "1g": 11,
+          "1q": 2,
+          "2f": 654.7,
+          "2g": -10.2,
+          "2q": 2,
+          "3f": 3550,
+          "3g": 10.5,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -38,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "2": {
+        "name": "CLWMIC",
+        "icon": 0,
+        "col": 2,
+        "fdr": 0,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 3
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 101,
+          "lcs": "12",
+          "hc": true,
+          "hcf": 2990,
+          "hcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 295.8,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": -4.5,
+          "2q": 2,
+          "3f": 990.9,
+          "3g": 0.5,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": true,
+          "mdl": "GATE",
+          "thr": -44,
+          "range": 60,
+          "att": 16,
+          "hld": 126,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": -25.5,
+          "ratio": 3,
+          "knee": 2,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 6,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": 0,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "3": {
+        "name": "CLMIC",
+        "icon": 0,
+        "col": 2,
+        "fdr": 0,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 4
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 101,
+          "lcs": "12",
+          "hc": true,
+          "hcf": 2990,
+          "hcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 295.8,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": -5,
+          "2q": 2,
+          "3f": 990.9,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": true,
+          "mdl": "GATE",
+          "thr": -44,
+          "range": 60,
+          "att": 16,
+          "hld": 126,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": -25.5,
+          "ratio": 3,
+          "knee": 2,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 6,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": 0,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "4": {
+        "name": "LWMIC",
+        "icon": 0,
+        "col": 9,
+        "fdr": 0,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 5
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 101,
+          "lcs": "12",
+          "hc": true,
+          "hcf": 2990,
+          "hcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 295.8,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": -4.5,
+          "2q": 2,
+          "3f": 990.9,
+          "3g": 0.5,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": true,
+          "mdl": "GATE",
+          "thr": -44,
+          "range": 60,
+          "att": 16,
+          "hld": 126,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": -25.5,
+          "ratio": 3,
+          "knee": 2,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 6,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "5": {
+        "name": "LMIC",
+        "icon": 0,
+        "col": 9,
+        "fdr": 0,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 6
+          }
+        },
+        "flt": {
+          "lc": true,
+          "lcf": 101,
+          "lcs": "12",
+          "hc": true,
+          "hcf": 2990,
+          "hcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 12000,
+          "hg": 0,
+          "hq": 1,
+          "heq": "SHV",
+          "1f": 306.2,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": -5,
+          "2q": 2,
+          "3f": 990.9,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": true,
+          "mdl": "GATE",
+          "thr": -44,
+          "range": 60,
+          "att": 16,
+          "hld": 126,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": -38.5,
+          "ratio": 3,
+          "knee": 2,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 6,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "6": {
+        "name": "House",
+        "icon": 0,
+        "col": 17,
+        "fdr": 0,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 7
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": 5,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": 5,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "7": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "LCL",
+            "in": 8
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "8": {
+        "name": "Zoom - L",
+        "icon": 0,
+        "col": 11,
+        "fdr": -144,
+        "mute": true,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": false,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 3
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": -100
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "9": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 11
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "10": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 12
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "11": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 13
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "12": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 14
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "13": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 15
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "14": {
+        "name": "",
+        "icon": 0,
+        "col": 17,
+        "fdr": -144,
+        "mute": false,
+        "pan": 0,
+        "main": {
+          "1": {
+            "on": true,
+            "lvl": 0,
+            "pre": false
+          }
+        },
+        "in": {
+          "set": {
+            "inv": false,
+            "trim": 0
+          },
+          "conn": {
+            "grp": "CRD",
+            "in": 16
+          }
+        },
+        "flt": {
+          "lc": false,
+          "lcf": 20,
+          "lcs": "12"
+        },
+        "eq": {
+          "on": true,
+          "mdl": "STD",
+          "lf": 80,
+          "lg": 0,
+          "lq": 1,
+          "leq": "SHV",
+          "hf": 10020,
+          "hg": 0,
+          "hq": 2,
+          "heq": "SHV",
+          "1f": 124.7,
+          "1g": 0,
+          "1q": 2,
+          "2f": 496.6,
+          "2g": 0,
+          "2q": 2,
+          "3f": 1970,
+          "3g": 0,
+          "3q": 2,
+          "4f": 8000,
+          "4g": 0,
+          "4q": 1
+        },
+        "gate": {
+          "on": false,
+          "mdl": "GATE",
+          "thr": -80,
+          "range": 60,
+          "att": 1,
+          "hld": 502,
+          "rel": 983
+        },
+        "dyn": {
+          "on": false,
+          "mdl": "COMP",
+          "thr": 0,
+          "ratio": 3,
+          "knee": 1,
+          "att": 10,
+          "hld": 10,
+          "rel": 151,
+          "gain": 0,
+          "det": "PEAK",
+          "env": "LOG",
+          "mix": 100
+        },
+        "send": {
+          "1": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "2": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "3": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "4": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "5": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          },
+          "6": {
+            "on": false,
+            "lvl": -144,
+            "mode": "POST",
+            "pan": 0
+          }
+        },
+        "clink": false
+      },
+      "15": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "16": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "17": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "18": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "19": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "20": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "21": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "22": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "23": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "24": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "25": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "26": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "27": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "28": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "29": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "30": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "31": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "32": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "33": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "34": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "35": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "36": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "37": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "38": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "39": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      },
+      "40": {
+        "name": "",
+        "fdr": -144,
+        "mute": true,
+        "pan": 0
+      }
+    },
+    "io": {
+      "in": {
+        "CRD": {
+          "1": {
+            "mode": "ST"
+          },
+          "3": {
+            "mode": "ST"
+          }
+        },
+        "LCL": {
+          "3": {
+            "g": 0,
+            "vph": false
+          },
+          "4": {
+            "g": 42,
+            "vph": false
+          },
+          "5": {
+            "g": 0,
+            "vph": false
+          },
+          "6": {
+            "g": 42,
+            "vph": false
+          },
+          "7": {
+            "g": 0,
+            "vph": false
+          },
+          "8": {
+            "g": 0,
+            "vph": false
+          }
+        }
+      }
+    }
+  }
+}
