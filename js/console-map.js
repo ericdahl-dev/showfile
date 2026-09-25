@@ -204,3 +204,23 @@ export function mapIcon(icon, target) {
   if (target === 'xair') return null;      // the X Air has no channel icon
   return 0;
 }
+
+// Compressor ratios each desk offers. The X32 stores an index into its list,
+// so anything else is not a setting it can hold; the Wing's list is finer.
+const RATIOS = {
+  x32:  [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
+  xair: [1.1, 1.3, 1.5, 2, 2.5, 3, 4, 5, 7, 10, 20, 100],
+  wing: [1.1, 1.2, 1.3, 1.5, 1.7, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 20, 50, 100],
+};
+
+// The nearest ratio the desk has (a tie goes to the gentler one), and whether
+// that is the ratio asked for.
+export function snapRatio(value, desk) {
+  const list = RATIOS[desk];
+  const v = Number(value) || 3;
+  const best = list.reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a));
+  return { value: best, exact: Math.abs(best - v) < 1e-9 };
+}
+
+// How an X32/X Air scene file spells a ratio: one decimal below 10, whole above.
+export const ratioToken = (r) => (r >= 10 ? String(r) : r.toFixed(1));

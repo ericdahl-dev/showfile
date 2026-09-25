@@ -40,3 +40,49 @@ test('nothing is sent to the mono bus (#15)', () => {
   assert.ok(mixes.length >= 32);
   for (const l of mixes) assert.match(l, /\sOFF\s+-oo$/, l);
 });
+
+test('inputs the X32 has no route for are reported, not patched to local (#22)', () => {
+  const out = writeScene(readScene('wing', realWing), 'x32');
+  const lost = out.losses.filter(l => l.code === 'patch.group-unsupported');
+  const groups = new Set(lost.map(l => l.detail.group));
+  // The bus-sourced channel is Wing ch 40, past the X32's 32, so it never gets this far.
+  assert.ok(groups.has('aes50c') && groups.has('usb'), [...groups].join(','));
+  assert.ok(lost.some(l => /Headset 1/.test(l.detail.label)));
+  // A channel on an unroutable input is not counted as local input in any block.
+  const row = out.preview.find(p => p.name === 'Headset 1');
+  assert.equal(row.patch, '—');
+});
+
+test('a cut survives when the X32 runs short of EQ bands (#18)', () => {
+  // Five active bands plus a Wing high cut: something has to go, but not the cut.
+  const snap = JSON.parse(realWing);
+  Object.assign(snap.ae_data.ch['1'].eq, { lg: 2, '1g': 1, '2g': -3, '3g': 2, '4g': -1, hg: 3 });
+  Object.assign(snap.ae_data.ch['1'].flt, { hc: true, hcf: 8000 });
+  const text = writeScene(readScene('wing', JSON.stringify(snap)), 'x32').file.text;
+  assert.match(text, /^\/ch\/01\/eq\/\d HCut 8000\.0 /m);
+});
+
+test('aux, FX-return and bus inputs are patched by channel source, not routing blocks (#16)', () => {
+  const scene = readScene('x32', synthetic);
+  scene.channels[1].patch = { group: 'aux', input: 2 };      // Vox on Aux 2
+  const text = writeScene(scene, 'x32').file.text;
+  for (const t of routingIn(text).slice(0, 4)) assert.match(t, BLOCK_TOKEN, `token ${t}`);
+  assert.match(text, /^\/ch\/03\/config "Vox" \d+ \w+ 34$/m);  // source 34 = Aux 2
+});
+
+const X32_RATIOS = ['1.1', '1.3', '1.5', '2.0', '2.5', '3.0', '4.0', '5.0', '7.0', '10', '20', '100'];
+const ratioOf = (text, ch) => text.match(new RegExp(`^/ch/${ch}/dyn \\S+ \\S+ \\S+ \\S+ \\S+ (\\S+) `, 'm'))[1];
+
+test('compressor ratios are written as X32 ratio tokens (#19)', () => {
+  const scene = readScene('x32', synthetic);
+  const vox = scene.channels.find(c => c.name === 'Vox');
+  vox.dyn = { ...vox.dyn, on: true, ratio: 10 };
+  const out = writeScene(scene, 'x32');
+  assert.equal(ratioOf(out.file.text, '03'), '10');
+  assert.equal(out.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 0);   // exact, nothing to report
+
+  vox.dyn = { ...vox.dyn, ratio: 6 };                                                   // a Wing ratio
+  const snapped = writeScene(scene, 'x32');
+  assert.ok(X32_RATIOS.includes(ratioOf(snapped.file.text, '03')));
+  assert.equal(snapped.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 1);
+});

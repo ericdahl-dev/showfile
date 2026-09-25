@@ -103,3 +103,17 @@ test('reading the wrong kind of file fails with a message a person can act on', 
   assert.throws(() => readScene('x32', 'not a scene'), /X32\/M32 \.scn/);
   assert.throws(() => readScene('nope', x32Text), /Unknown desk/);
 });
+
+test('compressor ratios snap to what the X Air and Wing offer (#19)', () => {
+  const scene = readScene('x32', x32Text);
+  const vox = scene.channels.find(c => c.name === 'Vox');
+  vox.dyn = { ...vox.dyn, on: true, ratio: 10 };
+  const xair = writeScene(scene, 'xair').file.text;
+  assert.match(xair, /^\/ch\/\d\d\/dyn ON COMP \S+ \S+ \S+ 10 /m);
+
+  vox.dyn = { ...vox.dyn, ratio: 7 };                        // an X32 ratio the Wing lacks
+  const wing = writeScene(scene, 'wing');
+  const node = Object.values(JSON.parse(wing.file.text).ae_data.ch).find(c => c.name === 'Vox');
+  assert.equal(node.dyn.ratio, 6);
+  assert.equal(wing.losses.filter(l => l.code === 'dyn.ratio-snapped').length, 1);
+});

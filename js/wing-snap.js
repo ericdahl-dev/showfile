@@ -6,7 +6,7 @@
 // Key names and value encodings were derived by diffing snapshots saved from
 // WING-EDIT: an initialised baseline against files with known values set.
 
-import { mapColor, mapIcon, codeToHex } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio } from './console-map.js';
 import { loss, renderAll } from './losses.js';
 
 const NEG_INF = -144;                 // the Wing's -oo sentinel
@@ -24,13 +24,17 @@ const round = (v) => Math.round(v * 1e4) / 1e4;
 function mapEq(eq, warnings, label, filterFree) {
   const out = { on: !!eq.on, mdl: 'STD' };
   const mids = [];
-  let low = null, high = null;
+  // Cuts are kept apart from shelves: a channel can carry both, and only the
+  // shelf belongs in the EQ's outer band.
+  let low = null, high = null, lowCut = null, highCut = null;
   out.cut = null;                                  // a cut to fold into node.flt
 
   for (const b of eq.bands || []) {
     const t = b.type || 'bell';
-    if (t === 'lowcut' || t === 'lowshelf') { if (!low)  low  = b; else mids.push(b); }
-    else if (t === 'highcut' || t === 'highshelf') { if (!high) high = b; else mids.push(b); }
+    if (t === 'lowcut') { if (!lowCut) lowCut = b; else mids.push(b); }
+    else if (t === 'highcut') { if (!highCut) highCut = b; else mids.push(b); }
+    else if (t === 'lowshelf') { if (!low) low = b; else mids.push(b); }
+    else if (t === 'highshelf') { if (!high) high = b; else mids.push(b); }
     else mids.push(b);
   }
 
@@ -39,14 +43,17 @@ function mapEq(eq, warnings, label, filterFree) {
   // writing one silently throws the rolloff away. The Wing does have a real
   // low cut — in the dedicated filter section — so use that when the channel
   // high-pass has not already claimed it, and say so when it has.
-  if (low && low.type === 'lowcut') {
-    if (filterFree) { out.cut = { lc: true, lcf: round(low.f), lcs: '12' }; }
+  if (lowCut) {
+    if (filterFree) { out.cut = { lc: true, lcf: round(lowCut.f), lcs: '12' }; }
     else {
       warnings.push(loss('eq.lowcut-no-slot',
-        { label, freq: Math.round(low.f), desk: DESK }));
+        { label, freq: Math.round(lowCut.f), desk: DESK }));
     }
-    low = null;
   }
+
+  // Same for a high cut. The filter block's high cut is always free, since
+  // the high-pass only ever takes the low cut.
+  if (highCut) out.cut = { ...(out.cut || {}), hc: true, hcf: round(highCut.f), hcs: '12' };
 
   // Every one of the six bands is written, including the ones the source
   // does not use. The Wing merges a snapshot key by key, so a band left out
@@ -63,7 +70,7 @@ function mapEq(eq, warnings, label, filterFree) {
   out.hf = round(high ? high.f : 12000);
   out.hg = round(high ? high.g : 0);
   out.hq = round(high ? high.q : 1);
-  out.heq = high && high.type === 'highcut' ? 'PEQ' : 'SHV';
+  out.heq = 'SHV';
 
   const fitMids = mids.length > 4 ? mids.filter(b => Number(b.g) !== 0).slice(0, 4) : mids;
   for (let i = 0; i < 4; i++) {
@@ -89,7 +96,8 @@ function tagsFor(c) {
 // X32 input classes map onto the Wing's own source groups. The Wing exposes
 // 24 local inputs in a snapshot (and only 8 physical XLRs on the desk), so a
 // scene patched to local inputs beyond that needs a stagebox on the day.
-const SRC_GROUP = { local: 'LCL', aes50a: 'A', aes50b: 'B', card: 'CRD', user: 'USR', aux: 'AUX' };
+const SRC_GROUP = { local: 'LCL', aes50a: 'A', aes50b: 'B', aes50c: 'C', card: 'CRD', user: 'USR', aux: 'AUX',
+                    usb: 'USB', bus: 'BUS' };
 
 function mapPatch(patch, warnings, label) {
   if (!patch) return { grp: 'OFF', in: 1 };
@@ -157,10 +165,15 @@ export function emitWingSnapshot(ir, opts = {}) {
     }
 
     if (include.dynamics) {
+      const ratio = snapRatio(c.dyn.ratio, 'wing');
+      if (!ratio.exact) {
+        warnings.push(loss('dyn.ratio-snapped', { label, from: c.dyn.ratio, to: ratio.value, desk: DESK },
+          { kind: 'channel', n, name: c.name }));
+      }
       node.gate = { on: !!c.gate.on, thr: round(c.gate.thr), range: round(c.gate.range),
                                 att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
       node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
-                                ratio: round(c.dyn.ratio), knee: round(c.dyn.knee),
+                                ratio: snapRatio(c.dyn.ratio, 'wing').value, knee: round(c.dyn.knee),
                                 att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
                                 gain: round(c.dyn.gain), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
                                 env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG', mix: round(c.dyn.mix) };

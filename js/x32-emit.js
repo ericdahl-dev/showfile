@@ -17,7 +17,7 @@
 //
 // Everything that does not fit is reported. Nothing is dropped silently.
 
-import { mapColor, mapIcon, codeToHex } from './console-map.js';
+import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken } from './console-map.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -42,7 +42,21 @@ const FLAT_BANDS = [
 
 // Neutral groups -> X32 routing-block prefixes. Groups with no preamp behind
 // them (card, user, aux) still patch; they just have no /headamp node.
-const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD', user: 'UIN', aux: 'AUX' };
+const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD', user: 'UIN' };
+
+// Inputs the X32 reaches through a channel's own source rather than a routing
+// block: /ch/NN/config source = base + input (33-38 Aux, 39-40 USB, 41-48 FX
+// returns, 49-64 buses), up to each group's size.
+const SOURCE_GROUP = {
+  aux: { base: 32, size: 6, label: 'AUX' },
+  usb: { base: 38, size: 2, label: 'USB' },
+  fx:  { base: 40, size: 8, label: 'FX' },
+  bus: { base: 48, size: 16, label: 'BUS' },
+};
+const bySource = (patch) => {
+  const g = patch && SOURCE_GROUP[patch.group];
+  return g && patch.input >= 1 && patch.input <= g.size ? g : null;
+};
 const HEADAMP_BASE = { local: 0, aes50a: 32, aes50b: 80 };
 
 const q = (s) => String(s ?? '').replace(/"/g, '');
@@ -112,7 +126,7 @@ function routingBlocks(placed, warnings) {
     const members = [];
     for (let i = 0; i < BLOCK; i++) {
       const p = byCh.get(first + i);
-      if (p?.c.patch?.group) members.push({ offset: i, ch: first + i, patch: p.c.patch, name: p.c.name });
+      if (BLOCK_PREFIX[p?.c.patch?.group]) members.push({ offset: i, ch: first + i, patch: p.c.patch, name: p.c.name });
     }
     if (!members.length) { tokens.push(`AN${first}-${first + BLOCK - 1}`); continue; }
 
@@ -167,8 +181,14 @@ function routingBlocks(placed, warnings) {
 // converted channel cannot inherit the last show's curve.
 function fitBands(bands, limit) {
   if (bands.length <= limit) return bands;
-  const active = bands.filter(b => Number(b.g) !== 0);
-  return (active.length <= limit ? active : active.slice(0, limit));
+  // A cut does its work at 0 dB, so it counts as active whatever its gain, and
+  // it is kept before any bell or shelf: losing a rolloff changes a channel
+  // more than losing a boost. Low cut goes first, high cut last, as on a desk.
+  const lowCuts = bands.filter(b => b.type === 'lowcut');
+  const highCuts = bands.filter(b => b.type === 'highcut');
+  const shaped = bands.filter(b => b.type !== 'lowcut' && b.type !== 'highcut' && Number(b.g) !== 0);
+  const room = Math.max(0, limit - lowCuts.length - highCuts.length);
+  return [...lowCuts, ...shaped.slice(0, room), ...highCuts].slice(0, limit);
 }
 
 export function emitX32Scene(ir, opts = {}) {
@@ -179,7 +199,18 @@ export function emitX32Scene(ir, opts = {}) {
     opts.include || {}
   );
 
-  const placed = allocate(ir, warnings);
+  // A source the X32 has no routing block for (a Wing's third AES50 port, its
+  // USB audio, an internal bus) cannot be patched. Say so and leave the channel
+  // unpatched, rather than letting it fall into a block of local inputs.
+  const placed = allocate(ir, warnings).map(p => {
+    if (!p.c.patch || BLOCK_PREFIX[p.c.patch.group] || bySource(p.c.patch)) return p;
+    if (include.patch) {
+      warnings.push(loss('patch.group-unsupported',
+        { label: `ch ${p.ch} "${p.c.name}"`, group: p.c.patch.group, desk: DESK },
+        { kind: 'channel', n: p.ch, name: p.c.name }));
+    }
+    return { ...p, c: { ...p.c, patch: null } };
+  });
   const lines = [];
   const preview = [];
 
@@ -257,7 +288,9 @@ export function emitX32Scene(ir, opts = {}) {
       const name = width === 2 ? stem.slice(0, 10).trim() + (k === 0 ? ' L' : ' R') : base;
       const icon = include.names ? mapIcon(c.icon, 'x32') : 1;
       const color = include.colors ? mapColor(c.color, 'x32') : 'OFF';
-      lines.push(`/ch/${id}/config "${name}" ${icon} ${color} ${n}`);
+      const via = bySource(c.patch);
+      const source = via ? via.base + c.patch.input + k : n;
+      lines.push(`/ch/${id}/config "${name}" ${icon} ${color} ${source}`);
 
       if (include.preamp) {
         const h = c.hpf;
@@ -275,7 +308,13 @@ export function emitX32Scene(ir, opts = {}) {
       }
       if (include.dynamics) {
         const d = c.dyn;
-        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${dec(d.ratio, 1)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
+        const ratio = snapRatio(d.ratio, 'x32');
+        if (!ratio.exact && k === 0) {
+          warnings.push(loss('dyn.ratio-snapped',
+            { label: `ch ${n} "${name}"`, from: d.ratio, to: ratio.value, desk: DESK },
+            { kind: 'channel', n, name }));
+        }
+        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
       if (include.eq) {
@@ -318,7 +357,7 @@ export function emitX32Scene(ir, opts = {}) {
       n: ch, name: c.name, colorHex: c.color?.hex || null,
       outColorHex: codeToHex('x32', mapColor(c.color, 'x32')),
       source: `ch ${c.srcChannels.join('+')}`, stereo: !!c.stereo,
-      patch: c.patch ? `${BLOCK_PREFIX[c.patch.group] || '?'}${c.patch.input}` : '—',
+      patch: c.patch ? `${BLOCK_PREFIX[c.patch.group] || bySource(c.patch)?.label || '?'}${c.patch.input}` : '—',
       groups: [...c.dcas.map(n2 => `#D${n2}`), ...c.muteGroups.map(n2 => `#M${n2}`)].join('') || '—',
       span: c.stereo ? `${ch}+${ch + 1}` : String(ch),
     });

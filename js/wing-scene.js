@@ -15,8 +15,11 @@ import { makeChannel } from './scene.js';
 const INF = -Infinity;
 const NEG_INF = -144;                  // the Wing's -oo sentinel
 
-// Wing source groups -> the IR's neutral groups.
-const IN_GROUP = { LCL: 'local', A: 'aes50a', B: 'aes50b', CRD: 'card', USR: 'user', AUX: 'aux' };
+// Wing source groups -> neutral groups. C is the Wing's third AES50 port, USB its
+// computer audio, BUS an internal bus used as a channel source (a sidechain key).
+const IN_GROUP = { LCL: 'local', A: 'aes50a', B: 'aes50b', C: 'aes50c', CRD: 'card', USR: 'user', AUX: 'aux',
+                   USB: 'usb', BUS: 'bus' };
+const WING_MODELS = ['wing', 'wing-edit'];
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const numOr = (v, fallback = 0) => (typeof v === 'number' && Number.isFinite(v) ? v : fallback);
@@ -30,10 +33,19 @@ function parseTags(tags) {
   return { dcas: grab('D'), muteGroups: grab('M') };
 }
 
-// The Wing's six bands -> neutral bands. The outer two carry a type flag (SHV
-// or PEQ, where PEQ in the outer slot means a cut); the four mids are always
-// bells. A band with no gain and no frequency was never set, so it is dropped
-// rather than emitted as a flat 0 dB bell that a target desk would then write.
+// The Wing's six bands -> neutral bands. The outer two are a shelf (SHV) or a
+// bell (PEQ); the channel EQ has no cut, since a channel's cuts live in its
+// filter block (flt). The four mids are always bells. A band with no gain and
+// no frequency was never set, so it is dropped rather than emitted as a flat
+// 0 dB bell that a target desk would then write.
+// The Wing's high cut lives in the filter block, not the EQ. Every other desk
+// here keeps it as an EQ band, so it joins the bands as one.
+function withHighCut(eq, flt) {
+  if (!isObj(flt) || flt.hc !== true) return eq;
+  const band = { type: 'highcut', f: numOr(flt.hcf, 20000), g: 0, q: 1 };
+  return eq ? { ...eq, bands: [...eq.bands, band] } : { on: true, bands: [band] };
+}
+
 function readEq(eq) {
   if (!isObj(eq)) return null;
   const bands = [];
@@ -44,7 +56,7 @@ function readEq(eq) {
   const live = (f, g) => typeof f === 'number' && typeof g === 'number' && g !== 0;
 
   if (live(eq.lf, eq.lg)) {
-    bands.push({ type: eq.leq === 'SHV' ? 'lowshelf' : 'lowcut',
+    bands.push({ type: eq.leq === 'SHV' ? 'lowshelf' : 'bell',
                  f: numOr(eq.lf), g: numOr(eq.lg), q: numOr(eq.lq, 1) });
   }
   for (let i = 1; i <= 4; i++) {
@@ -53,7 +65,7 @@ function readEq(eq) {
     bands.push({ type: 'bell', f: numOr(f), g: numOr(g), q: numOr(eq[`${i}q`], 1) });
   }
   if (live(eq.hf, eq.hg)) {
-    bands.push({ type: eq.heq === 'SHV' ? 'highshelf' : 'highcut',
+    bands.push({ type: eq.heq === 'SHV' ? 'highshelf' : 'bell',
                  f: numOr(eq.hf), g: numOr(eq.hg), q: numOr(eq.hq, 1) });
   }
   if (!bands.length) return null;
@@ -114,7 +126,9 @@ export function parseWingSnapshot(text) {
 
   const warnings = [];
   const model = String(root.creator_model || root.snapshot?.creator_model || '');
-  if (model && model.toLowerCase() !== 'wing') {
+  // Snapshots saved on the desk say "wing"; ones exported from the editor say
+  // "WING-EDIT". Both are Wing files.
+  if (model && !WING_MODELS.includes(model.toLowerCase())) {
     warnings.push(render(loss('file.model-mismatch', { model, expected: 'wing' })));
   }
 
@@ -199,7 +213,7 @@ export function parseWingSnapshot(text) {
         rel: numOr(c.dyn.rel, 250), pos: 'POST', mix: numOr(c.dyn.mix, 100),
       } : null,
 
-      eq: readEq(c.eq),
+      eq: withHighCut(readEq(c.eq), c.flt),
       sends: readSends(c.send),
       dcas,
       muteGroups,
