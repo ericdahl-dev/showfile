@@ -6,7 +6,7 @@
 // tested directly. This page owns only what a person sees: the desk pickers,
 // the wording for each pairing, the report and the download.
 
-import { DESKS, canConvert, readScene, writeScene } from './conversion.js';
+import { DESKS, canConvert, readScene, writeScene, reportRows } from './conversion.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -215,11 +215,12 @@ function render() {
         <td class="src">${esc(p.groups)}</td>
       </tr>`).join('') + '</tbody>';
 
-  const warns = out.warnings || [];
-  $('warncard').hidden = warns.length === 0;
-  $('warns').innerHTML = warns.map((w, i) =>
-    `<div class="warn-row" style="--i:${i}"><span class="mk">!</span><span>${esc(w)}</span></div>`).join('');
-  $('warncount').textContent = warns.length ? `${warns.length} to check` : '';
+  // Graded, the most serious first: what did not make it at all leads.
+  const report = reportRows(out.losses);
+  $('warncard').hidden = report.length === 0;
+  $('warns').innerHTML = report.map((r, i) =>
+    `<div class="warn-row" style="--i:${i}"><span class="sev sev-${esc(r.severity)}">${esc(r.severity)}</span><span>${esc(r.text)}</span></div>`).join('');
+  $('warncount').textContent = report.length ? `${report.length} to check` : '';
 
   $('go').disabled = state.shown;
   $('go').hidden = state.shown;

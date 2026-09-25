@@ -123,7 +123,7 @@ function mapPatch(patch, warnings, label) {
 }
 
 export function emitWingSnapshot(ir, opts = {}) {
-  const warnings = [...(ir.warnings || [])];
+  const warnings = [...(ir.losses || [])];
   if (ir.channels.length > MAX_CH) warnings.push(loss('channel.over-limit', { count: ir.channels.length, desk: DESK, limit: MAX_CH }));
   const include = Object.assign(
     { names: true, colors: true, patch: true, preamp: true, levels: true,
@@ -285,7 +285,7 @@ export function emitWingSnapshot(ir, opts = {}) {
     snapshot: { type: 'snapshot.11', creator: 'Showfile',
                 creator_name: String(ir.name || '').slice(0, 32), creator_model: 'wing', ae_data: ae },
     warnings: renderAll(warnings),
-    losses: warnings.filter(w => typeof w !== 'string'),
+    losses: warnings,
     preview,
     // The blanked slots are housekeeping, not channels the engineer converted.
     stats: { channels: Object.values(ch).filter(c => c.name).length,

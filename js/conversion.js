@@ -14,6 +14,7 @@ import { parseWingSnapshot } from './wing-scene.js';
 import { emitX32Scene } from './x32-emit.js';
 import { emitXAirScene } from './xair-emit.js';
 import { emitWingSnapshot } from './wing-snap.js';
+import { SEVERITY, render } from './losses.js';
 
 // dcas is the desk's DCA count: what a scene written for it can actually hold.
 export const DESKS = {
@@ -73,4 +74,14 @@ export function writeScene(scene, to, include = {}) {
       bytes: out.text.length,
     },
   };
+}
+
+// The report as the page shows it: one row per loss, graded, the most serious
+// first (the order of SEVERITY), keeping the writer's order within a grade.
+const RANK = Object.fromEntries(Object.keys(SEVERITY).map((s, i) => [s, i]));
+export function reportRows(losses) {
+  return losses
+    .map((l, i) => ({ severity: l.severity, rank: RANK[l.severity] ?? 99, text: render(l), i }))
+    .sort((a, b) => a.rank - b.rank || a.i - b.i)
+    .map(({ i, ...row }) => row);
 }

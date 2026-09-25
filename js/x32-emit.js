@@ -192,7 +192,7 @@ function fitBands(bands, limit) {
 }
 
 export function emitX32Scene(ir, opts = {}) {
-  const warnings = [...(ir.warnings || [])];
+  const warnings = [...(ir.losses || [])];
   const include = Object.assign(
     { names: true, colors: true, patch: true, preamp: true, levels: true,
       eq: true, dynamics: true, sends: true, groups: true },
@@ -403,7 +403,7 @@ export function emitX32Scene(ir, opts = {}) {
   return {
     text: lines.join('\n') + '\n',
     warnings: renderAll(warnings),
-    losses: warnings.filter(w => typeof w !== 'string'),
+    losses: warnings,
     preview,
     stats: {
       channels: placed.reduce((n, p) => n + p.width, 0),

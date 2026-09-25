@@ -172,7 +172,7 @@ export function parseXAirScene(text, fileName = '') {
   if (!strips.length) throw new Error('No channels found — is this an X Air .scn file?');
 
   if (fxSendsInUse) {
-    warnings.push(render(loss('fx.engine-unsupported', { count: fxSendsInUse, desk: 'X Air' })));
+    warnings.push(loss('fx.engine-unsupported', { count: fxSendsInUse, desk: 'X Air' }));
   }
 
   // Collapse linked mono pairs into single stereo channels, exactly as the
@@ -226,7 +226,8 @@ export function parseXAirScene(text, fileName = '') {
     matrices: [],                                   // the X Air has none
     dcas,
     muteGroups: get('/config/mute').map(bool),
-    warnings,
+    losses: warnings,
+    warnings: warnings.map(render),
     raw: nodes,
   };
 }

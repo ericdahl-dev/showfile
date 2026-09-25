@@ -129,7 +129,7 @@ export function parseWingSnapshot(text) {
   // Snapshots saved on the desk say "wing"; ones exported from the editor say
   // "WING-EDIT". Both are Wing files.
   if (model && !WING_MODELS.includes(model.toLowerCase())) {
-    warnings.push(render(loss('file.model-mismatch', { model, expected: 'wing' })));
+    warnings.push(loss('file.model-mismatch', { model, expected: 'wing' }));
   }
 
   // Preamp gain and phantom live on the physical input, not the strip.
@@ -150,7 +150,7 @@ export function parseWingSnapshot(text) {
     if (!isObj(block)) return false;
     const mdl = String(block.mdl || want).toUpperCase();
     if (mdl === want) return true;
-    warnings.push(render(loss('dyn.model-unsupported', { label: `ch ${n} "${name || ''}"`, what, model: mdl })));
+    warnings.push(loss('dyn.model-unsupported', { label: `ch ${n} "${name || ''}"`, what, model: mdl }));
     return false;
   }
 
@@ -177,7 +177,7 @@ export function parseWingSnapshot(text) {
       ? { group: IN_GROUP[conn.grp] || null, input: numOr(conn.in, 1) }
       : null;
     if (conn && conn.grp && conn.grp !== 'OFF' && !IN_GROUP[conn.grp]) {
-      warnings.push(render(loss('patch.group-unknown', { label: `ch ${n} "${c.name || ''}"`, group: conn.grp })));
+      warnings.push(loss('patch.group-unknown', { label: `ch ${n} "${c.name || ''}"`, group: conn.grp }));
     }
 
     // Stereo is flagged in more than one place depending on where the snapshot
@@ -242,7 +242,8 @@ export function parseWingSnapshot(text) {
     matrices: named(ae.mtx, 8),
     dcas: named(ae.dca, 16),
     muteGroups: [],
-    warnings,
+    losses: warnings,
+    warnings: warnings.map(render),
     raw: ae,
   };
 }
