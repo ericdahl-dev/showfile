@@ -8,8 +8,8 @@
 
 import { mapColor, mapIcon, codeToHex, snapRatio, tapTo } from './console-map.js';
 import { loss, renderAll } from './losses.js';
+import { NEG_INF, tags, conn, spare, gateModel, dynModel, EQ_MODEL, filter } from './wing-codec.js';
 
-const NEG_INF = -144;                 // the Wing's -oo sentinel
 const DESK = 'Wing';
 const MAX_CH = 40;
 const LCL_INPUTS = 24;                // local inputs present in the snapshot
@@ -34,7 +34,7 @@ function clamped(warnings, label, what, from, range, extra) {
 }
 
 function mapEq(eq, warnings, label, filterFree) {
-  const out = { on: !!eq.on, mdl: 'STD' };
+  const out = { on: !!eq.on, mdl: EQ_MODEL };
   const mids = [];
   // Cuts are kept apart from shelves: a channel can carry both, and only the
   // shelf belongs in the EQ's outer band.
@@ -57,7 +57,7 @@ function mapEq(eq, warnings, label, filterFree) {
   // high-pass has not already claimed it, and say so when it has.
   if (lowCut) {
     if (filterFree) {
-      out.cut = { lc: true, lcf: round(lowCut.f), lcs: '12' };
+      out.cut = filter.lowCut(lowCut.f);
       warnings.push(loss('eq.lowcut-to-filter', { label, freq: Math.round(lowCut.f), desk: DESK }));
     }
     else {
@@ -68,7 +68,7 @@ function mapEq(eq, warnings, label, filterFree) {
 
   // Same for a high cut. The filter block's high cut is always free, since
   // the high-pass only ever takes the low cut.
-  if (highCut) out.cut = { ...(out.cut || {}), hc: true, hcf: round(highCut.f), hcs: '12' };
+  if (highCut) out.cut = { ...(out.cut || {}), ...filter.highCut(highCut.f) };
 
   // Every one of the six bands is written, including the ones the source
   // does not use. The Wing merges a snapshot key by key, so a band left out
@@ -101,26 +101,18 @@ function mapEq(eq, warnings, label, filterFree) {
   return out;
 }
 
-// DCA and mute-group membership is a comma-separated tag string ("#D5,#M1"),
-// not the bitmask the X32 uses. The comma matters: WING-EDIT writes it, and
-// given "#D5#M1" it honours neither tag.
-function tagsFor(c) {
-  return [...c.dcas.map(n => `#D${n}`), ...c.muteGroups.map(n => `#M${n}`)].join(',');
-}
 
 // X32 input classes map onto the Wing's own source groups. The Wing exposes
 // 24 local inputs in a snapshot (and only 8 physical XLRs on the desk), so a
 // scene patched to local inputs beyond that needs a stagebox on the day.
-const SRC_GROUP = { local: 'LCL', aes50a: 'A', aes50b: 'B', aes50c: 'C', card: 'CRD', user: 'USR', aux: 'AUX',
-                    usb: 'USB', bus: 'BUS' };
 
 function mapPatch(patch, warnings, label) {
-  if (!patch) return { grp: 'OFF', in: 1 };
-  const grp = SRC_GROUP[patch.group];
-  if (!grp) { warnings.push(loss('patch.group-unsupported', { label, group: patch.group, desk: DESK })); return { grp: 'OFF', in: 1 }; }
+  if (!patch) return conn.off();
+  const grp = conn.group(patch.group);
+  if (!grp) { warnings.push(loss('patch.group-unsupported', { label, group: patch.group, desk: DESK })); return conn.off(); }
   if (grp === 'LCL' && patch.input > LCL_INPUTS) {
     warnings.push(loss('patch.input-overflow', { label, input: patch.input, desk: DESK, limit: LCL_INPUTS }));
-    return { grp: 'OFF', in: 1 };
+    return conn.off();
   }
   return { grp, in: patch.input };
 }
@@ -167,7 +159,7 @@ export function emitWingSnapshot(ir, opts = {}) {
     }
 
     if (include.preamp) {
-      node.flt = { lc: !!c.hpf.on, lcf: round(c.hpf.freq), lcs: String(c.hpf.slope || 24) };
+      node.flt = filter.hpf(c.hpf);
     }
 
     if (include.eq) {
@@ -185,13 +177,12 @@ export function emitWingSnapshot(ir, opts = {}) {
         warnings.push(loss('dyn.ratio-snapped', { label, from: c.dyn.ratio, to: ratio.value, desk: DESK },
           { kind: 'channel', n, name: c.name }));
       }
-      // A ducker is its own model on the Wing; a gate and an expander share
-      // the GATE model, told apart by its ratio.
-      node.gate = { on: !!c.gate.on, mdl: c.gate.mode === 'duck' ? 'DUCK' : 'GATE',
+      const { mdl, ratio: gateRatio } = gateModel.write(c.gate);
+      node.gate = { on: !!c.gate.on, mdl,
                     thr: round(c.gate.thr), range: round(c.gate.range),
                     att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
-      if (c.gate.mode !== 'duck') node.gate.ratio = c.gate.mode === 'exp' ? `1:${c.gate.ratio}` : 'gate';
-      node.dyn  = { on: !!c.dyn.on, mdl: c.dyn.mode === 'exp' ? 'EXP' : 'COMP', thr: round(c.dyn.thr),
+      if (gateRatio !== undefined) node.gate.ratio = gateRatio;
+      node.dyn  = { on: !!c.dyn.on, mdl: dynModel.write(c.dyn), thr: round(c.dyn.thr),
                                 ratio: snapRatio(c.dyn.ratio, 'wing').value, knee: round(c.dyn.knee),
                                 att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
                                 gain: round(clamped(warnings, label, 'compressor gain', c.dyn.gain, RANGE.dynGain, { kind: 'channel', n, name: c.name })), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
@@ -217,7 +208,7 @@ export function emitWingSnapshot(ir, opts = {}) {
     }
 
     if (include.groups) {
-      const t = tagsFor(c);
+      const t = tags.write(c);
       if (t) node.tags = t;
     }
 
@@ -230,7 +221,7 @@ export function emitWingSnapshot(ir, opts = {}) {
       n, name: c.name, colorHex: c.color?.hex || null,
       outColorHex: codeToHex('wing', mapColor(c.color, 'wing')),
       source: `ch ${c.srcChannels.join('+')}`, stereo: !!c.stereo,
-      patch: node.in?.conn && node.in.conn.grp !== 'OFF' ? `${node.in.conn.grp}${node.in.conn.in}` : '—',
+      patch: conn.isPatched(node.in?.conn) ? `${node.in.conn.grp}${node.in.conn.in}` : '—',
       groups: node.tags || '—',
     });
 
@@ -238,11 +229,11 @@ export function emitWingSnapshot(ir, opts = {}) {
     // strip (a Wing snapshot has no stereo flag on a channel). Stereo is
     // written whether or not the input has a preamp, or a card-fed stereo
     // channel would read back as mono.
-    const conn = node.in?.conn;
-    if (conn && conn.grp !== 'OFF' && (c.stereo || (include.preamp && c.headamp))) {
-      const entry = ((lcl[conn.grp] ||= {})[String(conn.in)] = {});
+    const inConn = node.in?.conn;
+    if (conn.isPatched(inConn) && (c.stereo || (include.preamp && c.headamp))) {
+      const entry = ((lcl[inConn.grp] ||= {})[String(inConn.in)] = {});
       if (include.preamp && c.headamp) {
-        const g = conn.grp === 'LCL'
+        const g = inConn.grp === 'LCL'
           ? clamped(warnings, label, 'preamp gain', c.headamp.gain, RANGE.lclGain, { kind: 'channel', n, name: c.name })
           : c.headamp.gain;
         Object.assign(entry, { g: round(g), vph: !!c.headamp.phantom });
@@ -256,9 +247,7 @@ export function emitWingSnapshot(ir, opts = {}) {
   // desk so a converted show lands the same way every time.
   for (let n = ir.channels.length + 1; n <= MAX_CH; n++) {
     if (ch[String(n)]) continue;
-    // Grey: the Wing has no "no color". Icon 0 is its blank icon.
-    ch[String(n)] = { name: '', icon: 0, col: 17, in: { conn: { grp: 'OFF', in: 1 } },
-                      fdr: NEG_INF, mute: true, pan: 0 };
+    ch[String(n)] = spare.write();
   }
 
   const ae = { ch };

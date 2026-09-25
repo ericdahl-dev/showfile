@@ -11,27 +11,16 @@
 import { colorFrom, wingIconToX32, tapFrom } from './console-map.js';
 import { loss, render } from './losses.js';
 import { makeChannel } from './scene.js';
+import { NEG_INF, tags, conn as wingConn, spare, gateModel, dynModel, EQ_MODEL, filter } from './wing-codec.js';
 
 const INF = -Infinity;
-const NEG_INF = -144;                  // the Wing's -oo sentinel
 
-// Wing source groups -> neutral groups. C is the Wing's third AES50 port, USB its
-// computer audio, BUS an internal bus used as a channel source (a sidechain key).
-const IN_GROUP = { LCL: 'local', A: 'aes50a', B: 'aes50b', C: 'aes50c', CRD: 'card', USR: 'user', AUX: 'aux',
-                   USB: 'usb', BUS: 'bus' };
 const WING_MODELS = ['wing', 'wing-edit'];
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const numOr = (v, fallback = 0) => (typeof v === 'number' && Number.isFinite(v) ? v : fallback);
 const dB    = (v) => (typeof v === 'number' ? (v <= NEG_INF ? INF : v) : INF);
 
-// "#D5#M1" -> { dcas: [5], muteGroups: [1] }
-function parseTags(tags) {
-  const s = String(tags || '');
-  const grab = (letter) => [...s.matchAll(new RegExp(`#${letter}(\\d+)`, 'g'))]
-    .map(m => parseInt(m[1], 10)).filter(n => n > 0);
-  return { dcas: grab('D'), muteGroups: grab('M') };
-}
 
 // The Wing's six bands -> neutral bands. The outer two are a shelf (SHV) or a
 // bell (PEQ); the channel EQ has no cut, since a channel's cuts live in its
@@ -41,8 +30,8 @@ function parseTags(tags) {
 // The Wing's high cut lives in the filter block, not the EQ. Every other desk
 // here keeps it as an EQ band, so it joins the bands as one.
 function withHighCut(eq, flt) {
-  if (!isObj(flt) || flt.hc !== true) return eq;
-  const band = { type: 'highcut', f: numOr(flt.hcf, 20000), g: 0, q: 1 };
+  const band = isObj(flt) ? filter.readHighCut(flt) : null;
+  if (!band) return eq;
   return eq ? { ...eq, bands: [...eq.bands, band] } : { on: true, bands: [band] };
 }
 
@@ -112,12 +101,6 @@ function named(store, count) {
   return out;
 }
 
-// GATE's ratio says whether it gates ("gate") or expands ("1:3").
-function gateMode(g) {
-  if (String(g.mdl).toUpperCase() === 'DUCK') return { mode: 'duck', ratio: null };
-  const exp = /^1:([\d.]+)$/.exec(String(g.ratio || ''));
-  return exp ? { mode: 'exp', ratio: Number(exp[1]) } : { mode: 'gate', ratio: null };
-}
 
 export function parseWingSnapshot(text) {
   let root;
@@ -142,18 +125,14 @@ export function parseWingSnapshot(text) {
   // Preamp gain and phantom live on the physical input, not the strip.
   const io = isObj(ae.io?.in) ? ae.io.in : {};
   function headampFor(conn) {
-    if (!conn || !conn.grp || conn.grp === 'OFF') return null;
+    if (!wingConn.isPatched(conn)) return null;
     const store = io[conn.grp];
     const e = isObj(store) ? store[String(conn.in)] : null;
     if (!isObj(e)) return null;
     return { gain: numOr(e.g, 0), phantom: e.vph === true, mode: e.mode || null };
   }
 
-  // The gate and compressor slots each hold one of several models (a
-  // de-esser, a vintage compressor...). Only the plain models mean what the
-  // other desks' gate and compressor mean: GATE (a gate, or an expander by its
-  // ratio) and DUCK in the gate slot, COMP and EXP in the compressor slot. Anything
-  // else is reported and left off rather than misread.
+  // A slot holding a model other desks lack (see wing-codec.js) is reported.
   function modelOk(block, want, what, n, name) {
     if (!isObj(block)) return false;
     const mdl = String(block.mdl || want[0]).toUpperCase();
@@ -163,8 +142,8 @@ export function parseWingSnapshot(text) {
   }
 
   function eqModelOk(eq, n, name) {
-    const mdl = String((isObj(eq) && eq.mdl) || 'STD').toUpperCase();
-    if (mdl === 'STD') return true;
+    const mdl = String((isObj(eq) && eq.mdl) || EQ_MODEL).toUpperCase();
+    if (mdl === EQ_MODEL) return true;
     warnings.push(loss('eq.model-unsupported', { label: `ch ${n} "${name || ''}"`, model: mdl }));
     return false;
   }
@@ -183,16 +162,12 @@ export function parseWingSnapshot(text) {
     // Wing's -oo, and nothing else — is our writer blanking the rest of the
     // desk so a converted show lands the same way every time. Reading those
     // back as real channels would overflow the next desk down.
-    const patched = isObj(c.in?.conn) && c.in.conn.grp && c.in.conn.grp !== 'OFF';
-    if (!c.name && c.mute === true && c.fdr === NEG_INF
-        && !patched && !c.eq && !c.gate && !c.dyn && !c.flt) continue;
+    if (spare.is(c)) continue;
 
     const conn = isObj(c.in?.conn) ? c.in.conn : null;
     const ha = headampFor(conn);
-    const patch = conn && conn.grp && conn.grp !== 'OFF'
-      ? { group: IN_GROUP[conn.grp] || null, input: numOr(conn.in, 1) }
-      : null;
-    if (conn && conn.grp && conn.grp !== 'OFF' && !IN_GROUP[conn.grp]) {
+    const patch = wingConn.read(conn);
+    if (wingConn.isPatched(conn) && !wingConn.knows(conn.grp)) {
       warnings.push(loss('patch.group-unknown', { label: `ch ${n} "${c.name || ''}"`, group: conn.grp }));
     }
 
@@ -203,7 +178,7 @@ export function parseWingSnapshot(text) {
                    String(conn?.mode || '').toUpperCase() === 'ST' ||
                    String(ha?.mode || '').toUpperCase() === 'ST';
 
-    const { dcas, muteGroups } = parseTags(c.tags);
+    const { dcas, muteGroups } = tags.read(c.tags);
     const mainOn = isObj(c.main?.['1']) ? c.main['1'].on !== false : true;
 
     channels.push(makeChannel({
@@ -220,7 +195,7 @@ export function parseWingSnapshot(text) {
       trim: numOr(c.in?.set?.trim, 0),
       invert: c.in?.set?.inv === true,
       hpf: isObj(c.flt)
-        ? { on: c.flt.lc === true, slope: numOr(parseInt(c.flt.lcs, 10), 24), freq: numOr(c.flt.lcf, 20) }
+        ? filter.readHpf(c.flt)
         : null,
 
       fader: dB(c.fdr),
@@ -228,13 +203,13 @@ export function parseWingSnapshot(text) {
       pan: numOr(c.pan, 0),
       toMain: mainOn,
 
-      gate: modelOk(c.gate, ['GATE', 'DUCK'], 'gate', n, c.name) ? {
-        on: c.gate.on !== false, ...gateMode(c.gate), thr: numOr(c.gate.thr, -40), range: numOr(c.gate.range, 20),
+      gate: modelOk(c.gate, gateModel.models, 'gate', n, c.name) ? {
+        on: c.gate.on !== false, ...gateModel.read(c.gate), thr: numOr(c.gate.thr, -40), range: numOr(c.gate.range, 20),
         att: numOr(c.gate.att, 10), hold: numOr(c.gate.hld, 20), rel: numOr(c.gate.rel, 250),
       } : null,
 
-      dyn: modelOk(c.dyn, ['COMP', 'EXP'], 'compressor', n, c.name) ? {
-        on: c.dyn.on !== false, mode: String(c.dyn.mdl).toUpperCase() === 'EXP' ? 'exp' : 'comp', det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
+      dyn: modelOk(c.dyn, dynModel.models, 'compressor', n, c.name) ? {
+        on: c.dyn.on !== false, mode: dynModel.read(c.dyn), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
         env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG',
         thr: numOr(c.dyn.thr, -20), ratio: numOr(c.dyn.ratio, 3), knee: numOr(c.dyn.knee, 0),
         gain: numOr(c.dyn.gain, 0), att: numOr(c.dyn.att, 10), hold: numOr(c.dyn.hld, 20),
