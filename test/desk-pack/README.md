@@ -208,10 +208,11 @@ Load with: X32-Edit, offline: open the scene file.
 - **Stereo:** CL PC L, Zoom - L
 - **DCAs written:** 0
 
-The converter's report (2 lines), each worth checking on the desk:
+The converter's report (3 lines), each worth checking on the desk:
 
 - `check` Channels 1-8 are routed as one block of eight (AN1-8), which is the only way the X32 patches. 1 channel cannot be addressed inside it and need repatching on the desk: ch 1 "CL PC L" → card 1.
 - `check` Channels 9-16 are routed as one block of eight (CARD9-16), which is the only way the X32 patches. 1 channel cannot be addressed inside it and need repatching on the desk: ch 9 "Zoom - L" → card 3.
+- `check` FX 5-8 hold the X Air's output GEQs: dual GEQs inserted on buses 1-6 and a stereo GEQ on the main. Anything in those FX slots on the X32 is replaced.
 
 ### meeting-xair-to-wing.snap
 

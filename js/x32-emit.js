@@ -288,6 +288,23 @@ export function emitX32Scene(ir, opts = {}) {
     });
   }
 
+  // The X32 has no graphic EQ on its outputs; an X Air's go into FX 5-8.
+  // A dual GEQ holds two buses (side A, its master, side B, its master); the
+  // main goes into a stereo GEQ (31 bands, then its master).
+  const geqs = ir.outputGeqs;
+  if (geqs) {
+    const bands = (gains) => [...(gains?.length === 31 ? gains : Array(31).fill(0)), 0];
+    const fx = (n, type, gains) => lines.push(`/fx/${n} ${type}`, `/fx/${n}/par ${gains.map(g => dec(g, 1)).join(' ')}`);
+    fx(5, 'GEQ2', [...bands(geqs.buses[1]), ...bands(geqs.buses[2])]);
+    fx(6, 'GEQ2', [...bands(geqs.buses[3]), ...bands(geqs.buses[4])]);
+    fx(7, 'GEQ2', [...bands(geqs.buses[5]), ...bands(geqs.buses[6])]);
+    fx(8, 'GEQ', bands(geqs.main));
+    // Each inserted after the output's EQ, on its own side of the FX.
+    for (let b = 1; b <= 6; b++) lines.push(`/bus/${pad2(b)}/insert ON POST FX${4 + Math.ceil(b / 2)}${b % 2 ? 'L' : 'R'}`);
+    lines.push('/main/st/insert ON POST FX8L');
+    warnings.push(loss('fx.geq-slots', { from: geqs.from, desk: DESK }));
+  }
+
   return {
     text: lines.join('\n') + '\n',
     warnings: renderAll(warnings),
