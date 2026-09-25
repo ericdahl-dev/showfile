@@ -34,6 +34,7 @@ const EQ_TOKEN = { lowcut: 'LCut', lowshelf: 'LShv', bell: 'PEQ', highshelf: 'HS
 // Neutral groups -> the X Air's source tokens. It has local XLRs and USB and
 // nothing else — no AES50, no expansion card.
 const SRC = { local: 'In', card: 'U', aux: 'In' };
+const NAME_MAX = 16;
 
 const q = (s) => String(s ?? '').replace(/"/g, '');
 const pad2 = (n) => String(n).padStart(2, '0');
@@ -172,14 +173,17 @@ export function emitXAirScene(ir, opts = {}) {
     // halves are suffixed the way an engineer would write them, and a name
     // that already carries a side marker loses it first ("OH L" must not
     // become "OH L L"). The marker has to be its own word.
-    const base = include.names ? q(c.name).trim().slice(0, 12).trim() : '';
+    // X Air channel and DCA names hold 16 characters (the X32's hold 12).
+    const base = include.names ? q(c.name).trim().slice(0, NAME_MAX).trim() : '';
     const stem = base.replace(/\s+[LR]$/i, '').trim();
-    const name = width === 2 ? stem.slice(0, 10).trim() + (half === 0 ? ' L' : ' R') : base;
+    const name = width === 2 ? stem.slice(0, NAME_MAX - 2).trim() + (half === 0 ? ' L' : ' R') : base;
     const color = include.colors ? mapColor(c.color, 'xair') : 0;
 
     // Per-channel patch — the whole reason this writer is simpler than the
     // X32's. A scattered patch needs no warning because it survives.
     let src = `In${id}`;
+    let rtn = `U${id}`;           // the USB return this channel would switch to
+    let onReturn = false;
     if (include.patch && c.patch) {
       const prefix = SRC[c.patch.group];
       if (!prefix) {
@@ -193,7 +197,10 @@ export function emitXAirScene(ir, opts = {}) {
             { label: `ch ${n} "${name}"`, input: c.patch.input + half, desk: DESK, limit: MAX_CH },
             { kind: 'channel', n, name }));
         }
-        src = `${prefix}${pad2(port)}`;
+        // A USB return is not an input source: it goes in the return slot,
+        // with the channel's return switch on.
+        if (prefix === 'U') { rtn = `U${pad2(port)}`; onReturn = true; }
+        else src = `${prefix}${pad2(port)}`;
         if (prefix === 'In' && include.preamp && c.headamp) headamps.set(port, c.headamp);
       }
     }
@@ -202,13 +209,22 @@ export function emitXAirScene(ir, opts = {}) {
       reportLostMembership(losses, c, n, name, DESK, DCAS, MUTE_GROUPS);
     }
 
-    lines.push(`/ch/${id}/config "${name}" ${color} ${src} U${id}`);
+    lines.push(`/ch/${id}/config "${name}" ${color} ${src} ${rtn}`);
+
+    // The X Air's only channel trim is the USB return's. An input channel has
+    // none (mic gain is the headamp), so a digital trim from another desk
+    // cannot come with it.
+    const trim = include.preamp ? c.trim : 0;
+    if (!onReturn && trim && half === 0) {
+      losses.push(loss('preamp.trim-dropped', { label: `ch ${n} "${name}"`, trim, desk: DESK },
+        { kind: 'channel', n, name }));
+    }
 
     const h = c.hpf;
     // The frequency is written whether or not the filter is engaged. Zeroing
     // it on bypass loses a setting the engineer dialled in and expects to find
     // when they switch the filter back on.
-    lines.push(`/ch/${id}/preamp ${sign1(include.preamp ? c.trim || 0 : 0)} OFF ${onOff(include.preamp && c.invert)} ${onOff(include.preamp && h.on)}  ${Math.round(h.freq || 20)}`);
+    lines.push(`/ch/${id}/preamp ${sign1(onReturn ? trim : 0)} ${onOff(onReturn)} ${onOff(include.preamp && c.invert)} ${onOff(include.preamp && h.on)}  ${Math.round(h.freq || 20)}`);
 
 
     // A stereo channel that came from a natively-stereo desk carries a real
@@ -308,7 +324,7 @@ export function emitXAirScene(ir, opts = {}) {
   for (let d = 1; d <= DCAS; d++) {
     const dca = (ir.dcas || []).find(x => x.n === d);
     lines.push(`/dca/${d} ${onOff(!(dca?.muted))} ${lvl(dca ? dca.fader : 0)}`);
-    lines.push(`/dca/${d}/config "${include.names ? q(dca?.name || '').slice(0, 12) : ''}" ${dca && include.colors ? mapColor(dca.color, 'xair') : 8}`);
+    lines.push(`/dca/${d}/config "${include.names ? q(dca?.name || '').slice(0, NAME_MAX) : ''}" ${dca && include.colors ? mapColor(dca.color, 'xair') : 8}`);
   }
 
   for (const [n, name, par] of [[1, 'VRM', '20 1.94 24 30 22 0.0 1.10 0.69 97 10k4 28 34 OFF'],

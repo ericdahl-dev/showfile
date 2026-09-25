@@ -67,6 +67,9 @@ const CODES = {
   'send.bus-overflow': { severity: 'dropped', render: (d) =>
     `${d.label}: send${plural(d.buses.length)} to bus ${d.buses.join(', ')} dropped — the ${d.desk} has ${d.limit} buses. Rebuild ${d.buses.length === 1 ? 'that mix' : 'those mixes'} on the desk.` },
 
+  'preamp.trim-dropped': { severity: 'dropped', render: (d) =>
+    `${d.label}: ${d.trim > 0 ? '+' : ''}${d.trim} dB digital trim dropped — the ${d.desk} has no trim on an input channel. Set it with the preamp gain.` },
+
   'dyn.ratio-snapped': { severity: 'approximated', render: (d) =>
     `${d.label}: compressor ratio ${d.from}:1 is not on the ${d.desk}; set to ${d.to}:1.` },
 

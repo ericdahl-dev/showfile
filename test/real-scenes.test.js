@@ -51,3 +51,14 @@ test('a real X32 channel is patched from its own source, not its channel number 
   assert.deepEqual(ch(11).patch, { group: 'aes50a', input: 45 });     // source 29 = routing slot 29 = A41-48, 5th
   assert.equal(ch(6).patch, null);                                     // source 0 = OFF
 });
+
+test('an X Air channel switched to its USB return plays that return (#23)', () => {
+  const scene = readScene('xair', fixture('hedgcoxekhav/meeting.scn'), 'meeting.scn');
+  const ch = (n) => scene.channels.find(c => c.srcChannels.includes(n));
+  // ch 1: config "... In01 U01", preamp "+3.0 ON ..." -> USB return 1, trim +3.
+  assert.deepEqual(ch(1).patch, { group: 'card', input: 1 });
+  assert.equal(ch(1).trim, 3);
+  // ch 3: return switch OFF -> the local input; the X Air has no digital trim there.
+  assert.equal(ch(3).patch.group, 'local');
+  assert.equal(ch(3).trim, 0);
+});

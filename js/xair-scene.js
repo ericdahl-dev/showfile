@@ -124,7 +124,12 @@ export function parseXAirScene(text, fileName = '') {
       });
     }
 
-    const patch = parseSource(cfg[2]);
+    // config: name color insrc rtnsrc. preamp: rtntrim rtnsw invert hpon hpf.
+    // With the return switch on, the channel plays its USB return (U01...)
+    // instead of its input, and the trim is that return's. The X Air has no
+    // digital trim on the input path: mic gain is the headamp's.
+    const onReturn = bool(pre[1]);
+    const patch = parseSource(onReturn ? cfg[3] : cfg[2]);
 
     strips.push({
       ch: n,
@@ -133,10 +138,7 @@ export function parseXAirScene(text, fileName = '') {
       color: colorFrom('xair', num(cfg[1], 0)),
       patch,
 
-      // preamp: trim rpdgt invert hpon hpf. The two flags are adjacent and a
-      // channel with both set cannot tell them apart; confirmed against a pair
-      // of scenes that set exactly one each.
-      trim:   num(pre[0]),
+      trim:   onReturn ? num(pre[0]) : 0,
       invert: bool(pre[2]),
       hpf:    { on: bool(pre[3]), slope: HPF_SLOPE, freq: num(pre[4], 20) },
 
