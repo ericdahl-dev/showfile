@@ -15,8 +15,11 @@ import { makeChannel } from './scene.js';
 const INF = -Infinity;
 const NEG_INF = -144;                  // the Wing's -oo sentinel
 
-// Wing source groups -> the IR's neutral groups.
-const IN_GROUP = { LCL: 'local', A: 'aes50a', B: 'aes50b', CRD: 'card', USR: 'user', AUX: 'aux' };
+// Wing source groups -> neutral groups. C is the Wing's third AES50 port, USB its
+// computer audio, BUS an internal bus used as a channel source (a sidechain key).
+const IN_GROUP = { LCL: 'local', A: 'aes50a', B: 'aes50b', C: 'aes50c', CRD: 'card', USR: 'user', AUX: 'aux',
+                   USB: 'usb', BUS: 'bus' };
+const WING_MODELS = ['wing', 'wing-edit'];
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const numOr = (v, fallback = 0) => (typeof v === 'number' && Number.isFinite(v) ? v : fallback);
@@ -114,7 +117,9 @@ export function parseWingSnapshot(text) {
 
   const warnings = [];
   const model = String(root.creator_model || root.snapshot?.creator_model || '');
-  if (model && model.toLowerCase() !== 'wing') {
+  // Snapshots saved on the desk say "wing"; ones exported from the editor say
+  // "WING-EDIT". Both are Wing files.
+  if (model && !WING_MODELS.includes(model.toLowerCase())) {
     warnings.push(render(loss('file.model-mismatch', { model, expected: 'wing' })));
   }
 

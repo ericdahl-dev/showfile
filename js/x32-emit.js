@@ -179,7 +179,18 @@ export function emitX32Scene(ir, opts = {}) {
     opts.include || {}
   );
 
-  const placed = allocate(ir, warnings);
+  // A source the X32 has no routing block for (a Wing's third AES50 port, its
+  // USB audio, an internal bus) cannot be patched. Say so and leave the channel
+  // unpatched, rather than letting it fall into a block of local inputs.
+  const placed = allocate(ir, warnings).map(p => {
+    if (!p.c.patch || BLOCK_PREFIX[p.c.patch.group]) return p;
+    if (include.patch) {
+      warnings.push(loss('patch.group-unsupported',
+        { label: `ch ${p.ch} "${p.c.name}"`, group: p.c.patch.group, desk: DESK },
+        { kind: 'channel', n: p.ch, name: p.c.name }));
+    }
+    return { ...p, c: { ...p.c, patch: null } };
+  });
   const lines = [];
   const preview = [];
 

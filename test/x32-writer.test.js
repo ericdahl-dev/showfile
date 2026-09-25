@@ -40,3 +40,15 @@ test('nothing is sent to the mono bus (#15)', () => {
   assert.ok(mixes.length >= 32);
   for (const l of mixes) assert.match(l, /\sOFF\s+-oo$/, l);
 });
+
+test('inputs the X32 has no route for are reported, not patched to local (#22)', () => {
+  const out = writeScene(readScene('wing', realWing), 'x32');
+  const lost = out.losses.filter(l => l.code === 'patch.group-unsupported');
+  const groups = new Set(lost.map(l => l.detail.group));
+  // The bus-sourced channel is Wing ch 40, past the X32's 32, so it never gets this far.
+  assert.ok(groups.has('aes50c') && groups.has('usb'), [...groups].join(','));
+  assert.ok(lost.some(l => /Headset 1/.test(l.detail.label)));
+  // A channel on an unroutable input is not counted as local input in any block.
+  const row = out.preview.find(p => p.name === 'Headset 1');
+  assert.equal(row.patch, '—');
+});
