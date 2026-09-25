@@ -253,7 +253,9 @@ export function emitWingSnapshot(ir, opts = {}) {
   // desk so a converted show lands the same way every time.
   for (let n = ir.channels.length + 1; n <= MAX_CH; n++) {
     if (ch[String(n)]) continue;
-    ch[String(n)] = { name: '', fdr: NEG_INF, mute: true, pan: 0 };
+    // Grey: the Wing has no "no color". Icon 0 is its blank icon.
+    ch[String(n)] = { name: '', icon: 0, col: 17, in: { conn: { grp: 'OFF', in: 1 } },
+                      fdr: NEG_INF, mute: true, pan: 0 };
   }
 
   const ae = { ch };

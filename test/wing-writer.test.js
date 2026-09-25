@@ -59,3 +59,16 @@ test('values outside the Wing ranges are clamped and reported (#21)', () => {
   const clamped = out.losses.filter(l => l.code === 'range.clamped').map(l => l.detail.what).sort();
   assert.deepEqual(clamped, ['compressor gain', 'preamp gain']);
 });
+
+test('channels the show does not reach are cleared of icon, color and patch too', () => {
+  // WING-EDIT kept the last snapshot's icons on them: blanking only the name
+  // and fader leaves the previous show showing through.
+  const out = writeScene(readScene('x32', synthetic), 'wing');
+  const snap = JSON.parse(out.file.text);
+  const spare = snap.ae_data.ch['40'];
+  assert.equal(spare.icon, 0);
+  assert.equal(spare.col, 17);                               // grey: the Wing has no "no color"
+  assert.equal(spare.in?.conn?.grp, 'OFF');
+  // Read back, the cleared channels are still not channels.
+  assert.equal(readScene('wing', out.file.text).channels.length, readScene('x32', synthetic).channels.length);
+});

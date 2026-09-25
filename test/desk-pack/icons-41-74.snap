@@ -2693,36 +2693,84 @@
       },
       "35": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "36": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "37": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "38": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "39": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
       },
       "40": {
         "name": "",
+        "icon": 0,
+        "col": 17,
+        "in": {
+          "conn": {
+            "grp": "OFF",
+            "in": 1
+          }
+        },
         "fdr": -144,
         "mute": true,
         "pan": 0
