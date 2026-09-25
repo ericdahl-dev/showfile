@@ -5,28 +5,13 @@
 // node names, argument layouts, routing.
 
 import { loss } from './losses.js';
+import { nearestExp } from './scn-codec.js';
 import { mapColor, snapRatio } from './console-map.js';
 
 // ── text ─────────────────────────────────────────────────────────────────
 export const q = (s) => String(s ?? '').replace(/"/g, '');
 export const pad2 = (n) => String(n).padStart(2, '0');
-export const onOff = (b) => (b ? 'ON' : 'OFF');
-export const dec = (v, p = 1) => (Number(v) || 0).toFixed(p);
-export const sign1 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(1);
-export const sign2 = (v) => ((Number(v) || 0) >= 0 ? '+' : '') + (Number(v) || 0).toFixed(2);
-
-// Neutral band types -> the tokens both desks use.
-export const EQ_TOKEN = {
-  lowcut: 'LCut', lowshelf: 'LShv', bell: 'PEQ',
-  highshelf: 'HShv', highcut: 'HCut',
-};
-
-// Membership mask, least-significant-bit first: group 1 is the rightmost.
-export function mask(members, width) {
-  const bits = Array(width).fill('0');
-  for (const n of members || []) if (n >= 1 && n <= width) bits[n - 1] = '1';
-  return '%' + bits.reverse().join('');
-}
+export { onOff, dec, sign1, sign2 } from './scn-codec.js';
 
 // ── layout ───────────────────────────────────────────────────────────────
 // Lay the Scene's channels out on the desk's mono slots. Stereo takes an
@@ -132,16 +117,7 @@ export function snapRatioReported(losses, ratio, { desk, target }, at) {
   return r;
 }
 
-// The .scn desks spell the gate's mode as one token: GATE, DUCK, or EXP2-EXP4
-// for an expander at 1:2-1:4. An expander ratio they lack goes to the nearest.
-const EXP_RATIOS = [2, 3, 4];
-const nearestExp = (r) => EXP_RATIOS.reduce((a, b) => (Math.abs(b - r) < Math.abs(a - r) ? b : a));
-export function gateToken(gate) {
-  if (gate?.mode === 'duck') return 'DUCK';
-  if (gate?.mode === 'exp') return 'EXP' + nearestExp(Number(gate.ratio) || 2);
-  return 'GATE';
-}
-
+// An expander ratio the .scn desks lack is written as the nearest; say so.
 export function reportGateRatio(losses, gate, { desk }, at) {
   if (gate?.mode !== 'exp') return;
   const to = nearestExp(Number(gate.ratio) || 2);

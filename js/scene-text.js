@@ -2,8 +2,8 @@
 // The X32/M32 and the X Air series write the same on-disk shape: one
 // OSC-style path per line followed by a right-aligned argument list. Only the
 // node names and field positions differ, so tokenising, the "-oo" sentinel,
-// the compact "3k43" frequency notation and the membership bitmasks are
-// common ground and live here.
+// the compact "3k43" frequency notation are common ground and live here.
+// Tokens that are read and written the same way live in scn-codec.js.
 
 export const INF = -Infinity;
 
@@ -44,17 +44,6 @@ export function num(tok, fallback = 0) {
 
 export const bool = (tok) => String(tok).trim() === 'ON';
 
-// Least-significant-bit-first membership mask: group 1 is the RIGHTMOST
-// character, so "%0001" is group 1 and "%0100" is group 3. Width comes from
-// the mask itself — the X32 writes 8 DCA bits, the X Air 4.
-//
-// Reading it left-to-right silently files every channel under the wrong DCA,
-// which is easy to miss because the result still looks plausible.
-export function bits(mask) {
-  const chars = String(mask || '').replace('%', '').split('').reverse();
-  return chars.map((c, i) => (c === '1' ? i + 1 : 0)).filter(Boolean);
-}
-
 // Read a whole scene file into a path -> tokens map.
 export function parseNodes(text) {
   const nodes = new Map();
@@ -71,23 +60,6 @@ export function parseNodes(text) {
     nodes.set(path, sp === -1 ? [] : tokenize(line.slice(sp + 1)));
   }
   return { nodes, header };
-}
-
-// EQ band tokens (the same on both desks) -> neutral band types. VEQ is the
-// X32's vintage bell.
-const EQ_TYPE = {
-  LCUT: 'lowcut', LSHV: 'lowshelf', PEQ: 'bell', VEQ: 'bell',
-  HSHV: 'highshelf', HCUT: 'highcut',
-};
-export const eqType = (t) => EQ_TYPE[String(t || 'PEQ').toUpperCase()] || 'bell';
-
-// Gate mode tokens (the same on both desks) -> the neutral mode: a hard gate,
-// an expander at a ratio, or a ducker.
-export function gateMode(t) {
-  const tok = String(t || 'GATE').toUpperCase();
-  const exp = /^EXP(\d)$/.exec(tok);
-  if (exp) return { mode: 'exp', ratio: Number(exp[1]) };
-  return { mode: tok === 'DUCK' ? 'duck' : 'gate', ratio: null };
 }
 
 // Collapse linked mono pairs into single stereo channels. The link bit for a
