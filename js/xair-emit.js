@@ -18,7 +18,10 @@
 // here, with the desk's own defaults where the IR has nothing to say.
 
 import { mapColor, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
-import { q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands } from './scn-core.js';
+import {
+  q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
+  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported,
+} from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X Air';
@@ -64,18 +67,7 @@ export function emitXAirScene(ir, opts = {}) {
     losses.push(loss('dca.overflow', { count: ir.dcas.length, desk: DESK, limit: DCAS }));
   }
 
-  // 18 Wing colours collapse onto 8 here exactly as they do on an X32.
-  if (include.colors) {
-    const seen = new Map();
-    for (const { c } of placed) {
-      if (c.color?.code === null || c.color?.code === undefined) continue;
-      const to = mapColor(c.color, 'xair');
-      if (!seen.has(to)) seen.set(to, new Set());
-      seen.get(to).add(String(c.color.code));
-    }
-    const collapsed = [...seen.values()].filter(s => s.size > 1).length;
-    if (collapsed) losses.push(loss('color.palette-collapse', { desk: DESK, to: 8, from: 18, count: collapsed }));
-  }
+  if (include.colors) reportColourCollapse(losses, placed, { desk: DESK, target: 'xair' });
 
   // ── /config ──────────────────────────────────────────────────────────────
   const chlink = Array(MAX_CH / 2).fill(false);
@@ -107,14 +99,9 @@ export function emitXAirScene(ir, opts = {}) {
       continue;
     }
 
-    // A stereo source becomes two strips; the desk has no shared name, so the
-    // halves are suffixed the way an engineer would write them, and a name
-    // that already carries a side marker loses it first ("OH L" must not
-    // become "OH L L"). The marker has to be its own word.
     // X Air channel and DCA names hold 16 characters (the X32's hold 12).
-    const base = include.names ? q(c.name).trim().slice(0, NAME_MAX).trim() : '';
-    const stem = base.replace(/\s+[LR]$/i, '').trim();
-    const name = width === 2 ? stem.slice(0, NAME_MAX - 2).trim() + (half === 0 ? ' L' : ' R') : base;
+    const name = stripName(c.name, { width, half, max: NAME_MAX, names: include.names });
+    const at = { label: `ch ${n} "${name}"`, n, name };
     const color = include.colors ? mapColor(c.color, 'xair') : 0;
 
     // Per-channel patch — the whole reason this writer is simpler than the
@@ -164,32 +151,10 @@ export function emitXAirScene(ir, opts = {}) {
     // when they switch the filter back on.
     lines.push(`/ch/${id}/preamp ${sign1(onReturn ? trim : 0)} ${onOff(onReturn)} ${onOff(include.preamp && c.invert)} ${onOff(include.preamp && h.on)}  ${Math.round(h.freq || 20)}`);
 
-    // A stereo channel that came from a natively-stereo desk carries a real
-    // balance. One that came from a linked pair carries -100/+100, which is
-    // an artefact of being the left strip, not a balance the engineer set —
-    // the Scene's pairing says which one this is.
-    // Sends past the X Air's six buses cannot be written. Only sends with a
-    // level are reported; a send at -oo carries nothing.
-    const lostBuses = half === 0 && include.sends
-      ? c.sends.filter(s => (s.bus < 1 || s.bus > BUSES) && s.level > -Infinity).map(s => s.bus)
-      : [];
-    if (lostBuses.length) {
-      losses.push(loss('send.bus-overflow',
-        { label: `ch ${n} "${name}"`, buses: lostBuses, desk: DESK, limit: BUSES },
-        { kind: 'channel', n, name }));
-    }
-
-    const ratio = snapRatio(c.dyn.ratio, 'xair');
-    if (half === 0 && include.dynamics && !ratio.exact) {
-      losses.push(loss('dyn.ratio-snapped',
-        { label: `ch ${n} "${name}"`, from: c.dyn.ratio, to: ratio.value, desk: DESK },
-        { kind: 'channel', n, name }));
-    }
-
-    if (half === 0 && c.pairing === 'native' && Math.round(c.pan) !== 0) {
-      losses.push(loss('stereo.balance-lost',
-        { label: `ch ${n} "${name}"`, balance: Math.round(c.pan), desk: DESK },
-        { kind: 'channel', n: n, name: name }));
+    if (half === 0) {
+      if (include.sends) reportLostBuses(losses, c.sends, { desk: DESK, limit: BUSES }, at);
+      if (include.dynamics) snapRatioReported(losses, c.dyn.ratio, { desk: DESK, target: 'xair' }, at);
+      reportBalanceLost(losses, c, { desk: DESK }, at);
     }
     const pan = width === 2 ? (half === 0 ? -100 : 100) : Math.round(c.pan || 0);
     pushChannelTail(lines, id,
@@ -201,11 +166,7 @@ export function emitXAirScene(ir, opts = {}) {
       include.groups ? c.muteGroups : [],
       include.levels ? { muted: c.muted, fader: c.fader, toMain: c.toMain, pan } : null);
 
-    if (include.eq && fitBands(c.eq.bands, MAX_EQ_BANDS).length < c.eq.bands.length && half === 0) {
-      losses.push(loss('eq.band-overflow',
-        { label: `ch ${n} "${name}"`, count: c.eq.bands.length, desk: DESK, limit: MAX_EQ_BANDS },
-        { kind: 'channel', n, name }));
-    }
+    if (include.eq && half === 0) fitBandsReported(losses, c.eq.bands, { desk: DESK, limit: MAX_EQ_BANDS }, at);
 
     if (half === 0) {
       preview.push({

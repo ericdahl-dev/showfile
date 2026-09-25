@@ -18,7 +18,10 @@
 // Everything that does not fit is reported. Nothing is dropped silently.
 
 import { mapColor, mapIcon, codeToHex, snapRatio, ratioToken, tapTo } from './console-map.js';
-import { q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands } from './scn-core.js';
+import {
+  q, pad2, onOff, dec, sign1, sign2, EQ_TOKEN, mask, allocate, fitBands, stripName,
+  reportColourCollapse, reportLostBuses, reportBalanceLost, snapRatioReported, fitBandsReported,
+} from './scn-core.js';
 import { loss, renderAll, reportLostMembership } from './losses.js';
 
 const DESK = 'X32';
@@ -146,19 +149,7 @@ export function emitX32Scene(ir, opts = {}) {
   const sceneName = q(ir.name || 'Converted').slice(0, 12) || 'Converted';
   lines.push(`#4.0# "${sceneName}" "" %000000000 1`);
 
-  // Colour loss is real on the way down: 18 Wing colours collapse onto 8.
-  if (include.colors) {
-    const seen = new Map();
-    for (const { c } of placed) {
-      const to = mapColor(c.color, 'x32');
-      const from = c.color?.code;
-      if (from === null || from === undefined) continue;
-      if (!seen.has(to)) seen.set(to, new Set());
-      seen.get(to).add(String(from));
-    }
-    const collapsed = [...seen.values()].filter(s => s.size > 1).length;
-    if (collapsed) warnings.push(loss('color.palette-collapse', { desk: DESK, to: 8, from: 18, count: collapsed }));
-  }
+  if (include.colors) reportColourCollapse(warnings, placed, { desk: DESK, target: 'x32' });
 
   const chlink = Array(MAX_CH / 2).fill(false);
   const headamps = new Map();
@@ -185,23 +176,10 @@ export function emitX32Scene(ir, opts = {}) {
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
-    // A send to a bus the X32 lacks cannot be written. One at -oo carries
-    // nothing, and a real scene holds sixteen of those per channel, so only
-    // sends with a level are worth a line in the report.
-    const lostBuses = include.sends
-      ? c.sends.filter(s => (s.bus < 1 || s.bus > 16) && s.level > -Infinity).map(s => s.bus)
-      : [];
-    if (lostBuses.length) {
-      warnings.push(loss('send.bus-overflow',
-        { label: `ch ${ch} "${c.name}"`, buses: lostBuses, desk: DESK, limit: 16 },
-        { kind: 'channel', n: ch, name: c.name }));
-    }
+    const whole = { label: `ch ${ch} "${c.name}"`, n: ch, name: c.name };
+    if (include.sends) reportLostBuses(warnings, c.sends, { desk: DESK, limit: 16 }, whole);
 
-    if (c.pairing === 'native' && Math.round(c.pan) !== 0) {
-      warnings.push(loss('stereo.balance-lost',
-        { label: `ch ${ch} "${c.name || ""}"`, balance: Math.round(c.pan), desk: DESK },
-        { kind: 'channel', n: ch, name: c.name }));
-    }
+    reportBalanceLost(warnings, c, { desk: DESK }, { ...whole, label: `ch ${ch} "${c.name || ''}"` });
 
     for (let k = 0; k < width; k++) {
       const n = ch + k;
@@ -211,9 +189,8 @@ export function emitX32Scene(ir, opts = {}) {
       // A name that already carries a side marker ("OH L", from a source that
       // was itself an X32 pair) loses it first, or the result reads "OH L L".
       // The marker has to be its own word — VOCAL must not become VOCA L.
-      const base = include.names ? q(c.name).trim().slice(0, 12).trim() : '';
-      const stem = base.replace(/\s+[LR]$/i, '').trim();
-      const name = width === 2 ? stem.slice(0, 10).trim() + (k === 0 ? ' L' : ' R') : base;
+      const name = stripName(c.name, { width, half: k, max: 12, names: include.names });
+      const at = { label: `ch ${n} "${name}"`, n, name };
       const icon = include.names ? mapIcon(c.icon, 'x32') : 1;
       const color = include.colors ? mapColor(c.color, 'x32') : 'OFF';
       const via = bySource(c.patch);
@@ -236,23 +213,17 @@ export function emitX32Scene(ir, opts = {}) {
       }
       if (include.dynamics) {
         const d = c.dyn;
-        const ratio = snapRatio(d.ratio, 'x32');
-        if (!ratio.exact && k === 0) {
-          warnings.push(loss('dyn.ratio-snapped',
-            { label: `ch ${n} "${name}"`, from: d.ratio, to: ratio.value, desk: DESK },
-            { kind: 'channel', n, name }));
-        }
+        const ratio = k === 0
+          ? snapRatioReported(warnings, d.ratio, { desk: DESK, target: 'x32' }, at)
+          : snapRatio(d.ratio, 'x32');
         lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${ratioToken(ratio.value)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
       if (include.eq) {
         lines.push(`/ch/${id}/eq ${onOff(c.eq.on !== false)}`);
-        const bands = fitBands(c.eq.bands, MAX_EQ_BANDS);
-        if (bands.length < c.eq.bands.length && k === 0) {
-          warnings.push(loss('eq.band-overflow',
-            { label: `ch ${n} "${name}"`, count: c.eq.bands.length, desk: DESK, limit: MAX_EQ_BANDS },
-            { kind: 'channel', n, name }));
-        }
+        const bands = k === 0
+          ? fitBandsReported(warnings, c.eq.bands, { desk: DESK, limit: MAX_EQ_BANDS }, at)
+          : fitBands(c.eq.bands, MAX_EQ_BANDS);
         // Every band is written. One left out keeps whatever that band held on
         // the desk before, so a source with fewer bands pads out flat.
         for (let i = 0; i < MAX_EQ_BANDS; i++) {

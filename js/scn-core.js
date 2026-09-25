@@ -5,6 +5,7 @@
 // node names, argument layouts, routing.
 
 import { loss } from './losses.js';
+import { mapColor, snapRatio } from './console-map.js';
 
 // ── text ─────────────────────────────────────────────────────────────────
 export const q = (s) => String(s ?? '').replace(/"/g, '');
@@ -76,4 +77,66 @@ export function fitBands(bands, limit) {
   const shaped = bands.filter(b => b.type !== 'lowcut' && b.type !== 'highcut' && Number(b.g) !== 0);
   const room = Math.max(0, limit - lowCuts.length - highCuts.length);
   return [...lowCuts, ...shaped.slice(0, room), ...highCuts].slice(0, limit);
+}
+
+// ── per-channel ──────────────────────────────────────────────────────────
+// A stereo source becomes two strips; the desk has no shared name, so the
+// halves are suffixed the way an engineer would write them, and a name that
+// already carries a side marker loses it first ("OH L" must not become
+// "OH L L"). The marker has to be its own word — VOCAL must not become VOCA L.
+export function stripName(raw, { width, half, max, names = true }) {
+  const base = names ? q(raw).trim().slice(0, max).trim() : '';
+  const stem = base.replace(/\s+[LR]$/i, '').trim();
+  return width === 2 ? stem.slice(0, max - 2).trim() + (half === 0 ? ' L' : ' R') : base;
+}
+
+// The checks below each report one kind of loss for one channel. `at` is how
+// the report names the channel: { label, n, name }.
+const scope = (at) => ({ kind: 'channel', n: at.n, name: at.name });
+
+// Colour loss is real on the way down: a Wing's 18 colours collapse onto 8.
+export function reportColourCollapse(losses, placed, { desk, target }) {
+  const seen = new Map();
+  for (const { c } of placed) {
+    const from = c.color?.code;
+    if (from === null || from === undefined) continue;
+    const to = mapColor(c.color, target);
+    if (!seen.has(to)) seen.set(to, new Set());
+    seen.get(to).add(String(from));
+  }
+  const collapsed = [...seen.values()].filter(s => s.size > 1).length;
+  if (collapsed) losses.push(loss('color.palette-collapse', { desk, to: 8, from: 18, count: collapsed }));
+}
+
+// A send to a bus the desk lacks cannot be written. One at -oo carries
+// nothing, and a real scene holds sixteen of those per channel, so only sends
+// with a level are worth a line.
+export function reportLostBuses(losses, sends, { desk, limit }, at) {
+  const buses = sends.filter(s => (s.bus < 1 || s.bus > limit) && s.level > -Infinity).map(s => s.bus);
+  if (buses.length) losses.push(loss('send.bus-overflow', { label: at.label, buses, desk, limit }, scope(at)));
+}
+
+// A stereo channel from a natively-stereo desk carries a real balance. One
+// built from a linked pair carries -100/+100, which is an artefact of being
+// the left strip, not a balance the engineer set; the pairing says which.
+export function reportBalanceLost(losses, c, { desk }, at) {
+  if (c.pairing === 'native' && Math.round(c.pan) !== 0) {
+    losses.push(loss('stereo.balance-lost', { label: at.label, balance: Math.round(c.pan), desk }, scope(at)));
+  }
+}
+
+// The nearest ratio the desk has; a ratio that had to move is reported.
+export function snapRatioReported(losses, ratio, { desk, target }, at) {
+  const r = snapRatio(ratio, target);
+  if (!r.exact) losses.push(loss('dyn.ratio-snapped', { label: at.label, from: ratio, to: r.value, desk }, scope(at)));
+  return r;
+}
+
+// The bands the desk can hold; if some had to go, say how many there were.
+export function fitBandsReported(losses, bands, { desk, limit }, at) {
+  const fitted = fitBands(bands, limit);
+  if (fitted.length < bands.length) {
+    losses.push(loss('eq.band-overflow', { label: at.label, count: bands.length, desk, limit }, scope(at)));
+  }
+  return fitted;
 }
