@@ -106,6 +106,12 @@ const CODES = {
   'fx.engine-unsupported': { severity: 'unsupported', render: (d) =>
     `${d.count} FX send${d.count === 1 ? ' is' : 's are'} active. The ${d.desk}'s four internal FX engines have no equivalent on the target desk, so the sends were not carried across — rebuild the effects and their sends on the desk.` },
 
+  'file.channel-preset': { severity: 'check', render: (d) =>
+    `This is the channel preset "${d.name}", written out as a scene with it on channel 1 and no input patch. Loading a scene replaces the whole desk, not one channel.` },
+
+  'file.snippet': { severity: 'check', render: (d) =>
+    `This is the snippet "${d.name}", written out as a scene with its ${d.count} channel${d.count === 1 ? '' : 's'}. Settings the snippet did not save are at the desk's defaults, and loading a scene replaces the whole desk.` },
+
   'file.model-mismatch': { severity: 'check', render: (d) =>
     `Snapshot reports model "${d.model}" rather than "${d.expected}"; reading it as a ${d.expected} file anyway.` },
 };
