@@ -82,8 +82,8 @@ function mapEq(eq, warnings, label, filterFree) {
 // DCA and mute-group membership is a tag string ("#D5#M1"), not the bitmask the
 // X32 uses.
 function tagsFor(c) {
-  return (c.dcas || []).map(n => `#D${n}`).join('') +
-         (c.muteGroups || []).map(n => `#M${n}`).join('');
+  return c.dcas.map(n => `#D${n}`).join('') +
+         c.muteGroups.map(n => `#M${n}`).join('');
 }
 
 // X32 input classes map onto the Wing's own source groups. The Wing exposes
@@ -134,7 +134,7 @@ export function emitWingSnapshot(ir, opts = {}) {
       // the source desk glued the pair together, not a balance anyone dialled.
       // Copying it through would make every converted stereo channel arrive
       // hard left, and would then read back as a deliberate balance.
-      node.pan  = c.stereo && c.srcChannels?.length === 2 ? 0 : round(c.pan || 0);
+      node.pan  = c.pairing === 'linked' ? 0 : round(c.pan);
       node.main = { 1: { on: c.toMain !== false, lvl: 0, pre: false } };
     }
 
@@ -143,12 +143,12 @@ export function emitWingSnapshot(ir, opts = {}) {
       if (include.patch) node.in.conn = mapPatch(c.patch, warnings, label);
     }
 
-    if (include.preamp && c.hpf) {
+    if (include.preamp) {
       node.flt = { lc: !!c.hpf.on, lcf: round(c.hpf.freq), lcs: String(c.hpf.slope || 24) };
     }
 
-    if (include.eq && c.eq) {
-      const hpfUsed = !!(include.preamp && c.hpf && c.hpf.on);
+    if (include.eq) {
+      const hpfUsed = include.preamp && c.hpf.on;
       const eqOut = mapEq(c.eq, warnings, label, !hpfUsed);
       const cut = eqOut.cut;
       delete eqOut.cut;
@@ -157,13 +157,13 @@ export function emitWingSnapshot(ir, opts = {}) {
     }
 
     if (include.dynamics) {
-      if (c.gate) node.gate = { on: !!c.gate.on, thr: round(c.gate.thr), range: round(c.gate.range),
+      node.gate = { on: !!c.gate.on, thr: round(c.gate.thr), range: round(c.gate.range),
                                 att: round(c.gate.att), hld: round(c.gate.hold), rel: round(c.gate.rel) };
-      if (c.dyn)  node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
+      node.dyn  = { on: !!c.dyn.on, mdl: 'COMP', thr: round(c.dyn.thr),
                                 ratio: round(c.dyn.ratio), knee: round(c.dyn.knee),
                                 att: round(c.dyn.att), hld: round(c.dyn.hold), rel: round(c.dyn.rel),
                                 gain: round(c.dyn.gain), det: c.dyn.det === 'RMS' ? 'RMS' : 'PEAK',
-                                env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG', mix: round(c.dyn.mix ?? 100) };
+                                env: c.dyn.env === 'LIN' ? 'LIN' : 'LOG', mix: round(c.dyn.mix) };
     }
 
     if (include.sends && c.sends?.length) {

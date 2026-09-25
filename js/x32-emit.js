@@ -32,6 +32,14 @@ const EQ_TOKEN = {
   highshelf: 'HShv', highcut: 'HCut',
 };
 
+// The X32's own flat channel EQ, used for any band the source did not carry.
+const FLAT_BANDS = [
+  { type: 'bell',      f: 124.7, g: 0, q: 2 },
+  { type: 'bell',      f: 496.6, g: 0, q: 2 },
+  { type: 'bell',      f: 1970,  g: 0, q: 2 },
+  { type: 'highshelf', f: 10020, g: 0, q: 2 },
+];
+
 // Neutral groups -> X32 routing-block prefixes. Groups with no preamp behind
 // them (card, user, aux) still patch; they just have no /headamp node.
 const BLOCK_PREFIX = { local: 'AN', aes50a: 'A', aes50b: 'B', card: 'CARD', user: 'UIN', aux: 'AUX' };
@@ -206,8 +214,8 @@ export function emitX32Scene(ir, opts = {}) {
     // A stereo channel that came from a natively-stereo desk carries a real
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
-    // srcChannels is the only thing that tells them apart today.
-    if (c.stereo && c.srcChannels?.length === 1 && Math.round(c.pan || 0) !== 0) {
+    // the Scene's pairing says which one this is.
+    if (c.pairing === 'native' && Math.round(c.pan) !== 0) {
       warnings.push(loss('stereo.balance-lost',
         { label: `ch ${ch} "${c.name || ""}"`, balance: Math.round(c.pan), desk: DESK },
         { kind: 'channel', n: ch, name: c.name }));
@@ -230,7 +238,7 @@ export function emitX32Scene(ir, opts = {}) {
       lines.push(`/ch/${id}/config "${name}" ${icon} ${color} ${n}`);
 
       if (include.preamp) {
-        const h = c.hpf || { on: false, slope: 24, freq: 20 };
+        const h = c.hpf;
         lines.push(`/ch/${id}/preamp ${sign1(c.trim || 0)} ${onOff(c.invert)} ${onOff(h.on)} ${Math.round(h.slope || 24)} ${dec(h.freq || 20, 1)}`);
       }
 
@@ -239,30 +247,33 @@ export function emitX32Scene(ir, opts = {}) {
         lines.push(`/ch/${id}/mix ${onOff(!c.muted)} ${lvl(c.fader)} ${onOff(c.toMain !== false)} ${pan >= 0 ? '+' : ''}${pan} ON ${lvl(0)}`);
       }
 
-      if (include.dynamics && c.gate) {
+      if (include.dynamics) {
         const g = c.gate;
         lines.push(`/ch/${id}/gate ${onOff(g.on)} GATE ${dec(g.thr, 1)} ${dec(g.range, 1)} ${dec(g.att, 0)} ${dec(g.hold, 2)} ${dec(g.rel, 0)} 0`);
       }
-      if (include.dynamics && c.dyn) {
+      if (include.dynamics) {
         const d = c.dyn;
-        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${dec(d.ratio, 1)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix ?? 100, 0)} OFF`);
+        lines.push(`/ch/${id}/dyn ${onOff(d.on)} COMP ${d.det === 'RMS' ? 'RMS' : 'PEAK'} ${d.env === 'LIN' ? 'LIN' : 'LOG'} ${dec(d.thr, 1)} ${dec(d.ratio, 1)} ${dec(d.knee, 0)} ${dec(d.gain, 2)} ${dec(d.att, 0)} ${dec(d.hold, 2)} ${dec(d.rel, 0)} ${d.pos === 'PRE' ? 'PRE' : 'POST'} 0 ${dec(d.mix, 0)} OFF`);
       }
 
-      if (include.eq && c.eq) {
+      if (include.eq) {
         lines.push(`/ch/${id}/eq ${onOff(c.eq.on !== false)}`);
-        const bands = fitBands(c.eq.bands || [], MAX_EQ_BANDS);
-        if (bands.length < (c.eq.bands || []).length && k === 0) {
+        const bands = fitBands(c.eq.bands, MAX_EQ_BANDS);
+        if (bands.length < c.eq.bands.length && k === 0) {
           warnings.push(loss('eq.band-overflow',
             { label: `ch ${n} "${name}"`, count: c.eq.bands.length, desk: DESK, limit: MAX_EQ_BANDS },
             { kind: 'channel', n, name }));
         }
-        bands.forEach((b, i) => {
+        // Every band is written. One left out keeps whatever that band held on
+        // the desk before, so a source with fewer bands pads out flat.
+        for (let i = 0; i < MAX_EQ_BANDS; i++) {
+          const b = bands[i] || FLAT_BANDS[i];
           lines.push(`/ch/${id}/eq/${i + 1} ${EQ_TOKEN[b.type] || 'PEQ'} ${dec(b.f, 1)} ${sign(b.g)} ${dec(b.q, 1)}`);
-        });
+        }
       }
 
       if (include.sends) {
-        for (const s of c.sends || []) {
+        for (const s of c.sends) {
           if (s.bus < 1 || s.bus > 16) continue;
           lines.push(`/ch/${id}/mix/${pad2(s.bus)} ${onOff(s.on)} ${lvl(s.level)} ${(s.pan || 0) >= 0 ? '+' : ''}${Math.round(s.pan || 0)} ${s.tap === 'POST' ? 'POST' : 'PRE'} 0`);
         }
@@ -286,7 +297,7 @@ export function emitX32Scene(ir, opts = {}) {
       outColorHex: codeToHex('x32', mapColor(c.color, 'x32')),
       source: `ch ${c.srcChannels.join('+')}`, stereo: !!c.stereo,
       patch: c.patch ? `${BLOCK_PREFIX[c.patch.group] || '?'}${c.patch.input}` : '—',
-      groups: [...(c.dcas || []).map(n2 => `#D${n2}`), ...(c.muteGroups || []).map(n2 => `#M${n2}`)].join('') || '—',
+      groups: [...c.dcas.map(n2 => `#D${n2}`), ...c.muteGroups.map(n2 => `#M${n2}`)].join('') || '—',
       span: c.stereo ? `${ch}+${ch + 1}` : String(ch),
     });
   }

@@ -112,8 +112,8 @@ export const KNOWN_CODES = Object.keys(CODES);
 // made before the mask is built.
 export function reportLostMembership(out, c, n, name, desk, dcaLimit, mgLimit) {
   const label = `ch ${n} "${name}"`;
-  const lostD = (c.dcas || []).filter(d => d > dcaLimit);
-  const lostM = (c.muteGroups || []).filter(m => m > mgLimit);
+  const lostD = c.dcas.filter(d => d > dcaLimit);
+  const lostM = c.muteGroups.filter(m => m > mgLimit);
   if (lostD.length) out.push(loss('group.membership-dropped',
     { label, kind: 'DCA', lost: lostD, desk, limit: dcaLimit }, { kind: 'channel', n, name }));
   if (lostM.length) out.push(loss('group.membership-dropped',

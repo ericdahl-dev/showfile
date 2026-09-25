@@ -198,7 +198,7 @@ export function emitXAirScene(ir, opts = {}) {
 
     lines.push(`/ch/${id}/config "${name}" ${color} ${src} U${id}`);
 
-    const h = c.hpf || { on: false, freq: 20 };
+    const h = c.hpf;
     // The frequency is written whether or not the filter is engaged. Zeroing
     // it on bypass loses a setting the engineer dialled in and expects to find
     // when they switch the filter back on.
@@ -208,8 +208,8 @@ export function emitXAirScene(ir, opts = {}) {
     // A stereo channel that came from a natively-stereo desk carries a real
     // balance. One that came from a linked pair carries -100/+100, which is
     // an artefact of being the left strip, not a balance the engineer set —
-    // srcChannels is the only thing that tells them apart today.
-    if (half === 0 && c.stereo && c.srcChannels?.length === 1 && Math.round(c.pan || 0) !== 0) {
+    // the Scene's pairing says which one this is.
+    if (half === 0 && c.pairing === 'native' && Math.round(c.pan) !== 0) {
       losses.push(loss('stereo.balance-lost',
         { label: `ch ${n} "${name}"`, balance: Math.round(c.pan), desk: DESK },
         { kind: 'channel', n: n, name: name }));
@@ -219,12 +219,12 @@ export function emitXAirScene(ir, opts = {}) {
       include.dynamics ? c.gate : null,
       include.dynamics ? c.dyn : null,
       include.eq ? c.eq : null,
-      include.sends ? c.sends || [] : [],
+      include.sends ? c.sends : [],
       include.groups ? c.dcas : [],
       include.groups ? c.muteGroups : [],
       include.levels ? { muted: c.muted, fader: c.fader, toMain: c.toMain, pan } : null);
 
-    if (include.eq && c.eq && fitBands(c.eq.bands || [], MAX_EQ_BANDS).length < (c.eq.bands || []).length && half === 0) {
+    if (include.eq && fitBands(c.eq.bands, MAX_EQ_BANDS).length < c.eq.bands.length && half === 0) {
       losses.push(loss('eq.band-overflow',
         { label: `ch ${n} "${name}"`, count: c.eq.bands.length, desk: DESK, limit: MAX_EQ_BANDS },
         { kind: 'channel', n, name }));
@@ -237,7 +237,7 @@ export function emitXAirScene(ir, opts = {}) {
         outColorHex: codeToHex('xair', mapColor(c.color, 'xair')),
         source: `ch ${c.srcChannels.join('+')}`, stereo: width === 2,
         patch: src,
-        groups: [...(c.dcas || []).map(d => `#D${d}`), ...(c.muteGroups || []).map(m => `#M${m}`)].join('') || '—',
+        groups: [...c.dcas.map(d => `#D${d}`), ...c.muteGroups.map(m => `#M${m}`)].join('') || '—',
       });
     }
   }
