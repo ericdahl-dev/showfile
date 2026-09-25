@@ -22,19 +22,12 @@
 
 import { colorFrom, tapFrom } from './console-map.js';
 import { makeChannel } from './scene.js';
-import { INF, num, bool, bits, parseNodes } from './scene-text.js';
+import { INF, num, bool, bits, parseNodes, eqType, collapsePairs } from './scene-text.js';
 import { loss, render } from './losses.js';
 
 const MAX_CH = 16;
 const BUSES = 6;
 const FX_SENDS = 4;
-
-// X Air EQ band tokens -> neutral band types. Same spellings as the X32.
-const EQ_TYPE = {
-  LCUT: 'lowcut', LSHV: 'lowshelf', PEQ: 'bell', VEQ: 'bell',
-  HSHV: 'highshelf', HCUT: 'highcut',
-};
-const eqType = (t) => EQ_TYPE[String(t || 'PEQ').toUpperCase()] || 'bell';
 
 // The X Air high-pass is fixed at 12 dB/oct — there is no slope field to read.
 const HPF_SLOPE = 12;
@@ -175,22 +168,8 @@ export function parseXAirScene(text, fileName = '') {
     warnings.push(loss('fx.engine-unsupported', { count: fxSendsInUse, desk: 'X Air' }));
   }
 
-  // Collapse linked mono pairs into single stereo channels, exactly as the
-  // X32 reader does; the pair bit covers channels 2n-1 and 2n.
-  const channels = [];
-  for (let i = 0; i < strips.length; ) {
-    const s = strips[i];
-    const pairIdx = Math.ceil(s.ch / 2) - 1;
-    const linked = s.ch % 2 === 1 && chlink[pairIdx] === true && strips[i + 1]?.ch === s.ch + 1;
-    channels.push(makeChannel({
-      ...s,
-      index: channels.length + 1,
-      pairing: linked ? 'linked' : 'mono',
-      srcChannels: linked ? [s.ch, s.ch + 1] : [s.ch],
-      headamp: headampFor(s.patch),
-    }));
-    i += linked ? 2 : 1;
-  }
+  const channels = collapsePairs(strips, chlink, (s, pair) =>
+    makeChannel({ ...s, ...pair, headamp: headampFor(s.patch) }));
 
   // /bus/N and /dca/N are single-digit here, and their config is name +
   // colour with no icon.

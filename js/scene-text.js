@@ -72,3 +72,30 @@ export function parseNodes(text) {
   }
   return { nodes, header };
 }
+
+// EQ band tokens (the same on both desks) -> neutral band types. VEQ is the
+// X32's vintage bell.
+const EQ_TYPE = {
+  LCUT: 'lowcut', LSHV: 'lowshelf', PEQ: 'bell', VEQ: 'bell',
+  HSHV: 'highshelf', HCUT: 'highcut',
+};
+export const eqType = (t) => EQ_TYPE[String(t || 'PEQ').toUpperCase()] || 'bell';
+
+// Collapse linked mono pairs into single stereo channels. The link bit for a
+// pair covers channels 2n-1 and 2n; every linked pair swallows one channel
+// index, which is why numbering drifts down the file. `build` turns a strip
+// (plus its pairing and source channels) into a finished channel.
+export function collapsePairs(strips, chlink, build) {
+  const channels = [];
+  for (let i = 0; i < strips.length; ) {
+    const s = strips[i];
+    const linked = s.ch % 2 === 1 && chlink[Math.ceil(s.ch / 2) - 1] === true && strips[i + 1]?.ch === s.ch + 1;
+    channels.push(build(s, {
+      index: channels.length + 1,
+      pairing: linked ? 'linked' : 'mono',
+      srcChannels: linked ? [s.ch, s.ch + 1] : [s.ch],
+    }));
+    i += linked ? 2 : 1;
+  }
+  return channels;
+}
