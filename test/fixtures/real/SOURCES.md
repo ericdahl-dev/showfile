@@ -1,10 +1,10 @@
 # Real scene and snippet files
 
 Saved off real desks or their editors, used as test fixtures. Each folder keeps
-its project's licence file next to the files taken from it. Files are unmodified
+its project's license file next to the files taken from it. Files are unmodified
 apart from the rename.
 
-| File | Desk | From | Commit | Licence |
+| File | Desk | From | Commit | License |
 |---|---|---|---|---|
 | `gdq/sgdq2023-post.scn` | X32 | [GamesDoneQuick/digital-mixer-configs](https://github.com/GamesDoneQuick/digital-mixer-configs) `PostEvent/SGDQ2023-PostEvent.scn` | `91ba649` | MIT (`gdq/LICENSE`) |
 | `gdq/pre-sgdq2025.snap` | Wing (WING-EDIT 3.1) | same repo, `Road/Interstitials/Wing Snapshots/Pre SGDQ 2025.snap` | `91ba649` | MIT (`gdq/LICENSE`) |
