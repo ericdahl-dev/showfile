@@ -45,7 +45,7 @@ export const conn = {
 };
 
 // A channel the show does not reach is written blank, so the desk does not
-// keep the last show on it: no name, icon or input, grey (the Wing has no "no
+// keep the last show on it: no name, icon or input, gray (the Wing has no "no
 // color"), muted at -oo. Read back, a channel in that state is not a channel.
 export const spare = {
   write: () => ({ name: '', icon: 0, col: 17, in: { conn: conn.off() }, fdr: NEG_INF, mute: true, pan: 0 }),

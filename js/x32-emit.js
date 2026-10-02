@@ -154,7 +154,7 @@ export function emitX32Scene(ir, opts = {}) {
     if (include.groups) reportLostMembership(warnings, c, ch, c.name || '', DESK, x32Desk.dcas, x32Desk.muteGroups);
     // A stereo channel that came from a natively-stereo desk carries a real
     // balance. One that came from a linked pair carries -100/+100, which is
-    // an artefact of being the left strip, not a balance the engineer set —
+    // an artifact of being the left strip, not a balance the engineer set —
     // the Scene's pairing says which one this is.
     const whole = { label: `ch ${ch} "${c.name}"`, n: ch, name: c.name };
     if (include.sends) reportLostBuses(warnings, c.sends, { desk: DESK, limit: x32Desk.buses }, whole);

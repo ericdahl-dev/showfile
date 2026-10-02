@@ -152,7 +152,7 @@ export function emitXAirScene(ir, opts = {}) {
 
     const h = c.hpf;
     // The frequency is written whether or not the filter is engaged. Zeroing
-    // it on bypass loses a setting the engineer dialled in and expects to find
+    // it on bypass loses a setting the engineer dialed in and expects to find
     // when they switch the filter back on.
     lines.push(`/ch/${id}/preamp ${sign1(onReturn ? trim : 0)} ${onOff(onReturn)} ${onOff(include.preamp && c.invert)} ${onOff(include.preamp && h.on)}  ${Math.round(h.freq || 20)}`);
 

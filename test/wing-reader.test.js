@@ -56,7 +56,7 @@ test('a gate slot holding another model is not read as a gate (#21)', () => {
 });
 
 test('tags are read the way WING-EDIT reads them: comma-separated, run-together ignored (#53)', () => {
-  // WING-EDIT 3.3.3 honoured "#D3,#M1" and neither tag of "#D3#M1" (#48).
+  // WING-EDIT 3.3.3 honored "#D3,#M1" and neither tag of "#D3#M1" (#48).
   const snap = (tags) => JSON.stringify({ type: 'snapshot.11', ae_data: { ch: { 1: { name: 'Vox', tags, fdr: 0, mute: false } } } });
   const groups = (tags) => { const c = readScene('wing', snap(tags)).channels[0]; return { dcas: c.dcas, muteGroups: c.muteGroups }; };
   assert.deepEqual(groups('#D3,#M1'), { dcas: [3], muteGroups: [1] });

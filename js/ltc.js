@@ -70,7 +70,7 @@ export function nextFrame(tc, nominal, dropFrame) {
   return { h, m, s, f };
 }
 
-/** Frames from 00:00:00:00 to tc, honouring drop-frame numbering. */
+/** Frames from 00:00:00:00 to tc, honoring drop-frame numbering. */
 export function timecodeToFrames(tc, nominal, dropFrame) {
   const total = ((tc.h * 60 + tc.m) * 60 + tc.s) * nominal + tc.f;
   if (!dropFrame) return total;
@@ -79,7 +79,7 @@ export function timecodeToFrames(tc, nominal, dropFrame) {
 }
 
 /**
- * The inverse of timecodeToFrames — O(1), so a running clock can be labelled from
+ * The inverse of timecodeToFrames — O(1), so a running clock can be labeled from
  * elapsed audio time instead of by stepping frames.
  *
  * Drop-frame works on the fact that ten minutes of 29.97 is exactly 17982 frames
