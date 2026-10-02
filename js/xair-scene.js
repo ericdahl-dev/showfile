@@ -99,7 +99,7 @@ export function parseXAirScene(text, fileName = '') {
         bus: b,
         on,
         level: num(s[0], INF),
-        // POSTEQ is post-EQ but PRE-fader, so it normalises to a pre-fader
+        // POSTEQ is post-EQ but PRE-fader, so it normalizes to a pre-fader
         // send at the emitters, not a post-fader one.
         tap: sendTap.read(s[2]),
         pan: s.length > 3 ? num(s[3]) : 0,

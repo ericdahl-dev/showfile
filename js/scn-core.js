@@ -102,7 +102,7 @@ export function reportLostBuses(losses, sends, { desk, limit }, at) {
 }
 
 // A stereo channel from a natively-stereo desk carries a real balance. One
-// built from a linked pair carries -100/+100, which is an artefact of being
+// built from a linked pair carries -100/+100, which is an artifact of being
 // the left strip, not a balance the engineer set; the pairing says which.
 export function reportBalanceLost(losses, c, { desk }, at) {
   if (c.pairing === 'native' && Math.round(c.pan) !== 0) {

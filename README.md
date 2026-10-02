@@ -31,7 +31,7 @@ with Python's `zipfile`.
 | `js/x32-emit.js`, `js/xair-emit.js`, `js/wing-snap.js` | Writers: IR → desk file |
 | `js/console-map.js` | Color and icon mapping between desks |
 | `js/losses.js` | The graded "check these on the desk" report |
-| `js/scene-text.js` | Shared `.scn` tokenising |
+| `js/scene-text.js` | Shared `.scn` tokenizing |
 | `js/convert.js` | Converter page UI |
 | `js/ltc.js`, `js/zip.js` | LTC encoder and the zip writer for batch export |
 | `js/ltc-batch.js` | LTC batch plan: file names, timecode spans, limits, sizes, manifest |
@@ -83,11 +83,11 @@ rsvg-convert -w 120 -h 120 favicon.svg -o /tmp/mark.png
 magick -size 180x180 xc:'#0B1026' /tmp/mark.png -gravity center -composite -strip apple-touch-icon.png
 ```
 
-## Licence
+## License
 
 Showfile is free software under the GNU General Public License, version 3 or later
 ([`LICENSE`](LICENSE)). The real scene files in `test/fixtures/real/` come from other projects
-under MIT and Apache-2.0; each folder keeps its own licence, and
+under MIT and Apache-2.0; each folder keeps its own license, and
 [`SOURCES.md`](test/fixtures/real/SOURCES.md) lists where each file came from.
 
 The X32, X Air and Wing file formats were checked against Patrick Maillot's unofficial protocol

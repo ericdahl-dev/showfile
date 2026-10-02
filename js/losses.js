@@ -53,7 +53,7 @@ const CODES = {
     `Channels ${d.first}-${d.last} are routed as one block of eight (${d.token}), which is the only way the ${d.desk} patches. ${d.stray.length} channel${plural(d.stray.length)} cannot be addressed inside it and need repatching on the desk: ${d.stray.join(', ')}.` },
 
   'stereo.balance-lost': { severity: 'dropped', render: (d) =>
-    `${d.label}: the source is a single stereo channel balanced ${d.balance > 0 ? 'right' : 'left'} (${d.balance > 0 ? '+' : ''}${d.balance}). The ${d.desk} builds stereo from two hard-panned mono strips, so the balance could not come with it — reset it on the desk if the image sounded off-centre.` },
+    `${d.label}: the source is a single stereo channel balanced ${d.balance > 0 ? 'right' : 'left'} (${d.balance > 0 ? '+' : ''}${d.balance}). The ${d.desk} builds stereo from two hard-panned mono strips, so the balance could not come with it — reset it on the desk if the image sounded off-center.` },
 
   'patch.group-unsupported': { severity: 'unsupported', render: (d) =>
     `${d.label}: input type "${d.group}" has no ${d.desk} equivalent; left unpatched.` },

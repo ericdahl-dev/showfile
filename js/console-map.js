@@ -29,7 +29,7 @@ export const WING_PALETTE = [
   { col: 14, name: 'sky blue',    rgb: [ 60, 180, 240] },
   { col: 15, name: 'orange-red',  rgb: [248,  80,  50] },
   { col: 16, name: 'mint',        rgb: [ 80, 224, 168] },
-  { col: 17, name: 'grey',        rgb: [128, 128, 128] },
+  { col: 17, name: 'gray',        rgb: [128, 128, 128] },
   { col: 18, name: 'white',       rgb: [235, 235, 235] },
 ];
 
@@ -90,7 +90,7 @@ function hexToX32Code(hex)  { return nearest(hexToRgb(hex), X32_PALETTE.slice(0,
 // looking at the two palettes side by side.
 //
 // The `i` (inverted) variants have no Wing equivalent and collapse onto the base
-// color; OFF becomes grey, since the Wing has no "no color" state.
+// color; OFF becomes gray, since the Wing has no "no color" state.
 const X32_COLOR_TO_WING = {
   OFF: 17, RD:  9, GN:  5, YE:  7, BL:  2, MG: 11, CY:  4, WH: 18,
   OFFi: 17, RDi: 9, GNi: 5, YEi: 7, BLi: 2, MGi: 11, CYi: 4, WHi: 18,

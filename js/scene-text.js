@@ -1,13 +1,13 @@
 // ─── Shared node-text scene parsing ────────────────────────────────────────
 // The X32/M32 and the X Air series write the same on-disk shape: one
 // OSC-style path per line followed by a right-aligned argument list. Only the
-// node names and field positions differ, so tokenising, the "-oo" sentinel,
+// node names and field positions differ, so tokenizing, the "-oo" sentinel,
 // the compact "3k43" frequency notation are common ground and live here.
 // Tokens that are read and written the same way live in scn-codec.js.
 
 export const INF = -Infinity;
 
-// Split a line's argument list, honouring quoted names and runs of padding
+// Split a line's argument list, honoring quoted names and runs of padding
 // spaces (both desks right-align numeric fields, so "ON   0.0" is two tokens).
 export function tokenize(rest) {
   const out = [];

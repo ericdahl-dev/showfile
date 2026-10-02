@@ -1,4 +1,4 @@
-// The X32 reader against small hand-written scenes, one behaviour each.
+// The X32 reader against small hand-written scenes, one behavior each.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

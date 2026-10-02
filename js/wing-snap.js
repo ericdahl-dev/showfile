@@ -4,7 +4,7 @@
 // console actually specified rather than a full 28,000-key console state.
 //
 // Key names and value encodings were derived by diffing snapshots saved from
-// WING-EDIT: an initialised baseline against files with known values set.
+// WING-EDIT: an initialized baseline against files with known values set.
 
 import { mapColor, mapIcon, codeToHex, snapRatio } from './console-map.js';
 import { loss, renderAll } from './losses.js';
@@ -146,7 +146,7 @@ export function emitWingSnapshot(ir, opts = {}) {
       node.mute = !!c.muted;
       // Both desks use -100..+100, but a stereo channel built from a linked
       // mono pair inherits the LEFT strip's hard pan, and that -100 is how
-      // the source desk glued the pair together, not a balance anyone dialled.
+      // the source desk glued the pair together, not a balance anyone dialed.
       // Copying it through would make every converted stereo channel arrive
       // hard left, and would then read back as a deliberate balance.
       node.pan  = c.pairing === 'linked' ? 0 : round(c.pan);
@@ -213,7 +213,7 @@ export function emitWingSnapshot(ir, opts = {}) {
     }
 
     // Editing one channel of a default-linked pair breaks the link on the desk;
-    // mirror that so an imported channel doesn't drag its neighbour around.
+    // mirror that so an imported channel doesn't drag its neighbor around.
     node.clink = false;
 
     ch[String(n)] = node;
